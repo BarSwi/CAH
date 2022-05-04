@@ -1,0 +1,593 @@
+html
+{
+	font-family: 'Merriweather', serif;
+}
+body{
+	margin: 0;
+}
+body#dark
+{
+	background-color: rgb(038, 036, 044);
+	color:  #DCDCDC;
+	--color:#DCDCDC;
+	--top: rgb(057, 053, 065 );
+	--link-color: #DCDCDC;
+	--text-color: #dadada;
+	--game-creator: #330033;
+	--game-creator-border: #660033; 
+	--game-creator-shadow: #660033;
+	--login-button-background: #006633;
+	--login-button-text: black;
+	--login-button-border: #339966;
+	--login-button-shadow:#339966;
+	--theme-toggler-background: #1f1f1f;
+	--theme-toggler-border: #262626;
+	--theme-toggler-shadow: rgba(0, 0, 0, 1);
+	--theme-togglerinside-background: white;
+	--theme-togglerinside-background: white;
+	--theme-togglerinside-border: #999999;
+	--lang-border: #339966;
+	--register-link-color: #0099ff;
+	--my-cards-button: #666699;
+	--nickname-color:  #330033;
+	--webkit-scrollbar-track: rgb(057, 053, 065);
+	--webit-scrollbar-thumb: grey;
+	--webkit-scrollbar-thumb-border:  rgb(057, 053, 065);
+	--my-cards-button-border: #660099;
+	--rules-border: #3d3d3d;
+	--rules-background: rgb(057, 053, 065 );
+	--forgot-password-email-input-border: #d5d5d5;
+	
+}
+body#bright
+{
+	background-color: rgb(205, 201, 213);
+	color: rgb(019, 015, 027);
+	--color: rgb(019, 015, 027);
+	--top:  rgb(168, 165, 174);
+	--link-color: black;
+	--game-creator: #993399;
+	--game-creator-shadow: #cc0099;
+	--top-border: #c2c2c2;
+	--game-creator-border: #cc0099; 
+	--login-button-background: #339900;
+	--login-button-text: black;
+	--login-button-border: #33cc00;
+	--login-button-shadow: #33cc00;
+	--theme-toggler-background: white;
+	--theme-toggler-border: #c7c7c7;
+	--theme-toggler-shadow:#c7c7c7;
+	--logout-button: #cc0066;
+	--register-link-color: #000099;
+	--my-cards-button-border: #333366;
+	--theme-togglerinside-background: black;
+	--nickname-color: #993399;
+	--my-cards-button: #666699;
+	--rules-background: rgb(168, 165, 174);
+	--rules-border: grey;
+	--webkit-scrollbar-track: rgb(168, 165, 174);
+	--webit-scrollbar-thumb: grey;
+	--webkit-scrollbar-thumb-border:  rgb(168, 165, 174);
+	--input-border: #c7c7c7;
+	--theme-togglerinside-border: #999999;
+}
+.loader{
+	background-color: green;
+	width: 0.5em;
+	height: 0.5em;
+	border-radius: 25%;	
+	animation: loader 1s ease infinite;
+}
+@keyframes loader{
+	100%{
+		transform: translateX(0) translateY(0) rotate(360deg);
+	}
+	25%{
+		transform: translateX(0) translateY(100%) rotate(90deg);
+	}
+	50%{
+		transform: translateX(100%) translateY(100%) rotate(180deg);
+	}
+	75%{
+		transform: translateX(100%) translateY(0) rotate(270deg);
+	}
+}
+#top
+{
+	display: flex;
+	position: sticky;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	z-index: 1;
+	background-color: var(--top);
+	width: 100%;
+	transition: all .1 ease;
+	padding-bottom: 10px;
+	border-bottom: 2px solid var(--top-border);
+	margin-bottom: 13px;
+}
+::-webkit-scrollbar{
+	width: 15px;
+}
+::-webkit-scrollbar-thumb{
+	border-radius: 10px;
+	width: 10px;
+	background: var(--webit-scrollbar-thumb);
+	border: 2px solid var(--webkit-scrollbar-thumb-border);
+}
+::-webkit-scrollbar-track{
+	background-color: var(--webkit-scrollbar-track);
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+::-webkit-scrollbar-button{
+	display: none;
+}
+::-webkit-scrollbar-thumb:hover{
+	opacity: 90%;
+}
+a:link,a:visited{
+	text-decoration: none;
+	color: var(--link-color);
+}
+
+#middletop
+{
+	padding: 3px;
+	width: max-content;
+	height: max-content;
+	float: left;
+}
+#middletop a 
+{
+	display: block;
+	background-color: var(--game-creator) ;
+	border-radius: 10px;
+	border: 2px solid var(--game-creator-border);
+	font-size: 30px;
+	margin-top: 10px;
+	font-weight: 900;
+	transition: all .15s ease-in-out;
+	padding: 15px;
+}
+#middletop a#active:focus, #middletop a#active:hover
+{
+	outline: none;
+	-webkit-box-shadow: 0px 0px 5px 1px var(--game-creator-shadow);
+	-moz-box-shadow: 0px 0px 5px 1px var(--game-creator-shadow);
+	box-shadow: 0px 0px 5px 1px var(--game-creator-shadow);
+	transform: scale(1.1,1.1);
+}
+#middletop a#inactive:focus{
+	outline: none;
+	border: 2px solid red;
+}
+#middletop a#inactive:hover{
+	outline: none;
+	cursor: default;
+}
+#middletop a#inactive{
+	background-color: var(--game-creator) ;
+	color: var(--link-color);
+	opacity: 60%;
+	cursor: default;
+}
+#lefttop
+{
+	float: left;
+	position: relative;
+	width: 200px;;
+	display: flex;
+	height: max-content;
+	justify-content: space-between;
+}
+#lang
+{
+	float: left;
+	margin-top: 25px;
+	margin-left: 10px;
+}
+#lang input[type="submit"]{
+	display: none;
+}
+.lang_change{
+	cursor: pointer;	
+	display: block;
+	margin: 0 0 10px 20px;
+}
+.lang_change:hover{
+	transform: scale(1.05,1.05);
+	
+}
+
+
+#themetoggler
+{
+	float: left;
+}
+#theme
+{
+	width: 100px;
+	float: left;
+	margin-top: 40px;
+}
+.t_icon
+{
+	margin: -1px 1px 0px 1px;
+	float: left;
+}
+
+input[type="checkbox"]{
+	
+	-webkit-appearance: none;
+	visibility: hidden;
+	display: none;
+}
+.check
+{
+	position: relative; 
+	display: block;
+	height: 20px;
+	border: 1px solid var(--theme-toggler-border);
+	-webkit-box-shadow: -1px 1px 8px -2px var(--theme-toggler-shadow);
+	-moz-box-shadow: -1px 1px 8px -2px var(--theme-toggler-shadow);
+	box-shadow: -1px 1px 8px -2px var(--theme-toggler-shadow);
+	width: 50px;
+	background-color: var(--theme-toggler-background);
+	cursor: pointer;
+	border-radius: 20px;
+	overflow: hidden;
+	transition: all .2s ease;
+}
+.check:before
+{
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	background-color: var(--theme-togglerinside-background);
+	border: 1px solid var(--theme-togglerinside-border);
+	width: 15px;
+	height: 15px;
+	transition: .2s ease;
+	border-radius: 50%;
+	content: "";
+}
+input#topcheck:checked + .check:before
+{
+	transform: translateX(30px);
+}
+
+#righttop
+{
+	position: relative;
+	float: left;
+	margin: 10px 10px 0px 5px;
+}
+
+#input_login, #input_password
+{
+	text-align: center;
+	margin-bottom: 10px;
+	padding: 2px;
+	border-radius: 5px;
+	border: 1px solid var(--input-border);
+	-webkit-box-shadow: 0px 1px 6px 0px var(--input-border);
+	-moz-box-shadow: 0px 1px 6px 0px var(--input-border);
+	font-size: 15px;
+	box-shadow: 0px 1px 6px 0px var(--input-border);
+	width: 140px;
+}
+#input_login:focus, #input_password:focus
+{
+	outline: none;
+	transform: scaleY(1.05);
+	
+}
+#login_button
+{
+	width: 146px;
+	position: relative;
+	left: -1px;
+	color: var(--text-color);
+	font-size: 15px;
+	padding: 2px; 
+	background-color: var(--login-button-background);
+	transition: all .2s ease;
+	border-radius: 5px;
+	border: 1px solid var(--login-button-border);
+	font-family: 'Merriweather', serif;
+
+}
+#login_button:hover, #login_button:focus
+{
+	cursor: pointer;
+	opacity: 90%;
+	-webkit-box-shadow: 0px 0px 3px 1px var(--login-button-shadow);
+	-moz-box-shadow: 0px 0px 3px 1px var(--login-button-shadow);
+	box-shadow: 0px 0px 3px 1px var(--login-button-shadow);
+	transform: scale(1.02,1.02);
+	outline: none;
+	
+}
+#register
+{
+	float: left;
+	color: var(--text-color);
+	margin-top: 20px;
+	min-width: 150px;
+	text-align: center;
+}
+#login
+{
+	margin-right: 25px;
+	float: left;
+}
+#register a
+{
+	display: block;
+	margin-top: 14px;
+	color: var(--register-link-color);
+	transition: 0.15s ease;
+}
+#register a:focus, #register a:hover
+{
+	outline: none;
+	font-size: 1.1em;
+}
+#container{
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+#left_container{
+	width: 35%;
+	float: left;
+}
+#middle_container{
+	width: 45%;
+	float: left;
+	position: relative;
+	background-color: green;
+}
+#register_success, #forgot_password_email{
+	z-index: 5;
+	position: fixed;
+	top: 32%;
+	color: green;
+	left: 25%;
+	text-align: center;
+	font-size: 30px;
+	-webkit-box-shadow: 0px 0px 8px -3px rgba(78, 16, 71, 1);
+	-moz-box-shadow: 0px 0px 8px -3px rgba(78, 16, 71, 1);
+	box-shadow: 0px 0px 10px 0px rgba(78, 16, 71, 1);
+	font-weight: 900;
+	width: 50vw;
+	display: block;
+	padding: 10px 15px 5px 15px;
+	transition: .1s ease;
+	border-radius: 5px;
+	background-color: var(--color);
+}
+ #create_new_deck_menu{
+	z-index: 5;
+	position: relative;
+	top: 3vh;
+	color: green;
+	display: block;
+	margin-left: auto;
+	transform: scaleX(0);
+	transition: .2s ease;
+	margin-right: auto;
+	text-align: center;
+	font-size: 30px;
+	font-weight: 900;
+	width: 431.7px;
+	height: 661.2px;
+	padding: 10px 15px 5px 15px;
+	border-radius: 5px;
+	background: url("../img/card") no-repeat center;
+	background-size: 431.7px 661.2px;
+ }
+input[type="button"]{
+	display: none;
+}
+#forgot_password_email_input_send{
+	font-size: 1em;
+	display: block; 
+	border-radius: 4px;
+	padding: 3px;
+	width: max-content;
+	margin: 0 auto 10px auto;
+	transition: .1s ease-in-out;
+}
+#password_recovery_loader{
+	position: absolute;
+	right: 0.6em;
+	bottom: 0.6em;
+}
+ #create_new_deck_send{
+	font-size: 1em;
+	display: block; 
+	padding: 3px;
+	width: max-content;
+	transition: .1s ease-in-out;
+	position: absolute;
+	bottom: 6.5em;
+	left: 31%;
+	color: black;
+ }
+ 
+#forgot_password_email_input_send:hover, #forgot_password_email_input_send:focus{
+	cursor: pointer;
+	transform: scale(1.05,1.05);
+	opacity: 90%;
+}
+#create_new_deck_send:hover, #create_new_deck_send:focus{
+	cursor: pointer;
+	transform: scale(1.05,1.05);
+}
+#close_register{
+	position: absolute;
+	top:5px;
+	cursor: pointer;
+	right: 5px;
+}
+#close_deck_creator{
+	position: absolute;
+	top: 10px;
+	cursor: pointer;
+	color: black;
+	right: 15px;
+}
+#forgot_password_email_input{
+	opacity: 70%;
+	margin: -10px 0 20px 0;
+	text-align: center;
+	padding: 5px;
+	border-radius: 5px;
+	font-size: 1em;
+	border: 1px solid var(--forgot-password-email-input-border);
+}
+#create_new_deck_title_input{
+	opacity: 70%;
+	position: absolute;
+	top: 9em;
+	resize: none;
+	text-align: center;
+	right: 3em;
+	padding: 5px;
+	width: 300px;
+	border-radius: 5px;
+	font-size: 0.8em;
+	border: 1px solid var(--forgot-password-email-input-border);
+}
+#create_new_deck_input_title_span{
+	color: black;
+	position: absolute;
+	top: 5.5em;
+	right: 2.7em;
+	width: 300px;
+}
+
+#forgot_password_email_input:focus, #forgot_password_email_input:hover, #create_new_deck_title_input:hover, #create_new_deck_title_input:focus{
+	outline: none;
+	opacity: 100%;
+}
+#right_container{
+	width: 20%;
+	float: left;
+	text-align: center;
+}
+#error_login{
+	color: red;
+	font-weight: 900;
+}
+
+#nickname{
+	text-align: center;
+	font-weight: 900;
+	font-size: 20px;
+	margin-bottom: -7px;
+	color: var(--nickname-color);
+}
+#logout_button{
+	float: left;
+	border-radius: 5px;
+	padding: 5px;
+	border: 1px solid var(--my-cards-button-border);
+	background-color: var(--game-creator);
+	transition: all .1s ease;
+	font-weight: 900;
+}
+#my_cards, #create_new_deck{
+	margin-right: 10px;
+	font-weight: 900;
+	border-radius: 5px;
+	transition: all .1s ease;
+	background-color: var(--my-cards-button);
+	border: 1px solid var(--my-cards-button-border);
+	padding: 5px;
+	float: left;
+}
+#my_cards:hover, #logout_button:hover, #my_cards:focus, #logout_button:focus, #create_new_deck:hover, #create_new_deck:focus{
+	cursor: pointer;
+	opacity: 90%;
+	-webkit-box-shadow: 0px 0px 1px 1px var(--my-cards-button-border);
+	-moz-box-shadow: 0px 0px 1px 1px var(--my-cards-button-border);
+	box-shadow: 0px 0px 1px 1px var(--my-cards-button-border)	;
+	outline: none;
+	transform: scale(1.07,1.07);
+}
+#left_nav{
+	text-align: center;
+	width: 100%;
+}
+.rules{
+	padding: 5px;
+	display: block;
+	transform-origin: bottom;
+	float: left;
+	background-color: var(--rules-background);
+	transition: all .1s ease-in-out;
+	font-weight: 900;
+	overflow-wrap: break-word;
+
+	border: 2px solid var(--rules-border);
+}
+.rules:hover{
+	cursor: pointer;
+	transform: scaleY(1.07);
+	opacity: 80%		
+}
+#game_rules{
+	width: calc(50% - 14px);
+}
+#side_rules{
+	width: calc(50% - 12px);
+	margin-left: -2px;
+
+}
+input.rules:checked + label {
+	transform: scaleY(1.20);	
+}
+#game_rules_text, #side_rules_text{
+	text-align: left;
+	clear: both;
+	overflow-wrap: break-word;
+	max-height: calc(100vh - 185px);
+	display: none;
+	font-size: 20px;
+	overflow: auto;
+	padding: 5px 5px 24px 0;
+	background-color: var(--rules-background);
+	border-bottom-right-radius: 5px;
+	border-bottom: 2px solid var(--rules-border);
+	border-right: 2px solid var(--rules-border);
+}
+#create_new_deck_input_title_span:before{
+	content:"* ";
+	color: #cc0033;
+	position: absolute;
+	top: 6px;
+	left: 2.5em;
+}
+ol li, ul li{
+	text-align: justify;
+	padding: 0px 25px 0px 5px;
+
+}
+#forgot_password{
+	transition: .1s ease;
+	font-weight: 900;
+}
+#forgot_password:hover{
+	cursor: pointer;
+	font-size: 1.03em;
+}
+#forgot_password_result{
+	margin: -10px 0px 0 0px;
+	display: block;
+	padding: 5px;
+	font-weight: 900;
+
+}
