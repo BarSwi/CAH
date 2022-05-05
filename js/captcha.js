@@ -11,22 +11,21 @@ function equation(){
 		}
 	});
 }
+register_login = $('#register_login');
+register_email = $('#register_email');
+register_password = $('#register_password');
+register_password_re = $('#register_password-re');
+equation_result = $('#equation_result');
 $('#rules_accept').click(validation);
 function validation(){
-	var register_login = $('#register_login');
-	var register_password = $('#register_password');
-	var register_email = $('#register_email');
-	var register_password_re = $('#register_password-re');
-	var equation_result = $('#equation_result');
+	var a = parseInt($('#equation').html().substring(0, 2));
+	var b = parseInt($('#equation').html().substring(5, 8));
 	var login = register_login.val();
 	var haslo = register_password.val();
 	var email = register_email.val();
-	var lang = $('#hl').html();
 	var validation = true;
 	var haslo2 = register_password_re.val();
 	var bot = equation_result.val();
-	var a= parseInt($('#equation').html().substring(0, 2));
-	var b =parseInt($('#equation').html().substring(5, 8));
 	var login = register_login.val();
 	if(!login){
 		validation = false;
@@ -98,6 +97,7 @@ function validation(){
 			async: false,
 			success: function(res){
 				if(res=="0"){
+					var lang = $('#hl').html();
 					validation = false;
 					if(lang=="en") $('#errorl').html('<br>Nickname is already taken.');
 					if(lang=="pl") $('#errorl').html("<br>Nazwa jest zajęta.");
@@ -114,6 +114,7 @@ function validation(){
 			async: false,
 			success: function(res){
 				if(res=="0"){
+					var lang = $('#hl').html();
 					if(lang=="en") $('#errore').html('<br>Email is already taken.');
 					if(lang=="pl") $('#errore').html("<br>Email jest zajęty.");
 					register_email.css("border", "2px solid red");
@@ -129,11 +130,6 @@ function validation(){
 }
 
 $("#register_button").click(function(){
-	var register_login = $('#register_login');
-	var register_password = $('#register_password');
-	var register_email = $('#register_email');
-	var register_password_re = $('#register_password-re');
-	var equation_result = $('#equation_result');
 	var login = register_login.val();
 	var haslo = register_password.val();
 	var email = register_email.val();
