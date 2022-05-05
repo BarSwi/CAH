@@ -5,7 +5,7 @@ $deck_code = $_POST['deck_code'];
 $nick = $_SESSION['user'];
 try{
 	$dsn = "mysql:host=".$host.";dbname=".$db_name;
-	$pdo = new PDO($dsn,$db_user,$db_password);
+	$pdo = new PDO($dsn,$db_user, $db_password);
 	$pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$sql = "SELECT * FROM decks WHERE BINARY deck_code = :deck_code AND BINARY author = '$nick'";

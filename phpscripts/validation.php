@@ -36,7 +36,7 @@
 	try{
 		require_once("connect_users.php");
 		$dsn = 'mysql:host='.$host.';dbname='.$db_name;
-		$pdo = new PDO($dsn, $db_user);
+		$pdo = new PDO($dsn, $db_user, $db_password);
 		$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 		$pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 		$pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -55,7 +55,7 @@
 		echo "0";
 		exit();
 		}
-		$sql = 'INSERT INTO users(id, login, password, email, deck_count, ingame) VALUES(NULL, :login, :password, :email, 0, false)';
+		$sql = 'INSERT INTO users(id, login, password, email, ingame) VALUES(NULL, :login, :password, :email, false)';
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute(['login'=> $login, 'password' => $haslo_hash, 'email'=> $email]);
 		$_SESSION['login'] = true;
@@ -65,6 +65,7 @@
 	}
 	catch(PDOException $e){
 		$error_message = $e->getMessage();
+		echo $error_message;
 	}
 	
 ?>

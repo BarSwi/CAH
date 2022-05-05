@@ -124,6 +124,11 @@ function validation(){
 }
 
 $("#register_button").click(function(){
+	var register_login = $('#register_login');
+	var register_password = $('#register_password');
+	var register_email = $('#register_email');
+	var register_password_re = $('#register_password-re');
+	var equation_result = $('#equation_result');
 	var login = register_login.val();
 	var haslo = register_password.val();
 	var email = register_email.val();
@@ -134,7 +139,8 @@ $("#register_button").click(function(){
 		url: '../phpscripts/validation.php',
 		data: {login:login, haslo:haslo, email:email, haslo2:haslo2, bot:bot},
 		success: function(res){
-			if(res==0){
+			alert(res);
+			if(res=="0"){
 				window.location.reload();
 				alert("Error: Unauthorized actions, please try again.");
 			}

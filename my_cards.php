@@ -58,10 +58,11 @@
 					echo '<div class = "deck" id = "deck'.$counter.'"><span id = "deck_content"><br><br>ID: <span id ="deck_id">'.$deck_code.'</span><br><br>'.$lang['deck_title'].'<span id = "deck_title">'.$deck_title.'</span><span id = "deck_content_cards">'.$lang['white_cards'].': '.$white_cards.'<br>'.$lang['black_cards'].': '.$black_cards.'
 					</span></span></div>';
 				}
-				if($stmt->rowCount()>1) echo
+				if($stmt->rowCount()>1){ echo
 				'<i class = "icon-right-circled2"></i>
 				<i class = "icon-left-circled2"></i></div>';
 				echo '<div id = "bottom"><div id = "edit_btn" class = "btn">'.$lang['edit_deck'].'</div><div id = "delete_btn" class = "btn">'.$lang['delete_deck'].'</div></div>';
+				}
 			}
 		if($stmt->rowCount()<3) echo '<div id = "create_btn" class = "btn"">'.$lang['create_new_deck_button'].'</div>';
 		?>
