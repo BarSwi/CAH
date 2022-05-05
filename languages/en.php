@@ -28,7 +28,7 @@
 	"side_rule3" => "Copying and disseminating the content of the website under your own signature without the consent of the administration is prohibited.",
 	"side_rule4" => "All gameplay is coordinated and created, in the form of their own and public decks of cards, entirely by the players. The author and the website administration do not interfere in this process in any way.",
 	"side_rule5" => "The purpose of the site is to access the options outlined in the \"Game Rules \" tab on the home page.",
-	"side_rule6" => "Each account can create up to 3 decks of cards.",
+	"side_rule6" => "Each account can create up to three decks of cards.",
 	"side_rule7" => "Anyone who knows the special 7-character code assigned to a specific deck can use that deck in their game by using this code.",
 	"side_rule8" => "Any deck that does not have any cards will be deleted after 24 hours.",
 	

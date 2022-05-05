@@ -28,7 +28,7 @@
 	"side_rule3" => "Kopiowanie oraz rozpowszechnianie treści witryny pod własnym podpisem bez zgody administracji jest zabronione.",
 	"side_rule4" => "Cała rozgrywka jest koordynowana i tworzona w postaci własnych i publicznych talii kart całkowicie przez graczy. Autor oraz administracja strony w żaden sposób nie ingerują w ten proces.",
 	"side_rule5" => "Celem witryny jest dostarczenie możliwości rozgrywki zarysowanej w zakładce \"Zasady Gry\" na stronie głównej.",
-	"side_rule6" => "Na każde konto przypada możliwość stworzenia maksymalnie 3 talie kart.",
+	"side_rule6" => "Na każde konto przypada możliwość stworzenia maksymalnie trzech talii kart.",
 	"side_rule7" => "Każdy, kto zna specjalny 7-znakowy kod przypisany do konkretnej talii, może wykorzystać daną talię w swojej grze używając tego kodu.",
 	"side_rule8" => "Każda talia, która nie posiada żadnej karty zostanie usunięta po 24 godzinach.",
 	
