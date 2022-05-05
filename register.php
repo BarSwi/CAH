@@ -50,19 +50,19 @@
 			<div id = "register">
 				<table>	
 					<tr>
-						<td id ="login_label"><?=$lang['register_nickname']?></td> <td> <input type = "text" onkeyup ="validation()" maxlength ="15" id = "register_login"> <span class = "help" data-title = <?= '"'.$lang['register_nickname_help'].'"' ?>><i class = "icon-help-circled "></i></span></td>
+						<td id ="login_label"><?=$lang['register_nickname']?></td> <td> <input type = "text" maxlength ="15" onkeyup="validation()" id = "register_login"> <span class = "help" data-title = <?= '"'.$lang['register_nickname_help'].'"' ?>><i class = "icon-help-circled "></i></span></td>
 					</tr>
 					<tr>
-						<td><?=$lang['register_email']?></td> <td> <input type = "email"  onkeyup ="validation()" placeholder = "example@gmail.com" class = "no_inf"  id = "register_email"></td>
+						<td><?=$lang['register_email']?></td> <td> <input type = "email" onkeyup="validation()"  placeholder = "example@gmail.com" class = "no_inf"  id = "register_email"></td>
 					</tr>
 					<tr>
-						<td><?=$lang['register_password']?></td> <td> <input type = "password" id = "register_password"  onkeyup ="validation()"> <span class = "help" data-title = <?= '"'.$lang['register_password_help'].'"' ?> ><i class = "icon-help-circled"> </td></span>
+						<td><?=$lang['register_password']?></td> <td> <input type = "password" onkeyup="validation()" id = "register_password" > <span class = "help" data-title = <?= '"'.$lang['register_password_help'].'"' ?> ><i class = "icon-help-circled"> </td></span>
 					</tr>
 					<tr>
-						<td><?=$lang['register_password-re']?></td> <td> <input type = "password"  onkeyup ="validation()" class = "no_inf" id = "register_password-re"> </td>
+						<td><?=$lang['register_password-re']?></td> <td> <input type = "password" onkeyup="validation()"  class = "no_inf" id = "register_password-re"> </td>
 					</tr>
 					<tr>
-						<td id = "equation"></td> <td> <input type = "text"  onkeyup ="validation()" id ="equation_result"><span class = "help" data-title = <?= '"'.$lang['register_antybot'].'"' ?> ><i class = "icon-help-circled"> </td></span>
+						<td id = "equation"></td> <td> <input type = "text" onkeyup="validation()"  id ="equation_result"><span class = "help" data-title = <?= '"'.$lang['register_antybot'].'"' ?> ><i class = "icon-help-circled"> </td></span>
 					</tr>
 					<tr>
 						<td colspan = "2"><span id = "errorl"></span> <span id = "errore"></span></td>

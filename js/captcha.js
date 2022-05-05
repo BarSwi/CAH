@@ -1,3 +1,4 @@
+
 window.onload = equation;
 function equation(){
 	var a = Math.floor(Math.random()*9+1);
@@ -24,6 +25,9 @@ function validation(){
 	var validation = true;
 	var haslo2 = register_password_re.val();
 	var bot = equation_result.val();
+	var a= parseInt($('#equation').html().substring(0, 2));
+	var b =parseInt($('#equation').html().substring(5, 8));
+	var login = register_login.val();
 	if(!login){
 		validation = false;
 		register_login.css("border", "2px solid var(--input-border)")
@@ -37,8 +41,7 @@ function validation(){
 	else if(login.length > 2 && login.length < 16) {
 		register_login.css("border", "2px solid green");
 	}
-	
-
+	var email = register_email.val();
 	if(!email)	{
 		validation = false;
 		register_email.css("border", "2px solid var(--input-border)")
@@ -52,6 +55,7 @@ function validation(){
 	else{
 		register_email.css("border", "2px solid green");
 	}
+	var haslo = register_password.val();
 	if(!haslo){
 		validation = false;
 		register_password.css("border", "2px solid var(--input-border)")
@@ -63,6 +67,7 @@ function validation(){
 	else if(haslo.length > 7) {
 		register_password.css("border", "2px solid green");
 	}
+	var haslo2 = register_password_re.val();
 	if(!haslo2){
 		validation = false;
 		register_password_re.css("border", "2px solid var(--input-border)")
@@ -72,8 +77,7 @@ function validation(){
 		validation = false;
 	}
 	else if((haslo2 == haslo) && haslo.length>7) register_password_re.css("border", "2px solid green");
-	var a= parseInt($('#equation').html().substring(0, 2));
-	var b =parseInt($('#equation').html().substring(5, 8));
+	var bot = equation_result.val();
 	if(!bot){
 		validation = false;
 		equation_result.css("border", "2px solid var(--input-border)");
@@ -120,7 +124,8 @@ function validation(){
 		});
 		if(validation==true)	$('#register_button').prop("disabled", false);
 	}
-	else $('#register_button').prop("disabled", true);
+	if(validation==false) $('#regsiter_button').prop('disabled', true);
+
 }
 
 $("#register_button").click(function(){
@@ -139,7 +144,6 @@ $("#register_button").click(function(){
 		url: '../phpscripts/validation.php',
 		data: {login:login, haslo:haslo, email:email, haslo2:haslo2, bot:bot},
 		success: function(res){
-			alert(res);
 			if(res=="0"){
 				window.location.reload();
 				alert("Error: Unauthorized actions, please try again.");
