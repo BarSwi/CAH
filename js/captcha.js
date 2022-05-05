@@ -36,22 +36,6 @@ function validation(){
 	}
 	else if(login.length > 2 && login.length < 16) {
 		register_login.css("border", "2px solid green");
-		$.ajax({
-		
-		type: "POST",
-		url: '../phpscripts/check_ifexist_login.php',
-		data: {login:login},
-		async: false,
-		success: function(res){
-			if(res=="0"){
-				validation = false;
-				if(lang=="en") $('#errorl').html('<br>Nickname is already taken.');
-				if(lang=="pl") $('#errorl').html("<br>Nazwa jest zajęta.");
-				register_login.css("border", "2px solid red");
-			} 
-			else $('#errorl').html('');
-		}
-	});
 	}
 	
 
@@ -67,22 +51,6 @@ function validation(){
 	}
 	else{
 		register_email.css("border", "2px solid green");
-		$.ajax({
-		
-		type: "POST",
-		url: '../phpscripts/check_ifexist_email.php',
-		data: {email:email},
-		async: false,
-		success: function(res){
-			if(res=="0"){
-				if(lang=="en") $('#errore').html('<br>Email is already taken.');
-				if(lang=="pl") $('#errore').html("<br>Email jest zajęty.");
-				register_email.css("border", "2px solid red");
-				validation = false;
-			} 
-			else $('#errore').html('');
-		}
-	});
 	}
 	if(!haslo){
 		validation = false;
@@ -119,7 +87,38 @@ function validation(){
 		validation = false;
 	}
 	if(validation==true){
-		$('#register_button').prop("disabled", false);
+		$.ajax({
+			type: "POST",
+			url: '../phpscripts/check_ifexist_login.php',
+			data: {login:login},
+			async: false,
+			success: function(res){
+				if(res=="0"){
+					validation = false;
+					if(lang=="en") $('#errorl').html('<br>Nickname is already taken.');
+					if(lang=="pl") $('#errorl').html("<br>Nazwa jest zajęta.");
+					register_login.css("border", "2px solid red");
+				} 
+				else $('#errorl').html('');
+			}
+		});
+		$.ajax({
+		
+			type: "POST",
+			url: '../phpscripts/check_ifexist_email.php',
+			data: {email:email},
+			async: false,
+			success: function(res){
+				if(res=="0"){
+					if(lang=="en") $('#errore').html('<br>Email is already taken.');
+					if(lang=="pl") $('#errore').html("<br>Email jest zajęty.");
+					register_email.css("border", "2px solid red");
+					validation = false;
+				} 
+				else $('#errore').html('');
+			}
+		});
+		if(validation==true)	$('#register_button').prop("disabled", false);
 	}
 	else $('#register_button').prop("disabled", true);
 }
