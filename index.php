@@ -70,7 +70,7 @@
 			</div>';
 			else echo
 				'<div id = "nickname">'.$_SESSION['user'].'</div><br>
-				<a href = "my_cards.php"><div id = "my_cards" tabindex="0">'.$lang['my_cards_button'].'</div></a>
+				<div id = "my_cards" tabindex="0"><a href = "my_cards.php" tabindex ="-1">'.$lang['my_cards_button'].'</a></div>
 				<div id = "create_new_deck" tabindex="0">'.$lang['create_new_deck_button'].'</div>
 				<div id = "logout_button" tabindex="0">'.$lang['Logout_button'].'</div>
 				'

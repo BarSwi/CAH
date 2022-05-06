@@ -322,6 +322,7 @@ ol{
 	width: max-content;
 	font-size: 1.5em;
 	font-weight: 900;
+	transition: .2s ease;
 	position: relative;
 }
 #rules_accept_label:after{
@@ -337,7 +338,10 @@ ol{
 }
 #rules_accept_label:hover{
 	cursor: pointer;
-	font-size: 1.6em;
+	transform: scale(1.05);
+}
+#rules_accept_label:hover:after{
+	transform: scale(1.05);
 }
 #rules_accept_checkbox{
 	float: right;
@@ -352,3 +356,55 @@ ol{
 #rules_accept:checked + #rules_accept_label:after{
 	background-color: green;	
 }
+@media only screen and (max-width: 1550px) {
+	#container{
+		width: 1000px;
+	}
+	#register
+	{
+	font-size: 25px;
+	}
+	#errorl{
+		font-size: 13px;
+	}
+	#errore{
+		font-size: 13px;
+
+	}
+	.no_inf
+	{
+		margin-right: 44px !important;
+	}
+	.help:before
+	{
+		font-size: 11px;
+	}
+	input[type="submit"]
+	{
+		padding: 7px;
+		font-size: 1.3em;
+	}
+	h1{
+		padding-top: 20px;		
+		font-size: 30px;
+	}
+	ol{
+		font-size: 1.7em;
+	}
+	.rules{
+		font-size: 0.75em;
+	}
+	#rules{
+		max-height: calc(100vh - 460px);
+	}
+	#rules_accept_label{
+		margin: 50px auto 50px auto;
+		font-size: 1.3em;
+	}
+	#rules_accept_label:after{
+		width: 17px;
+		right: -27px;
+		top: 5.3px;
+		height: 17px;
+	}
+  }
