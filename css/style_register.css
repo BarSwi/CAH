@@ -266,6 +266,7 @@ table{
 #rules{
 	width: calc(100% - 20px);
 	overflow: auto;
+	min-height: 200px;
 	max-height: calc(100vh - 530px);
 	border-bottom: 1px dotted var(--background-color);
 	padding: 10px;

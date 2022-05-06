@@ -53,7 +53,7 @@
 		<div id = "middletop">
 			<?php
 			if(!isset($_SESSION['login']) || $_SESSION['login']==false)	echo '<a title = "'.$lang['lobbycreate_title'].'"  id = "inactive" >'.$lang['lobbycreate'].'</a>'; 
-			else echo  '<a  href="#"  id = "active" >'.$lang['lobbycreate'].'</a>' ;
+			else echo  '<a  href="create_lobby.php"  id = "active" >'.$lang['lobbycreate'].'</a>' ;
 			?>
 		</div>
 		<div id = "righttop">

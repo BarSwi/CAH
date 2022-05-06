@@ -1,0 +1,24 @@
+html
+{
+	font-family: 'Merriweather', serif;
+}
+body{
+	margin: 0;
+}
+#lang
+{
+	float: left;
+	margin-top: 25px;
+	margin-left: 10px;
+}
+#lang input[type="submit"]{
+	display: none;
+}
+.lang_change{
+	cursor: pointer;	
+	display: block;
+	margin: 0 0 10px 20px;
+}
+.lang_change:hover{
+	transform: scale(1.05,1.05);
+}
