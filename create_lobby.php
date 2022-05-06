@@ -7,11 +7,11 @@
 <html lang="pl">
 <head>
 	<meta charset = "utf-8"/>
-	<title>Przykładowy tytuł</title>
-	<meta name = "description" content ="Gra karciana, do wspólnej zabawy ze znajomymi." />
+	<title>GoCards</title>
+	<meta name = "description" content =<?= $lang['side_description'] ?> />
 	<meta name = "keywords" content = "Karty, gra karciana, multiplayer, zabawne, do gry ze znajomymi, na wolny wieczór" />
 	<meta http-equiv="X-UA-Compatible" content = "IE=edge,chrome=1"/> 
-	<link href="css/style.css" type="text/css" rel="stylesheet" />
+	<link href="css/create_lobby.css" type="text/css" rel="stylesheet" />
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href = "fontello/fontello-170c85d4/css/fontello.css" type ="text/css" rel = "stylesheet">
@@ -27,5 +27,7 @@
     <label class = "lang_change"> <img src = "img/enflag"> <input type = "submit" name = "hl" value ="en" class = "hl" ></label>
     
 </div>
+<div id ="container">
 
+</div>
 </body>

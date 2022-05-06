@@ -1,5 +1,6 @@
 <?php
 	$lang = array(
+	"side_description" => "Gra karciana, do wspólnej zabawy ze znajomymi.",
 	"lobbycreate" => "Stwórz Lobby",
 	"lobbycreate_title" => "Musisz być zalogowany, żeby to zrobić",
 	"login_password" => "Hasło",

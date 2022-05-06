@@ -1,5 +1,6 @@
 <?php
 	$lang = array(
+	"side_description"=> "Card game to play with friends.",
 	"lobbycreate" => "Create Lobby",
 	"lobbycreate_title" => "You have to sign in before doing that",
 	"login_password" => "Password",

@@ -197,7 +197,7 @@ a:link,a:visited{
 }
 .lang_change:hover{
 	transform: scale(1.05,1.05);
-	
+	cursor: pointer;
 }
 
 

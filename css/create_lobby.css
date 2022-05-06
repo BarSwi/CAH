@@ -3,22 +3,23 @@ html
 	font-family: 'Merriweather', serif;
 }
 body{
+    background-color: rgb(038, 036, 044);
 	margin: 0;
 }
 #lang
 {
+	width: 50px;
+	margin: 15px 0px 0px 15px;
 	float: left;
-	margin-top: 25px;
-	margin-left: 10px;
+}
+.lang_change{
+	display: block;
+	margin: 2px 0px 5px 0px;
 }
 #lang input[type="submit"]{
 	display: none;
 }
-.lang_change{
-	cursor: pointer;	
-	display: block;
-	margin: 0 0 10px 20px;
-}
 .lang_change:hover{
 	transform: scale(1.05,1.05);
+    cursor: pointer;
 }
