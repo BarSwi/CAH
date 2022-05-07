@@ -64,5 +64,11 @@
 	"no_decks" => "You haven't got any decks assigned to your account, if you want to create one click \"Create new deck\".",
 	"edit_deck" => "Edit deck",
 	"delete_deck" => "Delete deck",
+	"lobby_name" => "Lobby name: ",
+	"lobby_password" => "Lobby password (optional): ",
+	"max_players" => "Max number of players: ",
+	"round_limit" => "Number of rounds: ",
+	"round_time" => "Time limit for round (seconds): ",
+	"example_title" =>"RandomTitle",
 	);
 ?>

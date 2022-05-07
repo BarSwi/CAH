@@ -25,9 +25,42 @@
     <label class = "lang_change"><img src ="img/plflag"><input type = "submit" name = "hl" value ="pl" class = "hl" ></label>
 
     <label class = "lang_change"> <img src = "img/enflag"> <input type = "submit" name = "hl" value ="en" class = "hl" ></label>
-    
+    <div style = "clear:both;"></div>
 </div>
-<div id ="container">
+	<div id ="container">
+		<form action ="">
+			<div id = "overall_inf">
+				<div id ="lobby_title">
+					<label id = "lobby_title_label"><?= $lang['lobby_name']?>
+						<input type = "text" required ="true" value= <?=$lang['example_title'] ?> maxlength = "18" id = "lobby_title_input" />
+					</label>
+				</div>
+				<div id ="lobby_password">
+				<label id = "lobby_password_label"><?= $lang['lobby_password']?>
+						<input type = "password" id = "lobby_password_input" />
+					</label>
+				</div>
+			</div>
+			<div id = "sub_inf">
+				<div id = "max_players"><?=$lang['max_players'] ?>
+					<label id = "max_players_label">
+						<input id = "max_players_input" type = "number" value = "3" min="3" max = "10" />
+					</label>
+				</div>
+				<div id ="round_limit">
+					<label id = "round_limit_label"><?= $lang['round_limit']?>
+						<input id = "round_limit_input" value = "3" type = "number" max = "999" min="3" />
+					</label>
+				</div>
+				<div id = "round_time">
+					<label id = "round_time_label"><?= $lang['round_time']?>
+						<input id = "round_time_input" type = "number" value = "15" min="15"  max = "60" />
+					</label>
+				</div>
+			</div>
+			<input type = "submit" id = "form"/>
+		</form>
+	</div>
 
-</div>
+	<script src = "js/create_lobby.js"></script>
 </body>

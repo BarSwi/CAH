@@ -32,27 +32,11 @@ body#bright
 	background-color: rgb(205, 201, 213);
 	color: rgb(019, 015, 027);
 	--color: rgb(019, 015, 027);
-	--top:  rgb(168, 165, 174);
 	--link-color: black;
-	--game-creator: #993399;
-	--game-creator-shadow: #cc0099;
-	--top-border: #c2c2c2;
-	--game-creator-border: #cc0099; 
-	--login-button-background: #339900;
-	--login-button-text: black;
-	--login-button-border: #33cc00;
-	--login-button-shadow: #33cc00;
 	--theme-toggler-background: white;
 	--theme-toggler-border: #c7c7c7;
 	--theme-toggler-shadow:#c7c7c7;
-	--logout-button: #cc0066;
-	--register-link-color: #000099;
-	--my-cards-button-border: #333366;
 	--theme-togglerinside-background: black;
-	--nickname-color: #993399;
-	--my-cards-button: #666699;
-	--rules-background: rgb(168, 165, 174);
-	--rules-border: grey;
 	--webkit-scrollbar-track: rgb(168, 165, 174);
 	--webit-scrollbar-thumb: grey;
 	--webkit-scrollbar-thumb-border:  rgb(168, 165, 174);
@@ -192,6 +176,7 @@ input#topcheck:checked + .check:before
 {
 	margin: 6px 0 5px 10px;
 	padding: 5px;
+	border-radius: 3px;
 	border: 2px solid var(--input-border);
 	opacity: 70%;
 }

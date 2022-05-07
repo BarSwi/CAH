@@ -64,5 +64,11 @@
 	"no_decks" => "Nie posiadasz żadnej talii przypisanej do konta, jeżeli chcesz stworzyć nową kliknij zakładkę \"Stwórz nową talię\".",
 	"edit_deck" => "Edytuj talię",
 	"delete_deck" => "Usuń talię",
+	"lobby_name" => "Nazwa lobby: ",
+	"lobby_password" => "Hasło lobby (Opcjonalnie): ",
+	"max_players" => "Maksymalna ilość graczy: ",
+	"round_limit" => "Ilość rund: ",
+	"round_time" => "Limit czasu na runde (sekundy): ",
+	"example_title" =>"LosowyTytuł",
 	);
 	
