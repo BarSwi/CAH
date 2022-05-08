@@ -70,5 +70,10 @@
 	"round_limit" => "Ilość rund: ",
 	"round_time" => "Limit czasu na runde (sekundy): ",
 	"example_title" =>"LosowyTytuł",
+	"add_decks" => "Podaj 7 znakowy kod w celu dodania zewnętrznej talii do gry: ",
+	"added_decks" => "Dodane talie:",
+	"added_decks_list" => "Nie dodano żadnej talii.",
+	"add_decks_to_game" => "Dodaj talie do gry: ",
+	"add_deck_btn" => "Dodaj talię",
 	);
 	

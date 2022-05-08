@@ -1,6 +1,23 @@
 <?php
 	include "languages/config.php";	
     if(!isset($_SESSION['login']) || $_SESSION['login']==false) header('Location: index.php');
+	require_once('phpscripts/connect_users.php');
+	$nick = $_SESSION['user'];
+	$dsn = "mysql:host=".$host.";dbname=".$db_name;
+	$pdo = new PDO($dsn,$db_user,$db_password);
+	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+	try{
+		$sql = "SELECT * FROM decks WHERE BINARY author = '$nick'";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+		$decks = $stmt->fetchAll();
+	}
+	catch(PDOException $e){
+		$message = $e->getMessage();
+		echo $message;
+	}
 ?>
 
 <!DOCTYPE HTML>
@@ -58,7 +75,44 @@
 					</label>
 				</div>
 			</div>
-			<input type = "submit" id = "form"/>
+			<div id = "add_decks">
+				<h2><?=$lang['add_decks_to_game'] ?> </h2>
+				<ol id ="my_decks">
+					<?php 
+						foreach($decks as $deck){
+							$title = $deck['deck_title'];
+							$white_cards = $deck['white_cards'];
+							$black_cards = $deck['black_cards'];
+							echo 
+							'<li>
+								<table>
+									<tr>
+										<th>'.$lang['deck_title'].'</th>
+										<th>'.$lang['white_cards'].'</th>
+										<th>'.$lang['black_cards'].'</th>
+										<td rowspan ="2" style = "border: none;"><div id = "add_my_deck_btn">'.$lang['add_deck_btn'].'</div></td>
+									</tr>
+									<tr>
+										<td>'.$title.'</td>
+										<td>'.$white_cards.'</td>
+										<td>'.$black_cards.'</td>
+									</tr>
+								</table>
+							</li>';
+						}
+					?>
+				</ol>
+				<label id = "add_decks_label"><?= $lang['add_decks'] ?>
+					<input id = "add_decks_input" type = "text" maxlength = "7" /><span id = "add_decks_btn"> +</span>
+				</label>
+				<div id ="added_decks">
+					<h2><?= $lang['added_decks'] ?></h2>
+					<div id = "added_decks_list">
+						<h2><?= $lang['added_decks_list'] ?><h2>
+					</div>
+				</div>
+			</div>
+			<button id = "form" disabled><div id = "create_lobby" ><?=$lang['lobbycreate'] ?></div></button>
 		</form>
 	</div>
 

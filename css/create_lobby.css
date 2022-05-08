@@ -17,11 +17,11 @@ body{
 	--color:#DCDCDC;
 	--container: rgb(057, 053, 065 );
 	--link-color: #DCDCDC;
-	--text-color: #dadada;
-	--game-creator: #330033;
-	--game-creator-border: #660033; 
+	--text-color: #c9c6c6;
 	--container-border: rgb(042, 036, 054);
+    --text-color: #f7efef;
 	--theme-toggler-background: #1f1f1f;
+	--input-submit-background: #ccff99;
 	--theme-toggler-border: #262626;
 	--theme-toggler-shadow: rgba(0, 0, 0, 1);
 	--input-border: #660033;
@@ -32,9 +32,6 @@ body{
 	--webkit-scrollbar-track: rgb(057, 053, 065);
 	--webit-scrollbar-thumb: grey;
 	--webkit-scrollbar-thumb-border:  rgb(057, 053, 065);
-	--my-cards-button-border: #660099;
-	--rules-border: #3d3d3d;
-	--rules-background: rgb(057, 053, 065 );
 	--forgot-password-email-input-border: #d5d5d5;
 }
 ::-webkit-scrollbar{
@@ -76,14 +73,13 @@ body{
 }
 #container{
 	position: relative;
-	top: 100px;
+	top: 120px;
 	margin: 0 auto 0 auto;
 	width: 1200px;
 	background-color: var(--container);
 	padding: 15px;
 	font-size: 30px;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
+	border-radius: 5px;
 	text-align: center;
 	-webkit-box-shadow: 0px 0px 8px -3px rgba(78, 16, 71, 1);
 	-moz-box-shadow: 0px 0px 8px -3px rgba(78, 16, 71, 1);
@@ -97,17 +93,19 @@ body{
 	display: flex;	
 	justify-content: space-evenly;
 }
-#lobby_title_input, #lobby_password_input, #round_time_input, #round_limit_input, #max_players_input{
+#lobby_title_input, #lobby_password_input, #round_time_input, #round_limit_input, #max_players_input, #add_decks_input{
 	border: none;
 	border-radius: 3px;
 	height: 1.6em;
 	font-family: 'Merriweather', serif;
 	overflow: hidden;
     padding: 5px;
-    border: 2px solid var(--input-border);
-    opacity: 70%;
+    border: 2px solid var(--input-border);	
 	position: relative;
 	bottom: 4px;
+}
+input{
+	opacity: 75%;
 }
 #round_time_input, #round_limit_input, #max_players_input{
 	width: 50px;
@@ -125,4 +123,95 @@ input:focus, input:hover{
 }
 input:invalid{
 	border: 2px solid #ca0f02 !important;
+}
+#add_decks{
+	font-size: 20px;
+	margin-top: 35px;
+	position: relative;
+}
+#add_decks_input{
+	width: 65px;
+	position: relative;
+	margin-left: 8px;
+}
+#add_decks_btn{
+	color: rgb(29, 202, 37);
+	font-weight: 900;
+	position: relative;
+	bottom: 1px;
+	width: 5px;
+	height: 5px;
+	font-size: 25px;
+	margin-left: 5px;
+}
+#add_decks_btn:hover{
+	cursor: pointer;
+}
+#added_decks{
+	padding: 10px;
+}
+#added_decks_list{
+	background-color: rgb(59, 55, 66) ;
+	border-top-left-radius: 3px;
+	margin-top: 35px;
+	border-top-right-radius: 3px;
+}
+#added_decks_list h2{
+	opacity: 30%;
+}
+#form{
+	background-color: var(--input-submit-background);
+	border-radius: 5px;
+	color: rgb(37, 37, 37);
+	opacity: 80%;
+	border: none;
+	padding:10px;
+	transition: .2s ease;
+	font-weight: 900;
+	margin: 35px 0 20px 0;
+	font-size: 25px;
+}
+#form:hover, #form:focus{
+	outline: none;
+	opacity: 100%;
+	transform: scale(1.1);
+	cursor: pointer;
+}
+#form:disabled:hover{
+	pointer-events: none;
+	transform: none;
+	opacity: 80%; 
+}
+#my_decks{
+	margin-bottom: 25px;
+}
+ol{
+	width: max-content;
+	list-style-type: none;
+	display: block;
+	margin: 0 auto 0 auto;
+}
+ol li{
+	margin: 10px 0 10px 0;
+	min-width: 700px;
+}
+td, th{
+	padding: 10px;
+	text-align: center;
+	width: 150px;
+	word-wrap: break-word;
+}
+table{
+	border-collapse: collapse;
+	border-bottom: 1px solid black;
+	border-top: 1px solid black;
+}
+table td:first-child{
+	max-width: 300px;
+}
+#add_my_deck_btn{
+	padding: 10px;
+	background-color: rgba(23, 194, 46, 0.849);
+	font-weight: 900;
+	border-radius: 5px;
 }

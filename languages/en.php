@@ -70,5 +70,11 @@
 	"round_limit" => "Number of rounds: ",
 	"round_time" => "Time limit for round (seconds): ",
 	"example_title" =>"RandomTitle",
+	"add_decks" => "Enter 7-character code to add the external deck to the game: ",
+	"added_decks" => "Added decks:",
+	"added_decks_list" => "No deck has been added.",
+	"add_decks_to_game" => "Add decks to game: ",
+	"add_deck_btn" => "Add deck",
+	
 	);
 ?>
