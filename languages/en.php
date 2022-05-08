@@ -67,7 +67,7 @@
 	"lobby_name" => "Lobby name: ",
 	"lobby_password" => "Lobby password (optional): ",
 	"max_players" => "Max number of players: ",
-	"round_limit" => "Number of rounds: ",
+	"point_limit" => "Max number of points: ",
 	"round_time" => "Time limit for round (seconds): ",
 	"example_title" =>"RandomTitle",
 	"add_decks" => "Enter 7-character code to add the external deck to the game: ",
@@ -75,6 +75,8 @@
 	"added_decks_list" => "No deck has been added.",
 	"add_decks_to_game" => "Add decks to game: ",
 	"add_deck_btn" => "Add deck",
+	"min_white_cards"=> "Minimum amount of white cards ",
+	"min_black_cards"=> "Minimum amount of black cards  ",
 	
 	);
 ?>

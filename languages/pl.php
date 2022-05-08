@@ -67,7 +67,7 @@
 	"lobby_name" => "Nazwa lobby: ",
 	"lobby_password" => "Hasło lobby (Opcjonalnie): ",
 	"max_players" => "Maksymalna ilość graczy: ",
-	"round_limit" => "Ilość rund: ",
+	"point_limit" => "Maksymalna ilość punktów: ",
 	"round_time" => "Limit czasu na runde (sekundy): ",
 	"example_title" =>"LosowyTytuł",
 	"add_decks" => "Podaj 7 znakowy kod w celu dodania zewnętrznej talii do gry: ",
@@ -75,5 +75,7 @@
 	"added_decks_list" => "Nie dodano żadnej talii.",
 	"add_decks_to_game" => "Dodaj talie do gry: ",
 	"add_deck_btn" => "Dodaj talię",
+	"min_white_cards"=> "Minimalna ilość białych kart ",
+	"min_black_cards"=> "Minimalna ilość czarnych kart ",
 	);
 	

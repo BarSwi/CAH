@@ -65,7 +65,7 @@
 					</label>
 				</div>
 				<div id ="round_limit">
-					<label id = "round_limit_label"><?= $lang['round_limit']?>
+					<label id = "round_limit_label"><?= $lang['point_limit']?>
 						<input id = "round_limit_input" value = "3" type = "number" max = "999" min="3" />
 					</label>
 				</div>
@@ -84,16 +84,16 @@
 							$white_cards = $deck['white_cards'];
 							$black_cards = $deck['black_cards'];
 							echo 
-							'<li>
+							'<li id = "deck">
 								<table>
 									<tr>
 										<th>'.$lang['deck_title'].'</th>
 										<th>'.$lang['white_cards'].'</th>
 										<th>'.$lang['black_cards'].'</th>
-										<td rowspan ="2" style = "border: none;"><div id = "add_my_deck_btn">'.$lang['add_deck_btn'].'</div></td>
+										<td rowspan ="2" style = "border: none;"><div id = "add_my_deck_btn" class = "'.$title.'">'.$lang['add_deck_btn'].'</div></td>
 									</tr>
 									<tr>
-										<td>'.$title.'</td>
+										<td class = "deck_title">'.$title.'</td>
 										<td>'.$white_cards.'</td>
 										<td>'.$black_cards.'</td>
 									</tr>
@@ -111,10 +111,33 @@
 						<h2><?= $lang['added_decks_list'] ?><h2>
 					</div>
 				</div>
+				<div id = "min_cards">
+					<span id = "white_cards">
+						<?= $lang['min_white_cards'] ?>
+						<span id = "current_white_cards">
+							0 
+						</span>
+							/
+						<span id ="min_amount_white_cards">
+							100
+						</span>
+					</span>
+					<br><br>
+					<span id = "black_cards">
+						<?= $lang['min_black_cards'] ?>
+						<span id = "current_black_cards">
+							0 
+						</span>
+							/
+						<span id ="min_amount_black_cards">
+							100
+						</span>
+					</span>
+				</div>
 			</div>
+
 			<button id = "form" disabled><div id = "create_lobby" ><?=$lang['lobbycreate'] ?></div></button>
 		</form>
 	</div>
-
 	<script src = "js/create_lobby.js"></script>
 </body>
