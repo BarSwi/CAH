@@ -73,7 +73,7 @@ body{
 }
 #container{
 	position: relative;
-	top: 120px;
+	top: 45px;
 	margin: 0 auto 0 auto;
 	width: 1200px;
 	background-color: var(--container);
@@ -154,6 +154,9 @@ input:invalid{
 	background-color: rgb(59, 55, 66) ;
 	border-top-left-radius: 3px;
 	margin-top: 35px;
+	max-height: 138px;
+	overflow: auto;
+	margin-bottom: 20px;
 	border-top-right-radius: 3px;
 }
 #added_decks_list h2{
@@ -183,7 +186,9 @@ input:invalid{
 	opacity: 80%; 
 }
 #my_decks{
-	margin-bottom: 25px;
+	margin: 0 auto 25px auto;
+	max-height: 193px;
+	overflow: auto;
 }
 ol{
 	width: max-content;
@@ -210,7 +215,7 @@ table{
 table td:first-child{
 	max-width: 300px;
 }
-#add_my_deck_btn{
+.add_my_deck_btn{
 	padding: 10px;
 	background-color: rgba(23, 194, 46, 0.849);
 	font-weight: 900;
@@ -218,9 +223,37 @@ table td:first-child{
 	opacity: 90%;
 	transition: .2s ease;
 }
-#add_my_deck_btn:hover, #add_my_deck_btn:focus{
+.add_my_deck_btn:hover, .add_my_deck_btn:focus{
 	outline: none;
 	transform: scale(1.1);
 	opacity: 100%;
 	cursor: pointer;
 }
+.min_amount{
+	color: red;
+}
+#added_decks_table{
+	margin: 0 auto 0 auto;
+}
+#added_decks_table tr:not(:first-child){
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+#added_decks_table tr td:last-child{
+	width: 0;
+	height: 0;
+	border-top: 1px solid var(--container);
+	border-bottom: 1px solid var(--container);
+	color: red;
+	font-family: courier;
+}
+#delete_added_deck_btn{
+	position: relative;
+	left: 200px;
+	font-weight: 900;
+}
+#delete_added_deck_btn:hover{
+	cursor: pointer;
+	font-size: 1.1em;
+}
+

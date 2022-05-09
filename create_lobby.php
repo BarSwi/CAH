@@ -83,19 +83,22 @@
 							$title = $deck['deck_title'];
 							$white_cards = $deck['white_cards'];
 							$black_cards = $deck['black_cards'];
+							$deck_id = $deck['deck_code'];
 							echo 
 							'<li id = "deck">
 								<table>
 									<tr>
+										<th>ID:</th>
 										<th>'.$lang['deck_title'].'</th>
 										<th>'.$lang['white_cards'].'</th>
 										<th>'.$lang['black_cards'].'</th>
-										<td rowspan ="2" style = "border: none;"><div id = "add_my_deck_btn" class = "'.$title.'">'.$lang['add_deck_btn'].'</div></td>
+										<td rowspan ="2" style = "border: none;"><div class = "add_my_deck_btn" id = "'.$deck_id.'">'.$lang['add_deck_btn'].'</div></td>
 									</tr>
 									<tr>
+										<td class = "deck_id">'.$deck_id.'</td>
 										<td class = "deck_title">'.$title.'</td>
-										<td>'.$white_cards.'</td>
-										<td>'.$black_cards.'</td>
+										<td class = "white_cards">'.$white_cards.'</td>
+										<td class = "black_cards">'.$black_cards.'</td>
 									</tr>
 								</table>
 							</li>';
@@ -108,11 +111,23 @@
 				<div id ="added_decks">
 					<h2><?= $lang['added_decks'] ?></h2>
 					<div id = "added_decks_list">
-						<h2><?= $lang['added_decks_list'] ?><h2>
+						<?php 
+							echo 
+							'<table id = "added_decks_table">
+								<tr>
+									<th>ID:</th>
+									<th>'.$lang['deck_title'].'</th>
+									<th>'.$lang['white_cards'].'</th>
+									<th>'.$lang['black_cards'].'</th>
+								</tr>
+							</table>'
+						
+						?>
+						<h2 id = "child"> <?= $lang['added_decks_list'] ?> </h2>
 					</div>
 				</div>
 				<div id = "min_cards">
-					<span id = "white_cards">
+					<span id = "white_cards" class ="min_amount">
 						<?= $lang['min_white_cards'] ?>
 						<span id = "current_white_cards">
 							0 
@@ -123,7 +138,7 @@
 						</span>
 					</span>
 					<br><br>
-					<span id = "black_cards">
+					<span id = "black_cards" class = "min_amount">
 						<?= $lang['min_black_cards'] ?>
 						<span id = "current_black_cards">
 							0 
