@@ -134,7 +134,7 @@
 						</span>
 							/
 						<span id ="min_amount_white_cards">
-							100
+							46
 						</span>
 					</span>
 					<br><br>
@@ -145,7 +145,7 @@
 						</span>
 							/
 						<span id ="min_amount_black_cards">
-							100
+							7
 						</span>
 					</span>
 				</div>
