@@ -54,7 +54,7 @@
 				</div>
 				<div id ="lobby_password">
 				<label id = "lobby_password_label"><?= $lang['lobby_password']?>
-						<input type = "password" id = "lobby_password_input" />
+						<input  maxlength = "20" type = "password" id = "lobby_password_input" />
 					</label>
 				</div>
 			</div>

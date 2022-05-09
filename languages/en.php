@@ -75,8 +75,8 @@
 	"added_decks_list" => "No deck has been added.",
 	"add_decks_to_game" => "Add decks to game: ",
 	"add_deck_btn" => "Add deck",
-	"min_white_cards"=> "Minimum amount of white cards ",
-	"min_black_cards"=> "Minimum amount of black cards  ",
+	"min_white_cards"=> "Minimum amount of white cards: ",
+	"min_black_cards"=> "Minimum amount of black cards:  ",
 	
 	);
 ?>

@@ -75,7 +75,7 @@
 	"added_decks_list" => "Nie dodano żadnej talii.",
 	"add_decks_to_game" => "Dodaj talie do gry: ",
 	"add_deck_btn" => "Dodaj talię",
-	"min_white_cards"=> "Minimalna ilość białych kart ",
-	"min_black_cards"=> "Minimalna ilość czarnych kart ",
+	"min_white_cards"=> "Minimalna ilość białych kart: ",
+	"min_black_cards"=> "Minimalna ilość czarnych kart: ",
 	);
 	
