@@ -22,7 +22,6 @@ $dsn = "mysql:host=".$host.';dbname='.$db_name;
 $pdo = new PDO($dsn, $db_user, $db_password);
 $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$counter = 0;
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 try{
     foreach($decks as $deck){
@@ -79,7 +78,8 @@ try{
 			exit();
 		}
 		else{
-            $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_round_time, lobby_points_limit, lobby_title, lobby_creator, game_started) VALUES('$randomString', '$password', $time, $max_points, '$title', '$user', false)";
+            $last_change = floor(microtime(true) * 1000);
+            $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_round_time, lobby_points_limit, lobby_title, lobby_creator, game_started, last_change) VALUES('$randomString', '$password', $time, $max_points, '$title', '$user', false, '$last_change')";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser) VALUES ('$user', '$randomString', 0, false)";
