@@ -1,6 +1,3 @@
-$('#form').click(function(event){
-    event.preventDefault();
-});
 added_decks = [];
 min_amount_white_cards = $('#min_amount_white_cards');
 white_cards_span = $('#white_cards');
@@ -8,11 +5,55 @@ min_amount_black_cards = $('#min_amount_black_cards');
 black_cards_span = $('#black_cards');
 current_white_cards = $('#current_white_cards');
 button = $('#form');
+hl = $('#hl').text();
 points = $('#round_limit_input');
 players = $('#max_players_input');
 time = $('#round_time_input');
 current_black_cards = $('#current_black_cards');
-
+$(document).ready(function(){
+    min_amount_white_cards.html();
+    var black_cards_res = players.val() * points.val() - players.val() + 1;
+    var white_cards_res = players.val() * 12 + 10;
+    min_amount_white_cards.html(white_cards_res);
+    min_amount_black_cards.html(black_cards_res);
+    
+});
+$('#form').click(function(event){
+    event.preventDefault();
+    let points_val = points.val();
+    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 10, time.val()>=15 && time.val()<=60  ].filter(Boolean).length==4;
+    let players_val = players.val();
+    let added_decks_json = JSON.stringify(added_decks);
+    let round_time = time.val();
+    let lobby_password = $('#lobby_password_input').val();
+    let lobby_title = $('#lobby_title_input').val();
+    let black_cards_res = players_val * points_val - players_val + 1;
+    let white_cards_res = players_val * 12 + 10;
+    if(flag && parseInt(min_amount_black_cards.text()) >= black_cards_res && parseInt(min_amount_white_cards.text()) >= white_cards_res){
+        $.ajax({
+            type: 'post',
+            data: {points:points_val, players:players_val, array:added_decks_json, time:round_time, password:lobby_password, title:lobby_title},
+            url: '../phpscripts/create_new_lobby.php',
+            success: function(res){
+                if(res=="2"){
+                    if(hl=="pl") alert("To konto jest już w innym lobby.")
+                    if(hl=="en") alert("This account is already in another lobby.")
+                    location.href="index.php";
+                }
+                else if(res!="0"){
+                    location.href = "game.php?id="+res;
+                }
+                
+            }
+        })
+    }
+    else{
+        window.location.reload();
+        alert('Unexpected error, please try again');
+    }
+    
+    
+});
 $('.add_my_deck_btn').click(function() {
     var added_decks_list = $('#added_decks_list');
     var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 10, time.val()>=15 && time.val()<=60  ].filter(Boolean).length==4;
@@ -20,6 +61,7 @@ $('.add_my_deck_btn').click(function() {
     var title =  $(this).parents().eq(1).siblings().children(".deck_title").text();
     var white_cards = $(this).parents().eq(1).siblings().children(".white_cards").text();
     var black_cards = $(this).parents().eq(1).siblings().children(".black_cards").text();
+
     for(var i =0; i<added_decks.length; i++){   
         if (deck_id == added_decks[i]) return 0;
     }
@@ -33,10 +75,10 @@ $('.add_my_deck_btn').click(function() {
     current_white_cards_int = parseInt(current_white_cards.text());
     current_white_cards_res = parseInt(white_cards) + current_white_cards_int;
     current_white_cards.html(current_white_cards_res);
-    if(parseInt(min_amount_white_cards.text()) < current_white_cards_res) {
+    if(parseInt(min_amount_white_cards.text()) <= current_white_cards_res) {
         white_cards_span.css('color','green');
     }  
-    if(parseInt(min_amount_black_cards.text()) < current_black_cards_res) {
+    if(parseInt(min_amount_black_cards.text()) <= current_black_cards_res) {
         black_cards_span.css('color','green');
     } 
     if(!button.is(':disabled')){
@@ -184,7 +226,7 @@ $('#add_decks_btn').click(function(){
             type: 'post',
             data: {code:input.val()},
             async: false,
-            url: '../phpscripts/create_lobby.php',
+            url: '../phpscripts/add_deck_to_lobby.php',
             success: function(res){
                 array = $.parseJSON(res);
             }
@@ -200,11 +242,11 @@ $('#add_decks_btn').click(function(){
         var white_cards = array['white_cards'];
         var black_cards = array['black_cards'];
         if(array['author']==1) $('#'+deck_id).css({'pointer-events': 'none', 'opacity': '60%'});
+        input.val('');
         for(var i =0; i<added_decks.length; i++){   
             if (deck_id == added_decks[i]) return 0;
         }
         added_decks.push(deck_id);
-        input.val('');
         added_decks_list.children('#child').css('display', 'none');
         $('#added_decks_table').append('<tr><td class = "deck_id">'+deck_id+'</td><td class = "deck_title">'+title+'</td><td class = "white_cards">'+white_cards+'</td><td class = "black_cards">'+black_cards+'</td><td><div id ="delete_added_deck_btn">x</div></td></tr>');
         current_black_cards_int = parseInt(current_black_cards.text());
@@ -213,10 +255,10 @@ $('#add_decks_btn').click(function(){
         current_white_cards_int = parseInt(current_white_cards.text());
         current_white_cards_res = parseInt(white_cards) + current_white_cards_int;
         current_white_cards.html(current_white_cards_res);
-        if(parseInt(min_amount_white_cards.text()) < current_white_cards_res) {
+        if(parseInt(min_amount_white_cards.text()) <= current_white_cards_res) {
             white_cards_span.css('color','green');
         }  
-        if(parseInt(min_amount_black_cards.text()) < current_black_cards_res) {
+        if(parseInt(min_amount_black_cards.text()) <= current_black_cards_res) {
             black_cards_span.css('color','green');
         } 
         if(!button.is(':disabled')){

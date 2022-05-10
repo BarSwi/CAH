@@ -154,5 +154,6 @@
 			<button id = "form" disabled><div id = "create_lobby" ><?=$lang['lobbycreate'] ?></div></button>
 		</form>
 	</div>
+	<span id ="hl" hidden><?= $_SESSION['lang']?></span>
 	<script src = "js/create_lobby.js"></script>
 </body>

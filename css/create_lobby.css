@@ -151,7 +151,6 @@ input:invalid{
 	padding: 10px;
 }
 #added_decks_list{
-	background-color: rgb(59, 55, 66) ;
 	border-top-left-radius: 3px;
 	margin-top: 35px;
 	max-height: 138px;
@@ -198,11 +197,11 @@ ol{
 	margin: 0 auto 0 auto;
 }
 ol li:first-child{
-	border-top: 1px solid black;
+	border-top: 1px solid var(--container-border);
 }
 ol li{
 	min-width: 700px;
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid var(--container-border	);
 }
 td, th{
 	padding: 10px;
@@ -237,8 +236,8 @@ table td:first-child{
 	margin: 0 auto 0 auto;
 }
 #added_decks_table tr:not(:first-child){
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
+	border-top: 1px solid var(--container-border);
+	border-bottom: 1px solid var(--container-border);
 }
 #added_decks_table tr td:last-child{
 	width: 0;
