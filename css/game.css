@@ -1,0 +1,120 @@
+html
+{
+	font-family: 'Merriweather', serif;
+}
+body{
+	margin: 0;
+    background-color: rgb(038, 036, 044);
+	color:  #DCDCDC;
+	--color:#DCDCDC;
+	--top: rgb(057, 053, 065 );
+	--link-color: #DCDCDC;
+	--text-color: #dadada;
+	--game-creator: #330033;
+	--game-creator-border: #660033; 
+	--game-creator-shadow: #660033;
+	--login-button-background: #006633;
+	--login-button-text: black;
+	--login-button-border: #339966;
+	--login-button-shadow:#339966;
+	--theme-toggler-background: #1f1f1f;
+	--theme-toggler-border: #262626;
+	--theme-toggler-shadow: rgba(0, 0, 0, 1);
+	--theme-togglerinside-background: white;
+	--theme-togglerinside-background: white;
+	--theme-togglerinside-border: #999999;
+	--lang-border: #339966;
+	--register-link-color: #0099ff;
+	--start_game: #666699;
+	--nickname-color:  #330033;
+	--webkit-scrollbar-track: rgb(057, 053, 065);
+	--webit-scrollbar-thumb: grey;
+	--webkit-scrollbar-thumb-border:  rgb(057, 053, 065);
+	--my-cards-button-border: #660099;
+	--rules-border: #3d3d3d;
+	--rules-background: rgb(057, 053, 065 );
+	--forgot-password-email-input-border: #d5d5d5;
+}
+::-webkit-scrollbar{
+	width: 15px;
+}
+::-webkit-scrollbar-thumb{
+	border-radius: 10px;
+	width: 10px;
+	background: var(--webit-scrollbar-thumb);
+	border: 2px solid var(--webkit-scrollbar-thumb-border);
+}
+::-webkit-scrollbar-track{
+	background-color: var(--webkit-scrollbar-track);
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+::-webkit-scrollbar-button{
+	display: none;
+}
+::-webkit-scrollbar-thumb:hover{
+	opacity: 90%;
+}
+#lang{
+	position: fixed;
+	left: 10px;
+	top: 20px;
+}
+#lang input[type = "submit"]
+{
+	display: none;
+}
+.lang_change{
+	cursor: pointer;	
+	display: block;
+	float: left;
+	margin: 0 0 10px 10px;
+}
+.lang_change:hover{
+	cursor: pointer;
+	transform: scale(1.05,1.05);
+}
+.players_not_started{
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 20px;
+    flex-wrap: wrap;
+    padding-bottom: 25px;
+    bottom: 0;
+    width: 100%;
+}
+#bottom{
+    background-color: red;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+h2{
+    display: block;
+    text-align: center;
+}
+.player_before{
+    padding: 10px;
+    border: 1px solid black;
+}
+.kick{
+    padding-top: 5px;
+    text-align: center;
+}
+h1{
+    text-align: center;
+    padding: 15px;
+}
+#middle{
+    width: 100%;
+    position: fixed;
+    top: 40%;
+    bottom: 40%;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 900;
+}
+#start_game{
+    padding: 10px;
+    background-color: var(--start_game);
+}

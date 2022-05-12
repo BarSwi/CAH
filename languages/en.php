@@ -68,7 +68,7 @@
 	"lobby_password" => "Lobby password (optional): ",
 	"max_players" => "Max number of players: ",
 	"point_limit" => "Max number of points: ",
-	"round_time" => "Time limit for round (seconds): ",
+	"round_time" => "Time limit for being afk (minutes): ",
 	"example_title" =>"RandomTitle",
 	"add_decks" => "Enter 7-character code to add the external deck to the game: ",
 	"added_decks" => "Added decks:",
@@ -77,6 +77,9 @@
 	"add_deck_btn" => "Add deck",
 	"min_white_cards"=> "Minimum amount of white cards: ",
 	"min_black_cards"=> "Minimum amount of black cards:  ",
+	"players" => "Players:",
+	"game_not_started" => "The game has not yet started.",
+	"start_game_btn" =>"Start the game (minimum 3 players)",
 	
 	);
 ?>

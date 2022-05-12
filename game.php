@@ -2,22 +2,42 @@
 	include "languages/config.php";	
     if(!isset($_SESSION['login']) || $_SESSION['login']==false) header('Location: index.php');
 	require_once('phpscripts/connect_users.php');
-	$nick = $_SESSION['user'];
+	$lobby_id = $_GET['id'];
+	$last_change = floor(microtime(true) * 1000);
+	$user = $_SESSION['user'];
 	$dsn = "mysql:host=".$host.";dbname=".$db_name;
-	$pdo = new PDO($dsn,$db_user,$db_password);
-	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$pdo = new PDO($dsn, $db_user, $db_password);
+	$pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	$pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-	try{
-		$sql = "SELECT * FROM decks WHERE BINARY author = '$nick'";
+	$sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute();
+	if($stmt->rowCount() == 0){
+		header('Location: index.php');
+		exit();
+	}
+	$lobby = $stmt->fetch();
+	$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute();
+	if($stmt->rowCount()==0){
+		$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
-		$decks = $stmt->fetchAll();
 	}
-	catch(PDOException $e){
-		$message = $e->getMessage();
-		echo $message;
+	else{
+		$sql = "DELETE FROM players_in_lobby WHERE nick = '$user'";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+		$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
 	}
+	$sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id'";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute();
+	$players = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE HTML>
@@ -28,7 +48,7 @@
 	<meta name = "description" content =<?= $lang['side_description'] ?> />
 	<meta name = "keywords" content = "Karty, gra karciana, multiplayer, zabawne, do gry ze znajomymi, na wolny wieczór" />
 	<meta http-equiv="X-UA-Compatible" content = "IE=edge,chrome=1"/> 
-	<link href="css/create_lobby.css" type="text/css" rel="stylesheet" />
+	<link href="css/game.css" type="text/css" rel="stylesheet" />
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href = "fontello/fontello-170c85d4/css/fontello.css" type ="text/css" rel = "stylesheet">
@@ -37,5 +57,36 @@
 	<script src = "js/FormSubmitLang.js"></script> 
 </head>
 <body>
-<button id ="test">Test</button>
+	<div id = "lang">
+				
+		<label class = "lang_change"><img src ="img/plflag"><input type = "submit" name = "hl" value ="pl" class = "hl" ></label>
+	
+		<label class = "lang_change"> <img src = "img/enflag"> <input type = "submit" name = "hl" value ="en" class = "hl" ></label>
+		
+	</div>
+	<?php echo'
+	<div id ="top">
+		<h1>'.$lobby['lobby_title'].'</h1>
+	</div>
+	<div id = "middle" class= "middle_not_started">';
+	if($user != $lobby['owner']){
+		echo $lang['game_not_started'];
+	}
+	else{
+		echo '<div id = "start_game">'.$lang['start_game_btn'].'</div>';
+	}
+
+	echo '</div>
+	<div id ="bottom">
+	<h2>'.$lang['players'].'</h2>
+	<div id = "players" class = "players_not_started">';
+		 foreach($players as $player){
+			echo
+			'<div  class = "player_before">
+				'.$player['nick'].'
+			<div class = "kick">test</div>';
+		}
+		
+	?>
+	<script src = "js/game.js"></script>
 </body>

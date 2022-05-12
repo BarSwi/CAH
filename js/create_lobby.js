@@ -19,6 +19,7 @@ $(document).ready(function(){
     
 });
 $('#form').click(function(event){
+    $(this).css('pointer-events', 'none');
     event.preventDefault();
     let points_val = points.val();
     var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 10, time.val()>=15 && time.val()<=60  ].filter(Boolean).length==4;
