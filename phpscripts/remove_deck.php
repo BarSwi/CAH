@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors','0');
 session_start();
 require_once('connect_users.php');
 $deck_code = $_POST['deck_code'];

@@ -1,6 +1,9 @@
 <?php
 	include "languages/config.php";	
-    if(!isset($_SESSION['login']) || $_SESSION['login']==false) header('Location: index.php');
+    if(!isset($_SESSION['login']) || $_SESSION['login']==false){
+		header('Location: index.php');
+		exit();
+	} 
 	require_once('phpscripts/connect_users.php');
 	$lobby_id = $_GET['id'];
 	$last_change = floor(microtime(true) * 1000);
@@ -25,12 +28,18 @@
 		$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
+		$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
 	}
 	else{
 		$sql = "DELETE FROM players_in_lobby WHERE nick = '$user'";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
 		$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+		$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
 	}
@@ -57,6 +66,7 @@
 	<script src = "js/FormSubmitLang.js"></script> 
 </head>
 <body>
+	<script src = "js/game.js"></script>
 	<div id = "lang">
 				
 		<label class = "lang_change"><img src ="img/plflag"><input type = "submit" name = "hl" value ="pl" class = "hl" ></label>
@@ -73,7 +83,7 @@
 		echo $lang['game_not_started'];
 	}
 	else{
-		echo '<div id = "start_game">'.$lang['start_game_btn'].'</div>';
+		echo '<div id = "start">START</div><div id = "information">'.$lang['lobby_message'].'</div>';
 	}
 
 	echo '</div>
@@ -81,12 +91,13 @@
 	<h2>'.$lang['players'].'</h2>
 	<div id = "players" class = "players_not_started">';
 		 foreach($players as $player){
+			if($lobby['owner']==$player['nick']) $class = 'class = "owner"';
+			else $class = 'class ="player_before"';
 			echo
-			'<div  class = "player_before">
+			'<div '.$class.'>
 				'.$player['nick'].'
-			<div class = "kick">test</div>';
+			<div class = "kick">test</div></div>';
 		}
-		
+	'</div>';
 	?>
-	<script src = "js/game.js"></script>
 </body>

@@ -1,4 +1,5 @@
 <?php
+	ini_set('display_errors','0');
 	$haslo = $_POST['haslo'];
 	$haslo1 = $_POST['haslo1'];
 	if(strlen($haslo)<8) echo 0;

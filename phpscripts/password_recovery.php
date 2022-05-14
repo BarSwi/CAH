@@ -1,5 +1,6 @@
 <?php
 include "../languages/config.php";
+ini_set('display_errors','0');
 $email = $_POST['email'];
 try{
 	require_once("connect_users.php");

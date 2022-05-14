@@ -1,8 +1,8 @@
 <?php
-
-$login = $_POST['login'];
+ini_set('display_errors','0');
 
 try{
+	$login = $_POST['login'];
 	require_once("connect_users.php");
 	$dsn = 'mysql:host='.$host.';dbname='.$db_name;
 	$pdo = new PDO($dsn, $db_user, $db_password);
@@ -16,5 +16,4 @@ try{
 }
 catch(PDOException $e){
 	$error_message = $e->getMessage();
-	echo $error_message;
 }

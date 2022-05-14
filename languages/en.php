@@ -78,8 +78,8 @@
 	"min_white_cards"=> "Minimum amount of white cards: ",
 	"min_black_cards"=> "Minimum amount of black cards:  ",
 	"players" => "Players:",
-	"game_not_started" => "The game has not yet started.",
-	"start_game_btn" =>"Start the game (minimum 3 players)",
+	"lobby_message" => "In order to start the game you need at least 3 players. Each lobby is deleted after one hour of inactivity.",
+	"game_not_started" => "Waiting for the owner of the waiting room to start the game.",
 	
 	);
 ?>

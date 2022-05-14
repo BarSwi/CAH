@@ -16,7 +16,7 @@ register_email = $('#register_email');
 register_password = $('#register_password');
 register_password_re = $('#register_password-re');
 equation_result = $('#equation_result');
-$('#rules_accept').click(validation);
+$('#rules_accept').change(validation);
 function validation(){
 	var a = parseInt($('#equation').html().substring(0, 2));
 	var b = parseInt($('#equation').html().substring(5, 8));
@@ -86,10 +86,28 @@ function validation(){
 		equation_result.css("border", "2px solid red");
 	}
 	else if (parseInt(bot) == (a+b)) equation_result.css("border", "2px solid green");
-	if(!$('#rules_accept').prop('checked')){
+	if(!$('#rules_accept').is(':checked')){
 		validation = false;
 	}
 	if(validation==true){
+		$('#register_button').prop('disabled', false);
+		return true;
+	}
+	else{
+		$('#register_button').prop('disabled', true);
+		return false;
+	}
+}
+
+$("#register_button").click(function(){
+	var validation_btn;
+	validation_btn = validation();
+	var login = register_login.val();
+	var haslo = register_password.val();
+	var email = register_email.val();
+	var haslo2 = register_password_re.val();
+	var bot = equation_result.val();
+	if(validation_btn==true){
 		$.ajax({
 			type: "POST",
 			url: '../phpscripts/check_ifexist_login.php',
@@ -98,7 +116,7 @@ function validation(){
 			success: function(res){
 				if(res=="0"){
 					var lang = $('#hl').html();
-					validation = false;
+					validation_btn = false;
 					if(lang=="en") $('#errorl').html('<br>Nickname is already taken.');
 					if(lang=="pl") $('#errorl').html("<br>Nazwa jest zajęta.");
 					register_login.css("border", "2px solid red");
@@ -118,25 +136,19 @@ function validation(){
 					if(lang=="en") $('#errore').html('<br>Email is already taken.');
 					if(lang=="pl") $('#errore').html("<br>Email jest zajęty.");
 					register_email.css("border", "2px solid red");
-					validation = false;
+					validation_btn = false;
 				} 
 				else $('#errore').html('');
 			}
 		});
-		if(validation==true)	$('#register_button').prop("disabled", false);
 	}
-	if(validation==false) $('#regsiter_button').prop('disabled', true);
-
-}
-
-$("#register_button").click(function(){
-	var login = register_login.val();
-	var haslo = register_password.val();
-	var email = register_email.val();
-	var haslo2 = register_password_re.val();
-	var bot = equation_result.val();
+	if(validation_btn==false){
+		$(this).prop('disabled', true);
+		return;
+	}
 	$.ajax({
 		type: "POST",
+		async: false,
 		url: '../phpscripts/validation.php',
 		data: {login:login, haslo:haslo, email:email, haslo2:haslo2, bot:bot},
 		success: function(res){
@@ -152,3 +164,4 @@ $("#register_button").click(function(){
 		}
 	});
 });
+

@@ -1,5 +1,6 @@
 <?php
- session_start();
+ini_set('display_errors','0');
+session_start();
 try{
 	$login = $_POST['login'];
 	$haslo = $_POST['haslo'];

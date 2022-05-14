@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors','0');
 session_start();
 if(!isset($_SESSION['login']) || $_SESSION['login']==false) exit();
 $flag = true;

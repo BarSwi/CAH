@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors','0');
 session_start();
 if(!isset($_SESSION['login']) || $_SESSION['login']==false){
     echo "0";
@@ -7,6 +8,8 @@ if(!isset($_SESSION['login']) || $_SESSION['login']==false){
 $title = $_POST['title'];
 $password = $_POST['password'];
 $time = $_POST['time'];
+$last_change = floor(microtime(true) * 1000);
+$delete = $last_change - 3600000;
 $flag = true;
 $max_players = $_POST['players'];
 $max_points = $_POST['points'];
@@ -24,6 +27,22 @@ $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 try{
+    $sql = "SELECT * FROM lobby WHERE last_change < $delete AND last_change_players < $delete";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetchAll();
+    $sql = "DELETE FROM lobby WHERE last_change < $delete AND last_change_players < $delete";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    foreach($row as $lobby){
+        $id = $lobby['lobby_id'];
+        $sql = "DELETE FROM players_in_lobby WHERE lobby_id = '$id'";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $sql = "DELETE FROM cards_in_lobby WHERE lobby_id = '$id'";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    }
     foreach($decks as $deck){
         $sql = "SELECT * FROM decks WHERE deck_code = :deck_code";
         $stmt = $pdo->prepare($sql);
@@ -67,7 +86,6 @@ try{
 			exit();
 		}
 		else{
-            $last_change = floor(microtime(true) * 1000);
             $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_afk_time, lobby_points_limit, lobby_title, owner, game_started, last_change, last_change_players) VALUES('$hash', '$password', $time, $max_points, '$title', '$user', false, '$last_change', '$last_change')";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();

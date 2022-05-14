@@ -78,7 +78,7 @@
 	"min_white_cards"=> "Minimalna ilość białych kart: ",
 	"min_black_cards"=> "Minimalna ilość czarnych kart: ",
 	"players" => "Gracze:",
-	"game_not_started" => "Gra jeszcze nie wystartowała.",
-	"start_game_btn" =>"START (minimum 3 graczy)",
+	"lobby_message" => "W celu wystartowania rozgrywki potrzeba conajmniej 3 graczy. Każda poczekalnia zostaje usunięta po godzinie nieaktywności.",
+	"game_not_started" => "Oczekiwanie na rozpoczęcie rozgrywki przez właściciela poczekalni.",
 	);
 	

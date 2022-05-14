@@ -1,5 +1,5 @@
 <?php
-
+ini_set('display_errors','0');
 $email = $_POST['email'];
 
 try{
