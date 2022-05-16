@@ -9,7 +9,6 @@ $title = $_POST['title'];
 $password = $_POST['password'];
 $time = $_POST['time'];
 $last_change = floor(microtime(true) * 1000);
-$delete = $last_change - 3600000;
 $flag = true;
 $max_players = $_POST['players'];
 $max_points = $_POST['points'];
@@ -27,22 +26,6 @@ $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 try{
-    $sql = "SELECT * FROM lobby WHERE last_change < $delete AND last_change_players < $delete";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $row = $stmt->fetchAll();
-    $sql = "DELETE FROM lobby WHERE last_change < $delete AND last_change_players < $delete";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    foreach($row as $lobby){
-        $id = $lobby['lobby_id'];
-        $sql = "DELETE FROM players_in_lobby WHERE lobby_id = '$id'";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $sql = "DELETE FROM cards_in_lobby WHERE lobby_id = '$id'";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-    }
     foreach($decks as $deck){
         $sql = "SELECT * FROM decks WHERE deck_code = :deck_code";
         $stmt = $pdo->prepare($sql);
@@ -52,6 +35,10 @@ try{
         $white_cards += $row['white_cards'];
     }
     if($black_cards < $max_players * $max_points - $max_players + 1 || $white_cards < $max_players * 12 + 10){
+        echo "0";
+        exit();
+    }
+    if(strlen($title)>18){
         echo "0";
         exit();
     }
@@ -86,10 +73,9 @@ try{
 			exit();
 		}
 		else{
-            $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_afk_time, lobby_points_limit, lobby_title, owner, game_started, last_change, last_change_players) VALUES('$hash', '$password', $time, $max_points, '$title', '$user', false, '$last_change', '$last_change')";
+            $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_afk_time, lobby_points_limit, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$hash', '$password', $time, $max_points, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
-            echo $hash;
             foreach($decks as $deck){
                 $sql = "SELECT * FROM cards WHERE deck_code = :deck_code";
                 $stmt = $pdo->prepare($sql);
@@ -104,6 +90,7 @@ try{
                 }
             }
         }
+        echo $hash;
 	}
     $pdo->commit();
 }

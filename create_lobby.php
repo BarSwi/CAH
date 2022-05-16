@@ -31,7 +31,7 @@
 	<link href="css/create_lobby.css" type="text/css" rel="stylesheet" />
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href = "fontello/fontello-170c85d4/css/fontello.css" type ="text/css" rel = "stylesheet">
+	<link href = "fontello/icons/css/fontello.css" type ="text/css" rel = "stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;900&display=swap" rel="stylesheet">
 	<script src="js/jquery-3.6.0.min.js"></script>
 	<script src = "js/FormSubmitLang.js"></script> 

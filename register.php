@@ -8,7 +8,7 @@
 <html lang="pl">
 <head>
 	<meta charset = "utf-8"/>
-	<title>Przykładowy tytuł</title>
+	<title>GoCards</title>
 	<meta name = "description" content ="Gra karciana, do wspólnej zabawy ze znajomymi." />
 	<meta name = "keywords" content = "Karty, gra karciana, multiplayer, zabawne, do gry ze znajomymi, na wolny wieczór" />
 	<meta http-equiv="X-UA-Compatible" content = "IE=edge,chrome=1"/> 
@@ -16,7 +16,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;900&display=swap" rel="stylesheet">
-	<link href = "fontello/fontello-170c85d4/css/fontello.css" type ="text/css" rel = "stylesheet">
+	<link href = "fontello/icons/css/fontello.css" type ="text/css" rel = "stylesheet">
 	<script src="js/jquery-3.6.0.min.js"></script>
 	<script src = "js/FormSubmitLang.js"></script> 
 	<script src = "js/captcha.js"></script>

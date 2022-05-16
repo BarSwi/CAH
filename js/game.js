@@ -20,6 +20,9 @@ function polling(time){
             if(res == "1"){
                 polling(time);
             }
+            if(res[0] == "<"){
+                polling(time);
+            }
             else{
                 let array = JSON.parse(res);
                 polling_res(array);
@@ -33,7 +36,6 @@ function polling(time){
     });
 }
 function polling_res(param){
-
     if(param[param.length-1]=="players"){
         time = param[param.length-2];
         $('.player_before').remove();

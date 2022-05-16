@@ -80,6 +80,11 @@
 	"players" => "Players:",
 	"lobby_message" => "In order to start the game you need at least 3 players. Each lobby is deleted after one hour of inactivity.",
 	"game_not_started" => "Waiting for the owner of the waiting room to start the game.",
-	
+	"active_lobbies" => "Active Lobbies",
+	"Search" => "Search",
+	"Refresh" => "Refresh",
+	"game_started" => "Game started",
+	"game_waiting" => "Game is waiting for start",
+	"join" => "JOIN",
 	);
 ?>

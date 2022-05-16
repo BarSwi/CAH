@@ -1,7 +1,7 @@
 <?php
-ini_set('max_execution_time', 4600);
+ini_set('max_execution_time', 4000);
 session_start();
-if(!isset($_SESSION['login']) || $_SESSION['login']==false){
+if(!isset($_SESSION['login']) || $_SESSION['login']==false || $_SESSION['game']==false){
     echo "0";
     exit();
 }
@@ -31,11 +31,20 @@ try{
     $counter = 0;
     while(true){
         $counter += 1;
+        $sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby'";
+        $stmt =  $pdo->prepare($sql);
+        $stmt->execute();
+        if($stmt->rowCount() == 0){
+            echo "0";
+            exit();
+        }
+
         $sql = "SELECT * FROM lobby WHERE (last_change > '$time' OR last_change_players > '$time') AND lobby_id = '$lobby'";
         $stmt =  $pdo->prepare($sql);
         $stmt->execute();
-        $row = $stmt->fetch();
         if($stmt->rowCount()>0){
+            $row = $stmt->fetch();
+            $lobby = $row['lobby_id'];
             if($row['last_change_players']>$time){
                 $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby'";
                 $stmt = $pdo->prepare($sql);
@@ -50,6 +59,7 @@ try{
                 exit();
             }
             if($row['last_change']>$time){
+                $lobby = $stmt->fetch();
                 $sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby'";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();
@@ -57,7 +67,7 @@ try{
                 foreach($array as $player){
                     array_push($array_exit, $player['nick']);
                 }
-                $time = $row['last_change_players'];
+                $time = $lobby['last_change_players'];
                 array_push($array_exit, $time, "players");
                 echo json_encode($array_exit);
                 exit();

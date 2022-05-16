@@ -80,5 +80,11 @@
 	"players" => "Gracze:",
 	"lobby_message" => "W celu wystartowania rozgrywki potrzeba conajmniej 3 graczy. Każda poczekalnia zostaje usunięta po godzinie nieaktywności.",
 	"game_not_started" => "Oczekiwanie na rozpoczęcie rozgrywki przez właściciela poczekalni.",
+	"active_lobbies" => "Aktywne Lobby",
+	"Search" => "Wyszukaj",
+	"Refresh" => "Odśwież",
+	"game_started" => "Gra wystartowała",
+	"game_waiting" => "Gra czeka na rozpoczęcie",
+	"join" => "DOŁĄCZ",
 	);
 	

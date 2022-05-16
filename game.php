@@ -1,9 +1,10 @@
 <?php
 	include "languages/config.php";	
-    if(!isset($_SESSION['login']) || $_SESSION['login']==false){
+    if(!isset($_SESSION['login']) || $_SESSION['login']==false || $_SESSION['game']==true){
 		header('Location: index.php');
 		exit();
 	} 
+	$_SESSION['game']= true;
 	require_once('phpscripts/connect_users.php');
 	$lobby_id = $_GET['id'];
 	$last_change = floor(microtime(true) * 1000);
@@ -13,40 +14,52 @@
 	$pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	$pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-	$sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
-	$stmt = $pdo->prepare($sql);
-	$stmt->execute();
-	if($stmt->rowCount() == 0){
-		header('Location: index.php');
-		exit();
+	try{
+		$pdo->beginTransaction();
+		$sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+		if($stmt->rowCount() == 0){
+			header('Location: index.php');
+			exit();
+		}
+		$lobby = $stmt->fetch();
+		$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+		if($stmt->rowCount()==0){
+			$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+			$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+			$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$lobby_id'";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+		}
+		else{
+			$sql = "DELETE FROM players_in_lobby WHERE nick = '$user'";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+			$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+			$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+		}
+		$sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id'";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+		$players = $stmt->fetchAll();
+		$pdo->commit();
 	}
-	$lobby = $stmt->fetch();
-	$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
-	$stmt = $pdo->prepare($sql);
-	$stmt->execute();
-	if($stmt->rowCount()==0){
-		$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
-		$stmt = $pdo->prepare($sql);
-		$stmt->execute();
-		$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
-		$stmt = $pdo->prepare($sql);
-		$stmt->execute();
+	catch(PDOException $e){
+		$pdo->rollBack();
+
 	}
-	else{
-		$sql = "DELETE FROM players_in_lobby WHERE nick = '$user'";
-		$stmt = $pdo->prepare($sql);
-		$stmt->execute();
-		$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
-		$stmt = $pdo->prepare($sql);
-		$stmt->execute();
-		$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
-		$stmt = $pdo->prepare($sql);
-		$stmt->execute();
-	}
-	$sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id'";
-	$stmt = $pdo->prepare($sql);
-	$stmt->execute();
-	$players = $stmt->fetchAll();
+	
 ?>
 
 <!DOCTYPE HTML>
@@ -55,12 +68,11 @@
 	<meta charset = "utf-8"/>
 	<title>GoCards</title>
 	<meta name = "description" content =<?= $lang['side_description'] ?> />
-	<meta name = "keywords" content = "Karty, gra karciana, multiplayer, zabawne, do gry ze znajomymi, na wolny wieczór" />
 	<meta http-equiv="X-UA-Compatible" content = "IE=edge,chrome=1"/> 
 	<link href="css/game.css" type="text/css" rel="stylesheet" />
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href = "fontello/fontello-170c85d4/css/fontello.css" type ="text/css" rel = "stylesheet">
+	<link href = "fontello/icons/css/fontello.css" type ="text/css" rel = "stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;900&display=swap" rel="stylesheet">
 	<script src="js/jquery-3.6.0.min.js"></script>
 	<script src = "js/FormSubmitLang.js"></script> 
