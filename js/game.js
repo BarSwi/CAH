@@ -1,16 +1,19 @@
-
-time = Date.now();
+id = window.location.href.substring(window.location.href.indexOf('=')+1);
+time = Date.now()-17000;
 $(window).on('beforeunload', function(){    
-        navigator.sendBeacon('../phpscripts/game/exit.php');
+    polling = function(){};
+    navigator.sendBeacon('../phpscripts/game/exit.php');
 });
-$(window).ready(function(){
-    polling(time);
+$(document).ready(function(){
+    setTimeout(function(){
+        polling(time);
+    },1000);
 
 });
 function polling(time){
     $.ajax({
         type: 'post',
-        data: {time:time},
+        data: {time:time, id:id},
         url: 'phpscripts/game/game_polling.php',
         success: function(res){
             if(res=="0"){

@@ -1,5 +1,6 @@
 var check = document.getElementById("topcheck");
-
+if($('#middletop').text().charAt(4)=="S") hl = "pl";
+if($('#middletop').text().charAt(4)=="C") hl = "en";
 function changeTheme()
 {
 	if (check.checked==false)
@@ -83,4 +84,28 @@ $(document).ready(function(){
 		$('#container').css('opacity','100%');
 		$('#register_success').remove();
 	});
+});
+$('#refresh').click(function(){
+	$(this).prop('disabled', true);
+	var refresh = $('#refresh');
+	var text = refresh.text();
+	refresh.text(10);
+	var i = 9;               
+
+	function loop() {
+	  setTimeout(function() {
+		refresh.text(i);
+		i--;
+		if (i >= 0) {      
+			loop();
+		}  
+		else{
+			if(hl=="pl") refresh.text('Odśwież');
+			if(hl=="en") refresh.text('Refresh');
+			refresh.prop('disabled',false);
+		}
+	  }, 1000)
+	}
+
+	loop();   
 });

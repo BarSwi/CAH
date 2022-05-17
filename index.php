@@ -6,16 +6,27 @@
 	$pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	$pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-	$sql = "SELECT * FROM lobby";
-	$stmt = $pdo->prepare($sql);
-	$stmt->execute();
-	$lobbies = $stmt->fetchAll();
+	$last_change = floor(microtime(true) * 1000);
+	$delete = $last_change - 3600000;
+	$sql = "SELECT * FROM lobby WHERE last_change < $delete AND last_change_players < $delete OR players_in_lobby < 1";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+			$row = $stmt->fetchAll();
+			$sql = "DELETE FROM lobby WHERE last_change < $delete AND last_change_players < $delete OR players_in_lobby < 1";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+			foreach($row as $lobby){
+				$id = $lobby['lobby_id'];
+				$sql = "DELETE FROM players_in_lobby WHERE lobby_id = '$id'";
+				$stmt = $pdo->prepare($sql);
+				$stmt->execute();
+				$sql = "DELETE FROM cards_in_lobby WHERE lobby_id = '$id'";
+				$stmt = $pdo->prepare($sql);
+				$stmt->execute();
+			}
 	if(isset($_SESSION['login']) && $_SESSION['login']==true){
 
 		$nick = $_SESSION['user'];
-		$_SESSION['game']=false;
-		$last_change = floor(microtime(true) * 1000);
-		$delete = $last_change - 3600000;
 		try{
 			$pdo->beginTransaction();
 			$sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick'";
@@ -42,22 +53,10 @@
 					$stmt->execute();
 				}
 			}
-			$sql = "SELECT * FROM lobby WHERE last_change < $delete AND last_change_players < $delete OR players_in_lobby < 1";
+			$sql = "SELECT * FROM lobby";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
-			$row = $stmt->fetchAll();
-			$sql = "DELETE FROM lobby WHERE last_change < $delete AND last_change_players < $delete OR players_in_lobby < 1";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
-			foreach($row as $lobby){
-				$id = $lobby['lobby_id'];
-				$sql = "DELETE FROM players_in_lobby WHERE lobby_id = '$id'";
-				$stmt = $pdo->prepare($sql);
-				$stmt->execute();
-				$sql = "DELETE FROM cards_in_lobby WHERE lobby_id = '$id'";
-				$stmt = $pdo->prepare($sql);
-				$stmt->execute();
-			}
+			$lobbies = $stmt->fetchAll();
 			$pdo->commit();
 			
 		}
@@ -219,8 +218,13 @@
 							.'</div><br>
 							<div id = "players_in_lobby">'.
 								$players
-							.'/'.$max_players.'<i class = "icon-adult"></i></div><br>
-							<div id = "join">'.$lang['join'].'</div>
+							.'/'.$max_players.'<i class = "icon-adult"></i></div><br>';
+							if(!empty($password))
+							{ echo 
+							'<input id = "lobby_password" type = "password" placeholder = '.$lang['login_password'].'></input>';
+							}
+						echo	
+						'<br><div id = "join">'.$lang['join'].'</div>
 						</div>';
 
 					}

@@ -69,11 +69,6 @@
 						<input id = "round_limit_input" value = "3" type = "number" max = "999" min="3" />
 					</label>
 				</div>
-				<div id = "round_time">
-					<label id = "round_time_label"><?= $lang['round_time']?>
-						<input id = "round_time_input" type = "number" value = "15" min="15"  max = "60" />
-					</label>
-				</div>
 			</div>
 			<div id = "add_decks">
 				<h2><?=$lang['add_decks_to_game'] ?> </h2>

@@ -1,6 +1,7 @@
 <?php
 session_start();
-//ini_set('display_errors','0');
+ini_set('display_errors','0');
+$_SESSION['game']= false;
 try{
     require_once('../connect_users.php');
     $dsn = "mysql:host=".$host.";dbname=".$db_name;
@@ -10,7 +11,6 @@ try{
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     $last_change = floor(microtime(true) * 1000);
     $nick = $_SESSION['user'];
-    $_SESSION['game']= false;
     $pdo->beginTransaction();
     $sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick'";
     $stmt = $pdo->prepare($sql);

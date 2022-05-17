@@ -7,13 +7,12 @@ if(!isset($_SESSION['login']) || $_SESSION['login']==false){
 }
 $title = $_POST['title'];
 $password = $_POST['password'];
-$time = $_POST['time'];
 $last_change = floor(microtime(true) * 1000);
 $flag = true;
 $max_players = $_POST['players'];
 $max_points = $_POST['points'];
 $decks = json_decode($_POST['array']);
-if(empty($title) || !is_numeric($max_players) || !is_numeric($max_points) || !is_numeric($time) || $max_players < 3 || $max_players > 10 || $max_points < 3 || $time < 15 || $time >60){
+if(empty($title) || !is_numeric($max_players) || !is_numeric($max_points) || $max_players < 3 || $max_players > 10 || $max_points < 3){
     echo "0";
     exit();
 }
@@ -73,7 +72,7 @@ try{
 			exit();
 		}
 		else{
-            $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_afk_time, lobby_points_limit, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$hash', '$password', $time, $max_points, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
+            $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_points_limit, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$hash', '$password', $max_points, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             foreach($decks as $deck){

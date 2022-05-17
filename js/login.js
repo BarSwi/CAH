@@ -1,4 +1,6 @@
-$("#login_button").click(function(){
+if($('#middletop').text().charAt(4)=="S") hl = "pl";
+if($('#middletop').text().charAt(4)=="C") hl = "en";
+$("#login_button").click(function(event){
 	var login = $("#input_login").val();
 	var haslo = $("#input_password").val();
 	if(login!="" && haslo !=""){
@@ -52,20 +54,20 @@ $('#logout_button').click(function(){
 					var forgot_password_result = $('#forgot_password_result');
 					var forgot_password = $('#forgot_password');
 					if(res=="0"){
-						if(forgot_password.html().charAt(0) == "H"){
+						if(hl == "en"){
 							forgot_password_result.html("Email does not exist").css("color","red");
 						}
-						if(forgot_password.html().charAt(0) == "Z"){
+						if(hl == "pl"){
 							forgot_password_result.html("Email nie istnieje").css("color","red");
 						}
 					forgot_password_email_input_send.prop('disabled', false).css('pointer-events','');
 							loader.html('');
 					}
 					else if(res=="2"){
-						if(forgot_password.html().charAt(0) == "H"){
+						if(hl == "en"){
 							forgot_password_result.html("Reset link already sent check your email").css("color","red");
 						}
-						if(forgot_password.html().charAt(0) == "Z"){
+						if(hl =="pl"){
 							forgot_password_result.html("Link został już wysłany na podany adres, sprawdź swoją pocztę").css("color","red");
 						}
 					forgot_password_email_input_send.prop('disabled', false).css('pointer-events','');
@@ -73,10 +75,10 @@ $('#logout_button').click(function(){
 					}
 					
 					else if(res=="1"){
-						if(forgot_password.html().charAt(0) == "H"){
+						if(hl=="en"){
 							forgot_password_result.html("Check your email").css("color","green");
 						}
-						if(forgot_password.html().charAt(0) == "Z"){
+						if(hl=="pl"){
 							forgot_password_result.html("Sprawdź swoją pocztę email").css("color","green");
 						}		
 						loader.html('');			
@@ -99,10 +101,10 @@ $('#forgot_password').click(function(){
 	$(this).css("pointer-events", "none");
 	$('#top').css('opacity','40%');
 	$('#container').css('opacity','40%');
-	if($(this).html().charAt(0) == "H"){
+	if(hl=="en"){
 	$('body').append('<div id = "forgot_password_email"> <h4>Insert email for the account you want to recover:</h4><label id = "close_register"><input type = "button" id = "close_password_recovery_btn"><i class = "icon-cancel"></i></label><input type = "text" placeholder = "example@mail.com" id = "forgot_password_email_input"><label id = "forgot_password_email_input_send"><input type = "button">Send</label><span id = "forgot_password_result"></span><span id = "password_recovery_loader"></span></div>');
 	}
-	if($(this).html().charAt(0) == "Z"){
+	if(hl =="pl"){
 	$('body').append('<div id = "forgot_password_email"> <h4>Podaj email do konta, do którego hasło chcesz odzyskać:</h4><label id = "close_register"><input type = "button" id = "close_password_recovery_btn"><i class = "icon-cancel"></i></label><input type = "text" placeholder = "example@mail.com" id = "forgot_password_email_input"><label id = "forgot_password_email_input_send"><input type = "button">Wyślij</label><span id = "forgot_password_result"></span><span id = "password_recovery_loader"></span></div>');
 	}
 	setTimeout(function(){
@@ -113,10 +115,10 @@ $('#create_new_deck').click(function(){
 	$(this).css('pointer-events', 'none');
 	$('#top').css('opacity','40%');
 	$('#container').css('opacity','40%');
-	if($(this).html().charAt(0) == "C"){
+	if(hl=="en"){
 	$('body').append('<div id = "create_new_deck_menu"><label id = "close_deck_creator"><input type = "button" id = "close_deck_creator_btn"><i class = "icon-cancel"></i></label><span id = "create_new_deck_input_title_span">Title:</span><textarea id = "create_new_deck_title_input" maxlength = "30" placeholder = " Maximum 30 characters."></textarea><label id = "create_new_deck_send"><input type = "button">Create deck</label></div>');
 	}
-	if($(this).html().charAt(0) == "S"){
+	if(hl == "pl"){
 	$('body').append('<div id = "create_new_deck_menu"><label id = "close_deck_creator"><input type = "button" id = "close_deck_creator_btn"><i class = "icon-cancel"></i></label><span id = "create_new_deck_input_title_span">Tytuł:</span><textarea id = "create_new_deck_title_input" maxlength = "30" placeholder = "Maksymalnie 30 znaków."></textarea><label id = "create_new_deck_send"><input type = "button">Utwórz talię</label></div>');
 	}
 	setTimeout(function(){
@@ -136,13 +138,13 @@ $(document).on('click', '#create_new_deck_send', function(){
 	var deck_title_input = $('#create_new_deck_title_input');
 	var title = deck_title_input.val();
 	if(title.length > 30){
-		if(litera == 'U') 	deck_title_input.val("Zbyt długi tytuł.");
-		if(litera == 'C') 	deck_title_input.val("Title too long.");
+		if(hl=="pl") 	deck_title_input.val("Zbyt długi tytuł.");
+		if(hl =="en") 	deck_title_input.val("Title too long.");
 		$(this).prop('disabled', false).css('pointer-events', 'auto');
 	}
 	if(title.length < 1){
-		if(litera == 'U') 	deck_title_input.attr('placeholder', "Tytuł jest wymagany.");
-		if(litera == 'C') 	deck_title_input.attr('placeholder', "Title is required.");
+		if(hl =="pl") 	deck_title_input.attr('placeholder', "Tytuł jest wymagany.");
+		if(hl =="en") 	deck_title_input.attr('placeholder', "Title is required.");
 		$(this).prop('disabled', false).css('pointer-events', 'auto');
 	}
 	else{
@@ -153,8 +155,8 @@ $(document).on('click', '#create_new_deck_send', function(){
 			success: function(res){
 				if(res!="0")	location.href= "card_creator.php?id=" + res;
 				else if(res=="0"){
-					if(litera == 'U') 	alert("Maksymalna ilość możliwych do stworzenia talii na konto została osiągnięta.");
-					if(litera == 'C') 	alert("The maximum number of decks that can be created per account has been reached.");					
+					if(hl=="pl") 	alert("Maksymalna ilość możliwych do stworzenia talii na konto została osiągnięta.");
+					if(hl=="en") 	alert("The maximum number of decks that can be created per account has been reached.");					
 				}
 			}
 		});

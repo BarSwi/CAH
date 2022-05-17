@@ -1,7 +1,7 @@
 <?php
 ini_set('max_execution_time', 4000);
 session_start();
-if(!isset($_SESSION['login']) || $_SESSION['login']==false || $_SESSION['game']==false){
+if(!isset($_SESSION['login']) || $_SESSION['login']==false){
     echo "0";
     exit();
 }
@@ -11,9 +11,12 @@ session_write_close();
 
 
 $time = $_POST['time'];
-
+$id = $_POST['id'];
+echo $id;
+exit();
 ignore_user_abort(false);
 $array_exit = [];
+
 try{
 
 
@@ -26,27 +29,36 @@ try{
     $sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
+    if($stmt->rowCount()==0){
+        $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$nick', '$id', 0, false, '$time')";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $sql = "UPDATE lobby SET last_change_players = '$time' WHERE lobby_id = '$id'";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$id'";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    }
     $row = $stmt->fetch();
     $lobby = $row['lobby_id'];
     $counter = 0;
     while(true){
         $counter += 1;
-        $sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby'";
+        $sql = "SELECT * FROM lobby WHERE lobby_id = '$id'";
         $stmt =  $pdo->prepare($sql);
         $stmt->execute();
         if($stmt->rowCount() == 0){
             echo "0";
             exit();
         }
-
-        $sql = "SELECT * FROM lobby WHERE (last_change > '$time' OR last_change_players > '$time') AND lobby_id = '$lobby'";
+        $sql = "SELECT * FROM lobby WHERE (last_change > '$time' OR last_change_players > '$time') AND lobby_id = '$id'";
         $stmt =  $pdo->prepare($sql);
         $stmt->execute();
         if($stmt->rowCount()>0){
             $row = $stmt->fetch();
-            $lobby = $row['lobby_id'];
             if($row['last_change_players']>$time){
-                $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby'";
+                $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$id'";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();
                 $array = $stmt->fetchAll();
@@ -60,7 +72,7 @@ try{
             }
             if($row['last_change']>$time){
                 $lobby = $stmt->fetch();
-                $sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby'";
+                $sql = "SELECT * FROM lobby WHERE lobby_id = '$id'";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();
                 $array = $stmt->fetchAll();
