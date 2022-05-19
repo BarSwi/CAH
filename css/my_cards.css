@@ -10,6 +10,8 @@ body
 	background-color: rgb(038, 036, 044);
 	color:  #DCDCDC;
 	--background-color: rgb(038,036,044);
+	--create-new-deck-btn: rgb(148, 146, 155);
+	--create-new-deck-btn-border: rgb(129, 128, 141);
 }
 input[type="submit"]{
 	display: none;
@@ -180,7 +182,7 @@ input[type="submit"]{
 #create_new_deck_menu{
 	z-index: 5;
 	position: fixed;
-	color: green;
+	color: grey;
 	display: block;
 	top: 12%;
 	left: 34%;
@@ -208,15 +210,22 @@ input[type="button"]{
 #create_new_deck_send{
 	font-size: 1em;
 	display: block; 
-	padding: 3px;
+	padding: 10px;
+	background-color: var(--create-new-deck-btn);
+	border-radius: 5px;
+	border: 1px solid var(--create-new-deck-btn-border);
 	width: max-content;
 	transition: .1s ease-in-out;
 	position: absolute;
 	bottom: 6.5em;
-	left: 34%;
+	left: 31.5%;
 	color: black;
 }
+ 
 #create_new_deck_send:hover, #create_new_deck_send:focus{
+	-webkit-box-shadow: 0px 0px 5px 0px var(--create-new-deck-btn-border);
+	-moz-box-shadow: 0px 0px 5px 0px var(--create-new-deck-btn-border);
+	box-shadow: 0px 0px 5px 0px var(--create-new-deck-btn-border);
 	cursor: pointer;
 	transform: scale(1.05,1.05);
 }

@@ -20,6 +20,16 @@ try{
     $sql = "DELETE FROM players_in_lobby WHERE nick = '$nick'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
+    $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id'";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    if($stmt->rowCount()!=0){
+        $row = $stmt->fetch();
+        $new_owner = $row['nick'];
+        $sql = "UPDATE lobby SET owner = '$new_owner' WHERE lobby_id = '$lobby_id'";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+    }
     $sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_id'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();

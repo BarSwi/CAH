@@ -8,11 +8,11 @@
 	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 	$last_change = floor(microtime(true) * 1000);
 	$delete = $last_change - 3600000;
-	$sql = "SELECT * FROM lobby WHERE last_change < $delete AND last_change_players < $delete OR players_in_lobby < 1";
+	$sql = "SELECT * FROM lobby WHERE last_change < $delete OR players_in_lobby < 1";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
 			$row = $stmt->fetchAll();
-			$sql = "DELETE FROM lobby WHERE last_change < $delete AND last_change_players < $delete OR players_in_lobby < 1";
+			$sql = "DELETE FROM lobby WHERE last_change < $delete OR players_in_lobby < 1";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
 			foreach($row as $lobby){
@@ -133,7 +133,7 @@
 			</div>';
 			else echo
 				'<div id = "nickname">'.$_SESSION['user'].'</div><br>
-				<div id = "my_cards" tabindex="0"><a href = "my_cards.php" tabindex ="-1">'.$lang['my_cards_button'].'</a></div>
+				<a href = "my_cards.php" tabindex ="-1"><div id = "my_cards" tabindex="0">'.$lang['my_cards_button'].'</div></a>
 				<div id = "create_new_deck" tabindex="0">'.$lang['create_new_deck_button'].'</div>
 				<div id = "logout_button" tabindex="0">'.$lang['Logout_button'].'</div>
 				'
@@ -184,7 +184,7 @@
 			<div id = "navbar">
 				<button id = "refresh"><?=$lang['Refresh']?></button>
 				<?= $lang['active_lobbies']?>
-				<input type = "search" placeholder = <?= $lang['Search'] ?>></input>
+				<input type = "search" id = "search" placeholder = <?= $lang['Search'] ?>></input>
 			</div>
 			<div id = "lobbies">
 				<?php
@@ -197,34 +197,34 @@
 						$players = $lobby['players_in_lobby'];
 						if($lobby['game_started']==true){
 							$status = $lang['game_started'];
-							$class = 'class = "started"';						} 
+							$class = 'class = "started status"';						} 
 						else
 						{
 							$status = $lang['game_waiting'];
-							$class = 'class = "not_started"';
+							$class = 'class = "not_started status"';
 						} 
 						echo 
 						'<div class = "lobby" id ='.$id.'>';	
 							if(!empty($password)) echo '<i class = "icon-lock"></i>';
 							echo
-							'<div id = "lobby_owner">'.
+							'<div class = "lobby_owner">'.
 								$owner
 							.'<i class = "icon-crown" ></i></div>
-							<div id = "lobby_title">„'.
+							<div class = "lobby_title">„'.
 								$title	
 							.'”</div>
-							<div id = "status"'.$class.'><br>'.
+							<div '.$class.'><br>'.
 								$status
 							.'</div><br>
-							<div id = "players_in_lobby">'.
+							<div class = "players_in_lobby">'.
 								$players
 							.'/'.$max_players.'<i class = "icon-adult"></i></div><br>';
 							if(!empty($password))
 							{ echo 
-							'<input id = "lobby_password" type = "password" placeholder = '.$lang['login_password'].'></input>';
+							'<input class = "lobby_password" type = "password" placeholder = '.$lang['login_password'].'></input>';
 							}
 						echo	
-						'<br><div id = "join">'.$lang['join'].'</div>
+						'<br><div class = "join">'.$lang['join'].'</div>
 						</div>';
 
 					}
@@ -261,7 +261,7 @@
 		}
 	?>
 	<script src="js/theme.js"></script>
-	<script src = "js/login.js"></script>
+	<script src = "js/main.js"></script>
 	
 </body>
 </html>

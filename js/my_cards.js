@@ -100,11 +100,13 @@ $(document).on('click', '#create_new_deck_send', function(){
 	var deck_title_input = $('#create_new_deck_title_input');
 	var title = deck_title_input.val();
 	if(title.length > 30){
+		deck_title_input.css('border', '1px solid red');
 		if(hl == 'U') 	deck_title_input.val("Zbyt długi tytuł.");
 		if(hl == 'C') 	deck_title_input.val("Title too long.");
 		$(this).prop('disabled', false).css('pointer-events', 'auto');
 	}
 	if(title.length < 1){
+		deck_title_input.css('border', '1px solid red');
 		if(hl == 'U') 	deck_title_input.attr('placeholder', "Tytuł jest wymagany.");
 		if(hl == 'C') 	deck_title_input.attr('placeholder', "Title is required.");
 		$(this).prop('disabled', false).css('pointer-events', 'auto');

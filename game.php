@@ -1,4 +1,5 @@
 <?php
+	usleep(10000);
 	include "languages/config.php";	
     if(!isset($_SESSION['login']) || $_SESSION['login']==false){
 		header('Location: index.php');
@@ -20,12 +21,16 @@
 		$sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
-		$lobby = $stmt->fetch();
+		$lobby_before = $stmt->fetch();
+		if($lobby_before['players_in_lobby'] + 1 > $lobby_before['max_players']){
+			header('Location: index.php');
+			exit();
+		}
 		if($stmt->rowCount() == 0){
 			header('Location: index.php');
 			exit();
 		}
-		if($lobby['last_change'] < $delete || $lobby['last_change_players'] < $delete){
+		if($lobby_before['last_change'] < $delete){
 			$sql = "DELETE FROM lobby WHERE lobby_id = '$lobby_id'";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
@@ -39,7 +44,6 @@
 		$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
-
 		if($stmt->rowCount()==0){
 			$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
 			$stmt = $pdo->prepare($sql);
@@ -83,12 +87,20 @@
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
 		$players = $stmt->fetchAll();
+		$sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+		$lobby = $stmt->fetch();
+		if($stmt->rowCount() == 0){
+			header('Location: index.php');
+			exit();
+		}
 		$pdo->commit();
 	}
 	catch(PDOException $e){
 		$pdo->rollBack();
 		$error_message = $e->getMessage();
-		echo $error_message;
+
 
 	}
 	
@@ -126,20 +138,37 @@
 		echo $lang['game_not_started'];
 	}
 	else{
-		echo '<div id = "start">START</div><div id = "information">'.$lang['lobby_message'].'</div>';
+		if($lobby['players_in_lobby']>=3) $class = 'class = "active"';
+		else $class = 'class = "inactive"';
+		echo '<div id = "start"'.$class.'>START</div><div id = "information">'.$lang['lobby_message'].'</div>';
 	}
 
 	echo '</div>
 	<div id ="bottom">
-	<h2>'.$lang['players'].'</h2>
+	<div id = "players_vis">
+		<span id = "players_in_lobby">
+			'.$lobby['players_in_lobby'].'
+		</span>
+		/
+		<span id = "max_players">
+			'.$lobby['max_players'].'
+		</span>
+		<i class = "icon-adult"></i>
+	</div>
+	<h2><span id = "players_in_lobby"></span>'.$lang['players'].'</h2>
 	<div id = "players" class = "players_not_started">';
 		 foreach($players as $player){
-			if($lobby['owner']==$player['nick']) $class = 'class = "owner"';
-			else $class = 'class ="player_before"';
+			if($lobby_before['owner']==$player['nick']) {
+				$class = 'class = "player_before owner player"';
+				$icon = '<i class ="icon-crown"></i>';
+			}
+			else
+		 	{
+				$class = 'class ="player_before player"';
+				$icon = '';
+			} 
 			echo
-			'<div '.$class.'>
-				'.$player['nick'].'
-			<div class = "kick">test</div></div>';
+			'<div '.$class.'><span class = "nick">'.$player['nick'].$icon.'</span></div>';
 		}
 	'</div>';
 	?>

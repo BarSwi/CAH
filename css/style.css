@@ -12,6 +12,7 @@ body#dark
 	--color:#DCDCDC;
 	--top: rgb(057, 053, 065 );
 	--navbar:rgb(057, 053, 065 );
+	--top-border: rgb(108, 104, 117);
 	--link-color: #DCDCDC;
 	--text-color: #dadada;
 	--game-creator: rgb(038, 036, 044);
@@ -38,6 +39,8 @@ body#dark
 	--navbar-border: #3d3d3d;
 	--rules-background: rgb(057, 053, 065 );
 	--forgot-password-email-input-border: #d5d5d5;
+	--create-new-deck-btn: rgb(148, 146, 155);
+	--create-new-deck-btn-border: rgb(129, 128, 141);
 	--lobby-background: rgb(038, 036, 044);
 	--lobby-border: rgb(26, 25, 31);
 	
@@ -409,15 +412,18 @@ input[type="button"]{
 	right: 0.6em;
 	bottom: 0.6em;
 }
- #create_new_deck_send{
+#create_new_deck_send{
 	font-size: 1em;
 	display: block; 
-	padding: 3px;
+	padding: 10px;
+	background-color: var(--create-new-deck-btn);
+	border-radius: 5px;
+	border: 1px solid var(--create-new-deck-btn-border);
 	width: max-content;
 	transition: .1s ease-in-out;
 	position: absolute;
 	bottom: 6.5em;
-	left: 31%;
+	left: 29%;
 	color: black;
  }
  
@@ -427,6 +433,9 @@ input[type="button"]{
 	opacity: 90%;
 }
 #create_new_deck_send:hover, #create_new_deck_send:focus{
+	-webkit-box-shadow: 0px 0px 5px 0px var(--create-new-deck-btn-border);
+	-moz-box-shadow: 0px 0px 5px 0px var(--create-new-deck-btn-border);
+	box-shadow: 0px 0px 5px 0px var(--create-new-deck-btn-border);
 	cursor: pointer;
 	transform: scale(1.05,1.05);
 }
@@ -505,12 +514,18 @@ input[type="button"]{
 #my_cards, #create_new_deck{
 	margin-right: 10px;
 	font-weight: 900;
+	position: relative;
 	border-radius: 5px;
 	transition: all .1s ease;
 	background-color: var(--my-cards-button);
 	border: 1px solid var(--my-cards-button-border);
 	padding: 5px;
 	float: left;
+}
+#my_cards a{
+	display: block;
+	width: 100%;
+	height: 100%;
 }
 #my_cards:hover, #logout_button:hover, #my_cards:focus, #logout_button:focus, #create_new_deck:hover, #create_new_deck:focus{
 	cursor: pointer;
@@ -660,12 +675,12 @@ input[type="search"]:focus, input[type="search"]:hover{
 	border: 2px solid var(--lobby-border);
 	background-color: var(--lobby-background);
 }
-#lobby_owner{
+.lobby_owner{
 	text-align: center;
 	font-size: 1.2em;
 	margin-bottom: 5px;
 }
-#lobby_title{
+.lobby_title{
 	font-size: 1.2em;
 	text-align: center;
 }
@@ -673,7 +688,7 @@ input[type="search"]:focus, input[type="search"]:hover{
 	position: relative;
 	top: 3px;
 }
-#status{
+.status{
 	text-align: center;
 }
 .started{
@@ -691,10 +706,10 @@ input[type="search"]:focus, input[type="search"]:hover{
 	position: relative;
 	top: 1px;
 }
-#players_in_lobby{
+.players_in_lobby{
 	text-align: center;
 }
-#join{
+.join{
 	margin: 0 auto 0 auto;
 	width: max-content;
 	border-radius: 5px;
@@ -703,13 +718,13 @@ input[type="search"]:focus, input[type="search"]:hover{
 	opacity: 80%;
 	transition: .15s ease;
 }
-#join:hover, #join:focus{
+.join:hover, #join:focus{
 	outline: none;
 	opacity: 100%;
 	transform: scale(1.1);
 	cursor: pointer;
 }
-#lobby_password{
+.lobby_password{
 	display: block;
 	text-align: center;
 	border-radius: 5px;
@@ -717,7 +732,15 @@ input[type="search"]:focus, input[type="search"]:hover{
 	opacity: 80%;
 	margin: 0 auto 0 auto;
 }
-#lobby_password:hover, #lobby_password:focus{
+.lobby_password:hover, .lobby_password:focus{
 	outline: none;
 	opacity: 100%;
+}
+#no_search_result{
+	padding: 20px;
+	display: block;
+	font-weight: 900;
+	font-size: 45px;
+	text-align: center;
+	margin: 50px auto 50px auto;
 }

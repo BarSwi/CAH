@@ -7,26 +7,22 @@ body{
     background-color: rgb(038, 036, 044);
 	color:  #DCDCDC;
 	--color:#DCDCDC;
-	--top: rgb(057, 053, 065 );
 	--link-color: #DCDCDC;
 	--text-color: #dadada;
-	--game-creator: #330033;
-	--game-creator-border: #660033; 
-	--game-creator-shadow: #660033;
-	--login-button-background: #006633;
-	--login-button-text: black;
-	--login-button-border: #339966;
 	--login-button-shadow:#339966;
 	--theme-toggler-background: #1f1f1f;
+	--start-game: rgb(53, 50, 61);
+	--start-game-border: rgb(26, 25, 31);
+	--start-game-shadow: rgb(26, 25, 31);
 	--theme-toggler-border: #262626;
 	--theme-toggler-shadow: rgba(0, 0, 0, 1);
 	--theme-togglerinside-background: white;
 	--theme-togglerinside-background: white;
+	--players-list:rgb(057, 053, 065 );
+	--players-top-border: rgb(108, 104, 117);
 	--theme-togglerinside-border: #999999;
-	--lang-border: #339966;
 	--register-link-color: #0099ff;
 	--start_game: #666699;
-	--nickname-color:  #330033;
 	--webkit-scrollbar-track: rgb(057, 053, 065);
 	--webit-scrollbar-thumb: grey;
 	--webkit-scrollbar-thumb-border:  rgb(057, 053, 065);
@@ -84,7 +80,8 @@ body{
     width: 100%;
 }
 #bottom{
-    background-color: red;
+	border-top: 2px solid var(--players-top-border);
+    background-color: var(--players-list);
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -93,13 +90,14 @@ h2{
     display: block;
     text-align: center;
 }
-.player_before, .owner{
-    padding: 10px;
-    border: 1px solid black;
-}
-.kick{
-    padding-top: 5px;
-    text-align: center;
+.player_before{
+    padding: 10px;	
+	height: 50px;
+	width: max-content;
+	margin: 0 15px 0 15px;
+	position: relative;
+
+	text-align: center;
 }
 h1{
     text-align: center;
@@ -114,9 +112,40 @@ h1{
     font-size: 25px;
     font-weight: 900;
 }
-#start_game{
-    padding: 10px;
-    background-color: var(--start_game);
+#start.active
+{
+	opacity: 100%;
+	width: max-content;
+	background-color: var(--start-game);
+	border-radius: 10px;
+	border: 2px solid var(--start-game-border);
+	font-size: 75px;
+	margin: 0 auto 0 auto;
+	font-weight: 900;
+	transition: all .15s ease-in-out;
+	padding: 15px;
+}
+#start.inactive
+{
+	pointer-events: none;
+	opacity: 60%;
+	width: max-content;
+	background-color: var(--start-game);
+	border-radius: 10px;
+	border: 2px solid var(--start-game-border);
+	font-size: 75px;
+	margin: 0 auto 0 auto;
+	font-weight: 900;
+	transition: all .15s ease-in-out;
+	padding: 15px;
+}
+#start:focus, #start:hover
+{
+	outline: none;
+	-webkit-box-shadow: 0px 0px 5px 1px var(--start-game-shadow);
+	-moz-box-shadow: 0px 0px 5px 1px var(--start-game-shadow);
+	box-shadow: 0px 0px 5px 1px var(--start-game-shadow);
+	transform: scale(1.1,1.1);
 }
 #information{
 	opacity: 80%;
@@ -125,17 +154,6 @@ h1{
 	left: 300px;
 	right: 300px;
 }
-#start{
-	font-size: 75px;
-	padding: 20px;
-	transition: .1s ease;
-	font-weight: 900;
-	background-color: red;
-	width: max-content;
-	border-radius: 5px;
-	margin-left: auto;
-	margin-right: auto;
-}
 #start:hover{
 	cursor: pointer;
 	transform: scale(1.05);
@@ -143,4 +161,30 @@ h1{
 .owner{
 	color: gold;
 	font-weight: 900;
+}
+.icon-crown{
+	position: absolute;
+	top: 12px;
+}
+#players_vis{
+	position: absolute;
+	top: 25px;
+	left: 20px;
+}
+.icon-adult{
+	position: relative;
+	top: 2px;
+}
+.kick{
+	border-radius: 5px;
+	padding: 5px;
+	width: max-content;
+	margin: 10px auto 0 auto;
+	transition: .1s ease;
+	font-size: 0.7em;
+	background-color: rgb(167, 11, 11);
+}
+.kick:hover, .kick:focus{
+	cursor: pointer;
+	transform: scale(1.05);
 }
