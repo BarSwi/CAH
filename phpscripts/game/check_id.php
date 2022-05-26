@@ -12,14 +12,28 @@ try{
     $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=> $id]);
-    $row = $stmt->fetch();
-    $owner = $row['owner'];
+    $lobby = $stmt->fetch();
+    $owner = $lobby['owner'];
     $sql = "SELECT * FROM users WHERE login = '$nick'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $row = $stmt->fetch();
     $array_exit = [];
-    array_push($array_exit, $row['id'], $row['login'], $owner);
+    array_push($array_exit, $row['id'], $row['login'], $owner, $_SESSION['lang']);
+    if($lobby['game_started']==1){
+        $sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'black' AND choosen = 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        if($stmt->rowCount()!=0){
+            $row = $stmt->fetch();
+            array_push($array_exit, $row['blank_space']);
+        }
+        $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id AND chooser = 0";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        $row = $stmt->fetch();
+        array_push($array_exit, $row['nick']);
+    }
     echo json_encode($array_exit);
 }
 catch(PDOException $e){

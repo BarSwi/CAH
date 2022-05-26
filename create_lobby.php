@@ -61,7 +61,7 @@
 			<div id = "sub_inf">
 				<div id = "max_players"><?=$lang['max_players'] ?>
 					<label id = "max_players_label">
-						<input id = "max_players_input" type = "number" value = "3" min="3" max = "10" />
+						<input id = "max_players_input" type = "number" value = "3" min="3" max = "9" />
 					</label>
 				</div>
 				<div id ="round_limit">

@@ -74,7 +74,7 @@
 				<label id = "add_card_black" class = "add_card" tabindex = "0"><?= $lang['add_card_button']?></label>
 			</div>
 			<div id = "white_side">
-				<textarea id = "white_input" maxlength = "200"></textarea>
+				<textarea id = "white_input" maxlength = "170"></textarea>
 				<input type = "checkbox" id = "white_input_antydouble" class = "cards_antydouble_checkbox"><label for = "white_input_antydouble" class = "cards_antydouble"><?=$lang['add_cards_antydouble']?></label>
 				<label id = "add_card_white" class = "add_card" tabindex = "0"><?= $lang['add_card_button']?></label>
 			</div>

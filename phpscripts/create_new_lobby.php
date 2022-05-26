@@ -12,7 +12,7 @@ $flag = true;
 $max_players = $_POST['players'];
 $max_points = $_POST['points'];
 $decks = json_decode($_POST['array']);
-if(empty($title) || !is_numeric($max_players) || !is_numeric($max_points) || $max_players < 3 || $max_players > 10 || $max_points < 3){
+if(empty($title) || !is_numeric($max_players) || !is_numeric($max_points) || $max_players < 3 || $max_players > 9 || $max_points < 3){
     echo "0";
     exit();
 }
@@ -75,6 +75,15 @@ try{
             $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_points_limit, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$hash', '$password', $max_points, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
+            $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$hash', 0, false, '$last_change')";
+			$stmt = $pdo->prepare($sql);
+				$stmt->execute();
+			$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$hash'";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+			$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$hash'";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
             foreach($decks as $deck){
                 $sql = "SELECT * FROM cards WHERE deck_code = :deck_code";
                 $stmt = $pdo->prepare($sql);
@@ -83,7 +92,12 @@ try{
                 foreach($row as $card){
                     $color = $card['color'];
                     $value = $card['value'];
-                    $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color) VALUES('$hash', '$value', '$color')";
+                    $blank_space = $card['blank_space'];
+                    if($color=="white"){
+                        $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color) VALUES('$hash', '$value', '$color')";
+                    }
+                    else    $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color, blank_space) VALUES('$hash', '$value', '$color', $blank_space)";
+
                     $stmt = $pdo->prepare($sql);
                     $stmt->execute();
                 }

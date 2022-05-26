@@ -30,7 +30,7 @@
 	"side_rule4" => "All gameplay is coordinated and created, in the form of their own and public decks of cards, entirely by the players. The author and the website administration do not interfere in this process in any way.",
 	"side_rule5" => "The purpose of the site is to access the options outlined in the \"Game Rules \" tab on the home page.",
 	"side_rule6" => "Each account can create up to three decks of cards.",
-	"side_rule7" => "Anyone who knows the special 7-character code assigned to a specific deck can use that deck in their game by using this code.",
+	"side_rule7" => "Anyone who knows the special 7-character ID code assigned to a specific deck can use that deck in their game by using this code.",
 	"side_rule8" => "Any deck that does not have any cards will be deleted after 24 hours.",
 	
 	"game_rule1" => "You must be logged in to create a lobby, join a game or to create your own deck of playing cards.",
@@ -77,7 +77,7 @@
 	"add_deck_btn" => "Add deck",
 	"min_white_cards"=> "Minimum amount of white cards: ",
 	"min_black_cards"=> "Minimum amount of black cards:  ",
-	"players" => "Players:",
+	"players" => "Players",
 	"lobby_message" => "In order to start the game you need at least 3 players. Each lobby is deleted after one hour of inactivity.",
 	"game_not_started" => "Waiting for the owner of the waiting room to start the game.",
 	"active_lobbies" => "Active Lobbies",
@@ -86,5 +86,8 @@
 	"game_started" => "Game started",
 	"game_waiting" => "Game is waiting for start",
 	"join" => "JOIN",
+	"points"=>"Points: ",
+	"Selecting"=>"Selecting",
+	"Select" => "SELECT",
 	);
 ?>

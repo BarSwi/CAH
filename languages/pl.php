@@ -30,7 +30,7 @@
 	"side_rule4" => "Cała rozgrywka jest koordynowana i tworzona w postaci własnych i publicznych talii kart całkowicie przez graczy. Autor oraz administracja strony w żaden sposób nie ingerują w ten proces.",
 	"side_rule5" => "Celem witryny jest dostarczenie możliwości rozgrywki zarysowanej w zakładce \"Zasady Gry\" na stronie głównej.",
 	"side_rule6" => "Na każde konto przypada możliwość stworzenia maksymalnie trzech talii kart.",
-	"side_rule7" => "Każdy, kto zna specjalny 7-znakowy kod przypisany do konkretnej talii, może wykorzystać daną talię w swojej grze używając tego kodu.",
+	"side_rule7" => "Każdy, kto zna specjalny 7-znakowy kod ID przypisany do konkretnej talii, może wykorzystać daną talię w swojej grze używając tego kodu.",
 	"side_rule8" => "Każda talia, która nie posiada żadnej karty zostanie usunięta po 24 godzinach.",
 	
 	"game_rule1" => "W celu stworzenia lobby, dołączenia do rozgrywki lub stworzenia własnej talii kart do gry należy być zalogowanym.",
@@ -77,7 +77,7 @@
 	"add_deck_btn" => "Dodaj talię",
 	"min_white_cards"=> "Minimalna ilość białych kart: ",
 	"min_black_cards"=> "Minimalna ilość czarnych kart: ",
-	"players" => "Gracze:",
+	"players" => "Gracze",
 	"lobby_message" => "W celu wystartowania rozgrywki potrzeba conajmniej 3 graczy. Każda poczekalnia zostaje usunięta po godzinie nieaktywności.",
 	"game_not_started" => "Oczekiwanie na rozpoczęcie rozgrywki przez właściciela poczekalni.",
 	"active_lobbies" => "Aktywne Lobby",
@@ -86,5 +86,8 @@
 	"game_started" => "Gra wystartowała",
 	"game_waiting" => "Gra czeka na rozpoczęcie",
 	"join" => "DOŁĄCZ",
+	"points"=>"Punkty: ",
+	"Selecting"=>"Wybiera",
+	"Select" => "WYBIERZ",
 	);
 	

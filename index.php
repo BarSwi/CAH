@@ -1,4 +1,5 @@
 <?php
+	usleep(10000);
 	require_once('phpscripts/connect_users.php');
 	include "languages/config.php";	
 	$dsn = "mysql:host=".$host.";dbname=".$db_name;
@@ -8,7 +9,36 @@
 	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 	$last_change = floor(microtime(true) * 1000);
 	$delete = $last_change - 3600000;
-	$sql = "SELECT * FROM lobby WHERE last_change < $delete OR players_in_lobby < 1";
+	if(isset($_SESSION['login']) && $_SESSION['login']==true){
+
+		$nick = $_SESSION['user'];
+		try{
+			$pdo->beginTransaction();
+			$sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick'";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+			if($stmt->rowCount()>0){
+				echo "1";
+				if($_SESSION['login']==true){
+					if($_SESSION['game']==true){
+						$row = $stmt->fetch();
+						$lobby_id = $row['lobby_id'];
+						$sql = "DELETE FROM players_in_lobby WHERE nick = '$nick'";
+						$stmt = $pdo->prepare($sql);
+						$stmt->execute();
+						$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_id'";
+						$stmt = $pdo->prepare($sql);
+						$stmt->execute();
+						$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
+						$stmt = $pdo->prepare($sql);
+						$stmt->execute();
+						$sql = "DELETE FROM players_in_lobby WHERE nick = '$nick'";
+						$stmt = $pdo->prepare($sql);
+						$stmt->execute();
+					}
+				}
+			}
+			$sql = "SELECT * FROM lobby WHERE last_change < $delete OR players_in_lobby < 1";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
 			$row = $stmt->fetchAll();
@@ -23,35 +53,6 @@
 				$sql = "DELETE FROM cards_in_lobby WHERE lobby_id = '$id'";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
-			}
-	if(isset($_SESSION['login']) && $_SESSION['login']==true){
-
-		$nick = $_SESSION['user'];
-		try{
-			$pdo->beginTransaction();
-			$sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick'";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
-			if($stmt->rowCount()>0){
-	
-				$row = $stmt->fetch();
-				$lobby_id = $row['lobby_id'];
-				$sql = "DELETE FROM players_in_lobby WHERE nick = '$nick'";
-				$stmt = $pdo->prepare($sql);
-				$stmt->execute();
-				$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_id'";
-				$stmt = $pdo->prepare($sql);
-				$stmt->execute();
-				$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
-				$stmt = $pdo->prepare($sql);
-				$stmt->execute();
-			}
-			if($_SESSION['login']==true){
-				if($_SESSION['game']==true){
-					$sql = "DELETE FROM players_in_lobby WHERE nick = '$nick'";
-					$stmt = $pdo->prepare($sql);
-					$stmt->execute();
-				}
 			}
 			$sql = "SELECT * FROM lobby";
 			$stmt = $pdo->prepare($sql);
@@ -195,6 +196,8 @@
 						$password = $lobby['lobby_password'];
 						$max_players = $lobby['max_players'];
 						$players = $lobby['players_in_lobby'];
+						if($max_players == $players) $player_status = 'class = "players_in_lobby max"';
+						else $player_status = 'class = "players_in_lobby free"';
 						if($lobby['game_started']==true){
 							$status = $lang['game_started'];
 							$class = 'class = "started status"';						} 
@@ -216,7 +219,7 @@
 							<div '.$class.'><br>'.
 								$status
 							.'</div><br>
-							<div class = "players_in_lobby">'.
+							<div '.$player_status.'>'.
 								$players
 							.'/'.$max_players.'<i class = "icon-adult"></i></div><br>';
 							if(!empty($password))

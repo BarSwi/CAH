@@ -3,6 +3,8 @@ html
 	font-family: 'Merriweather', serif;
 }
 body{
+
+	overflow: hidden;
 	margin: 0;
     background-color: rgb(038, 036, 044);
 	color:  #DCDCDC;
@@ -51,12 +53,18 @@ body{
 ::-webkit-scrollbar-thumb:hover{
 	opacity: 90%;
 }
-#lang{
+#lang_before{
 	position: fixed;
 	left: 10px;
 	top: 20px;
 }
-#lang input[type = "submit"]
+#lang_after{
+	position: fixed;
+	right: 10px;
+	z-index: 10;
+	bottom: 0;
+}
+input[type = "submit"]
 {
 	display: none;
 }
@@ -88,7 +96,8 @@ body{
 }
 h2{
     display: block;
-    text-align: center;
+    text-align:left;
+	padding-left: 10px;
 }
 .player_before{
     padding: 10px;	
@@ -162,15 +171,7 @@ h1{
 	color: gold;
 	font-weight: 900;
 }
-.icon-crown{
-	position: absolute;
-	top: 12px;
-}
-#players_vis{
-	position: absolute;
-	top: 25px;
-	left: 20px;
-}
+
 .icon-adult{
 	position: relative;
 	top: 2px;
@@ -187,4 +188,144 @@ h1{
 .kick:hover, .kick:focus{
 	cursor: pointer;
 	transform: scale(1.05);
+}
+#black_card_cont{
+	float:left;
+	border-bottom: 1px solid black;
+	padding: 1.042vw;
+	height: 15.625vw;
+	width: 13vw;
+	background-color: red;
+}
+#white_cards_cont{
+	float: left;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	min-height: 15,625vw;
+	padding: 1.04vw;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: calc(100% - 1.04vw);
+	background-color: yellow;
+}
+.white_card_picked{
+	height: 10.16vw;
+	min-width: 7.55vw;
+	max-width: 7.55vw;	
+	word-wrap: break-word;
+	font-size: 0.7vw;
+	float: left;
+	margin: 0.13vw;
+	color: black;
+	border-radius: 0.42vw;
+	background-color: rgb(243, 242, 242);
+	padding: 0.67vw;
+}
+#black_card{
+	width: calc(100% - 1.354vw);
+	overflow: hidden;
+	font-size: 0.83vw;
+	word-wrap: break-word;
+	margin: 0 auto 0 auto;
+	background-color: black;
+	border-radius: 0.417vw;
+	padding: 0.677vw;
+	height: 14.59vw;
+}
+.players_started{
+	width: 15.1vw;
+	background-color: green;
+	height: 100%;
+}
+#my_cards{
+
+	display: flex;
+	flex-wrap: wrap;	
+	padding: 0 0.9vw 0 0.9vw;
+	overflow: auto;
+	justify-content: center;
+	min-height: 10.9375vw;
+	max-height: 13.8vw;
+	width: calc(100% - 0.9vw);
+	background-color: purple;
+}
+.white_card{
+	margin: 1vw 0.2vw 1vw 0.2vw;
+	float: left;
+	opacity: 85%;
+	display: block;
+	background-color: white;
+	font-size: 0.73vw;
+	word-wrap: break-word;
+	color: black;
+	padding: 0.2vw;
+	overflow: hidden;
+	border-radius: 0.42vw;
+	height: 11.198vw;
+	min-width: 7.448vw;
+	max-width: 7.448vw;	
+}
+.white_card:hover, .white_card:focus{
+	outline: none;
+	cursor: pointer;
+	opacity: 100%;
+}
+input[type="checkbox"]{
+	display: none;
+}
+.player_after{
+	background-color: grey;
+
+	border-bottom: 1px solid black;
+	display: block;
+	min-height: 2.81vw;
+	overflow: hidden;
+	font-size: 0.9375vw;
+	width: calc(100% - 0.52vw);
+	padding: 0.26vw;
+	position: relative;
+}
+.player_left{
+	float: left;
+	width: 50%;
+	height: 100%;
+}
+.player_right{
+	float: left;
+	width: 50%;
+	text-align: center;
+}
+.points{
+	margin-top: 5px;
+}
+#UI{
+	display: flex;
+	flex-direction: column;
+}
+#menu{
+	display: flex;
+	justify-content: center;
+	padding-top: 1.04vw;
+	padding-bottom: 1.04vw;
+}
+#btn{
+	pointer-events: none;
+	background-color: red;
+	width: max-content;
+	border-radius: 0.26vw;
+	padding: 0.52vw;
+	opacity: 50%;
+	font-size: 1.5625vw;
+	font-weight: 900;
+}
+#left{
+	width: 15.104vw;
+	background-color: red;
+	float: left;
+	height: 100vh
+}
+#right{
+	width: 84.106vw;
+	float: left;
 }

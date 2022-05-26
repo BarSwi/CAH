@@ -167,6 +167,7 @@ $(document).on('click', '#create_new_deck_send', function(){
 	
 });
 $(document).on('click','.join', function(){
+	var corn = $(this).parent();
 	$(this).css({'pointer-events': 'none', 'opacity': '50%'});
 	var password = $(this).siblings('.lobby_password');
 	var id = $(this).parent().attr('id');
@@ -185,8 +186,7 @@ $(document).on('click','.join', function(){
 				data: {password:password_val, id:id},
 				success: function(res){
 					if(res=="0"){
-						alert('error');
-						window.location.reload();
+						corn.remove();
 					}
 					if(res=="1"){
 						password.val('');
@@ -241,6 +241,8 @@ $('#refresh').click(function(){
 				var max_players = result[i]['max_players'];
 				var players = result[i]['players_in_lobby'];
 				var game_started = result[i]['game_started'];
+				if(players==max_players) var player_status = "class = 'players_in_lobby max'";
+				else  var player_status = "class = 'players_in_lobby free'";
 				if(hl=="pl"){
 					var placeholder = "Hasło";
 					var join = "DOŁĄCZ";
@@ -264,7 +266,7 @@ $('#refresh').click(function(){
 				var el2 = '<div class = "lobby_owner">'+owner+'<i class = "icon-crown" ></i></div>';
 				var el3 = '<div class = "lobby_title">„'+title+'”</div>';
 				var el4 = '<div '+status_class+'><br>'+status+'</div><br>';
-				var el5 = '<div class = "players_in_lobby">'+players+'/'+max_players+'<i class = "icon-adult"></i></div><br>';
+				var el5 = '<div '+player_status+'>'+players+'/'+max_players+'<i class = "icon-adult"></i></div><br>';
 				if(password.length) var el6 = '<input class = "lobby_password" type = "password" placeholder ='+placeholder+'></input>';
 				else var el6 ='';
 				var el7 = '<br><div class = "join">'+join+'</div></div>';
@@ -296,11 +298,11 @@ $('#refresh').click(function(){
 });
 $('#search').keyup(function(){
 	$('#no_search_result').remove();
-	var filter = $(this).val().replace(/\s/g, '');
+	var filter = $(this).val().replace(/\s/g, '').toUpperCase();
 	var counter = 0;
 	var lobbies = $('#lobbies').children().length;
 	$('.lobby').each(function(){
-		if(!$(this).children('.lobby_title').text().replace(/\s/g, '').includes(filter)){
+		if(!$(this).children('.lobby_title').text().replace(/\s/g, '').toUpperCase().includes(filter)){
 			counter += 1;
 			if(!$(this).attr('style')){
 				$(this).css('display', 'none');

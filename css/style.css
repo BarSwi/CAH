@@ -642,8 +642,10 @@ input[type="search"]:focus, input[type="search"]:hover{
 	border-bottom-left-radius: 5px;
 	display: flex;
 	flex-wrap: wrap;
+	overflow: auto;
 	border-bottom-right-radius: 5px;;
 	position: relative;
+	max-height: calc(100vh - 166px);
 	font-weight: 900;
 	padding: 5px;
 }
@@ -743,4 +745,10 @@ input[type="search"]:focus, input[type="search"]:hover{
 	font-size: 45px;
 	text-align: center;
 	margin: 50px auto 50px auto;
+}
+.free{
+	color: green;
+}
+.max{
+	color: rgb(150, 9, 9);
 }

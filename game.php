@@ -1,5 +1,6 @@
 <?php
-	usleep(10000);
+	ini_set('display_errors','0');
+	usleep(20000);
 	include "languages/config.php";	
     if(!isset($_SESSION['login']) || $_SESSION['login']==false){
 		header('Location: index.php');
@@ -10,6 +11,7 @@
 	
 	$last_change = floor(microtime(true) * 1000);
 	$delete = $last_change - 3600000;
+	$delete2 = $last_change - 5000;
 	$user = $_SESSION['user'];
 	$dsn = "mysql:host=".$host.";dbname=".$db_name;
 	$pdo = new PDO($dsn, $db_user, $db_password);
@@ -30,7 +32,7 @@
 			header('Location: index.php');
 			exit();
 		}
-		if($lobby_before['last_change'] < $delete){
+		if($lobby_before['last_change'] < $delete || ($delete2 > $lobby_before['last_change_players'] && $lobby_before['players_in_lobby']==0)){
 			$sql = "DELETE FROM lobby WHERE lobby_id = '$lobby_id'";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
@@ -82,8 +84,25 @@
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
 		}
+		if($lobby_before['game_started']==1){
+			$sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'white'";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute(['id'=>$lobby_id]);
+			$sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'black' AND choosen = 1";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute(['id'=>$lobby_id]);
+			$black_card = $stmt->fetch();
+			$sql = "UPDATE cards_in_lobby SET owner = '$user' WHERE lobby_id = :id AND color = 'white' AND owner IS NULL ORDER BY RAND() LIMIT 10";
+			$stmt=$pdo->prepare($sql);
+			$stmt->execute(['id'=>$lobby_id]);
+			$sql = "SELECT * FROM cards_in_lobby WHERE owner = '$user'";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute();
+			$my_cards = $stmt->fetchAll();
+
+		}
 		$_SESSION['game']= true;
-		$sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id'";
+		$sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id' ORDER BY 'ID' ASC";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
 		$players = $stmt->fetchAll();
@@ -100,6 +119,7 @@
 	catch(PDOException $e){
 		$pdo->rollBack();
 		$error_message = $e->getMessage();
+		echo $error_message;
 
 
 	}
@@ -122,30 +142,33 @@
 	<script src = "js/FormSubmitLang.js"></script> 
 </head>
 <body>
-	<div id = "lang">
+	<?php
+	if($lobby['game_started']==0){
+		
+		echo'
+		<div id = "lang_before">
 				
 		<label class = "lang_change"><img src ="img/plflag"><input type = "submit" name = "hl" value ="pl" class = "hl" ></label>
 	
 		<label class = "lang_change"> <img src = "img/enflag"> <input type = "submit" name = "hl" value ="en" class = "hl" ></label>
 		
-	</div>
-	<?php echo'
-	<div id ="top">
-		<h1>'.$lobby['lobby_title'].'</h1>
-	</div>
-	<div id = "middle" class= "middle_not_started">';
-	if($user != $lobby['owner']){
-		echo $lang['game_not_started'];
-	}
-	else{
-		if($lobby['players_in_lobby']>=3) $class = 'class = "active"';
-		else $class = 'class = "inactive"';
-		echo '<div id = "start"'.$class.'>START</div><div id = "information">'.$lang['lobby_message'].'</div>';
-	}
-
-	echo '</div>
-	<div id ="bottom">
-	<div id = "players_vis">
+		</div>
+		<div id ="top">
+			<h1>'.$lobby['lobby_title'].'</h1>
+		</div>
+		<div id = "middle" class= "middle_not_started">';
+		if($user != $lobby['owner']){
+			echo $lang['game_not_started'];
+		}
+		else{
+			if($lobby['players_in_lobby']>=3) $class = 'class = "active"';
+			else $class = 'class = "inactive"';
+			echo '<div id = "start"'.$class.'>START</div><div id = "information">'.$lang['lobby_message'].'</div>';
+		}
+	
+		echo '</div>
+		<div id ="bottom">
+		<h2>'.$lang['players'].'	
 		<span id = "players_in_lobby">
 			'.$lobby['players_in_lobby'].'
 		</span>
@@ -154,23 +177,106 @@
 			'.$lobby['max_players'].'
 		</span>
 		<i class = "icon-adult"></i>
-	</div>
-	<h2><span id = "players_in_lobby"></span>'.$lang['players'].'</h2>
-	<div id = "players" class = "players_not_started">';
-		 foreach($players as $player){
-			if($lobby_before['owner']==$player['nick']) {
-				$class = 'class = "player_before owner player"';
-				$icon = '<i class ="icon-crown"></i>';
+		</h2>
+		<div id = "players" class = "players_not_started">';
+			 foreach($players as $player){
+				if($lobby['owner']===$player['nick']) {
+					$class = 'class = "player_before owner player"';
+					$icon = '<i class ="icon-crown"></i>';
+				}
+				else
+				 {
+					$class = 'class ="player_before player"';
+					$icon = '';
+				} 
+				echo
+				'<div '.$class.'><span class = "nick">'.$player['nick'].$icon.'</span></div>';
 			}
-			else
-		 	{
-				$class = 'class ="player_before player"';
-				$icon = '';
-			} 
-			echo
-			'<div '.$class.'><span class = "nick">'.$player['nick'].$icon.'</span></div>';
-		}
-	'</div>';
+		'</div>';
+	}	
+	if($lobby['game_started']==1){
+		echo'
+		<div id = "lang_after">
+				
+		<label class = "lang_change"><img src ="img/plflag"><input type = "submit" name = "hl" value ="pl" class = "hl" ></label>
+	
+		<label class = "lang_change"> <img src = "img/enflag"> <input type = "submit" name = "hl" value ="en" class = "hl" ></label>
+		
+		</div>
+		<div id = "main">
+			<div id = "left">
+			<div id = "black_card_cont">
+				<div id = "black_card">'.$black_card["value"].'</div>
+			</div>
+				<div id = "players" class = "players_started">';
+				foreach($players as $player){
+					if($lobby['owner']===$player['nick']) {
+						$class = 'class = "nick owner"';
+						$icon = '<i class ="icon-crown"></i>';
+					}
+					else
+					{
+						$class = 'class ="nick"';
+						$icon = '';
+					} 
+					echo
+					'
+					<div class = "player_after player"><div class = "player_left"><span '.$class.'>'.$player['nick'].$icon.'</span>
+					<div class = "points">'.$lang['points'].$player['points'].'</div>
+					</div>
+					<div class = "player_right">';
+					if($player['chooser']==1) echo $lang['Selecting'];
+					echo '</div>
+					<div style = "clear:both;"></div>
+					</div>';
+				}
+			
+			echo' </div></div>
+			<div id = "right">
+			<div id = "white_cards_cont">
+ 
+					<div class = "white_card_picked">sdsaadsadasdasdasdsa dasdasdasdsadasda adsadasdasdasdsa dasdasdasdsadasdaadsadasdasdasdsa dasdasdasdsadasdaadsadasdasdasdsa dasdasdasdsadasdaadsadasdasdasdsa dasdasdasfz  dfasd</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">sdsad</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">sdsad</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+					<div class = "white_card_picked">test</div>
+
+			</div>
+			<div style = "clear: both;"></div>
+			<div id = "UI">
+			<div id = "my_cards">';
+				foreach($my_cards as $card){
+					echo '<label id = '.$card['ID'].' class = "white_card">'.$card['value'].'<input type = "checkbox" id = check'.$card['ID'].' class = "white_check"/></label>';
+				}
+			echo '</div>
+			<div id = "menu">
+			<div id = "btn">'.$lang['Select'].'</div>
+			</div>
+			</div>
+		</div>';
+	}
 	?>
 	<script src = "js/game.js"></script>
 </body>

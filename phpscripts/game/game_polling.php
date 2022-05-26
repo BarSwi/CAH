@@ -49,23 +49,13 @@ try{
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
     }
-    $row = $stmt->fetch();
-    $lobby = $row['lobby_id'];
     $counter = 0;
     while(true){
         $sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick' AND lobby_id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
-        $row = $stmt->fetch();
-        if($row['kick']==true){
-            $last_change = floor(microtime(true) * 1000);
-            $sql = "DELETE FROM players_in_lobby WHERE nick = '$nick' AND lobby_id = :id";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute(['id'=>$id]);
-            $sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby-1 WHERE lobby_id = :id";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute(['id'=>$id]);
-            echo "kick";
+        if($stmt->rowCount()==0){
+            echo "0";
             exit();
         }
         $counter += 1;
@@ -80,9 +70,9 @@ try{
         $stmt =  $pdo->prepare($sql);
         $stmt->execute(['time_change'=>$time,'time_change2'=>$time,'id'=>$id]);
         if($stmt->rowCount()>0){
-            $row = $stmt->fetch();
-            if($row['last_change_players']>$time){
-                $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id";
+            $time_change = $stmt->fetch();
+            if($time_change['last_change_players']>$time){
+                $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id ORDER BY `players_in_lobby`.`ID` ASC";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute(['id'=>$id]);
                 $array = $stmt->fetchAll();
@@ -91,16 +81,19 @@ try{
                 $stmt->execute(['id'=>$id]);
                 $row = $stmt->fetch();
                 $owner = $row['owner'];
-                $time = $row['last_change_players'];
+                $time = floor(microtime(true) * 1000);
                 foreach($array as $player){
-                    array_push($array_exit, $player['nick']);
+                    array_push($array_exit, [$player['nick'], $player['points'], $player['chooser']]);
                 }
                 array_push($array_exit, $time, $owner, "players");
                 echo json_encode($array_exit);
                 exit();
             }
-            if($row['last_change']>$time){
-
+            if($time_change['last_change']>$time){
+                $time = floor(microtime(true) * 1000);
+                array_push($array_exit, $time, 'game');
+                echo json_encode($array_exit);
+                exit();
             }
             else{
                 echo "0";

@@ -21,7 +21,7 @@ $('#form').click(function(event){
     $(this).css('pointer-events', 'none');
     event.preventDefault();
     let points_val = points.val();
-    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 10].filter(Boolean).length==3;
+    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 9].filter(Boolean).length==3;
     let players_val = players.val();
     let added_decks_json = JSON.stringify(added_decks);
     let lobby_password = $('#lobby_password_input').val();
@@ -55,7 +55,7 @@ $('#form').click(function(event){
 });
 $('.add_my_deck_btn').click(function() {
     var added_decks_list = $('#added_decks_list');
-    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 10].filter(Boolean).length==3;
+    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 9].filter(Boolean).length==3;
     var deck_id =  $(this).parents().eq(1).siblings().children(".deck_id").text();
     var title =  $(this).parents().eq(1).siblings().children(".deck_title").text();
     var white_cards = $(this).parents().eq(1).siblings().children(".white_cards").text();
@@ -127,11 +127,11 @@ $(document).on('click', '#delete_added_deck_btn', function(){
 });
 $('#max_players_input').change(function(){
     if(players.val() < 3) players.val(3);
-    if(players.val() > 10) players.val(10);
+    if(players.val() > 9) players.val(9);
     var black_cards_res = players.val() * points.val() - players.val() + 1;
     var white_cards_res = players.val() * 12 + 10;
     min_amount_black_cards.html(black_cards_res);
-    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 10].filter(Boolean).length==3;
+    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 9].filter(Boolean).length==3;
     min_amount_white_cards.html(white_cards_res);
     if(!button.is(':disabled')){
         if(!flag || parseInt(min_amount_black_cards.text()) > parseInt(current_black_cards.text()) || parseInt(min_amount_white_cards.text()) > parseInt(current_white_cards.text())){
@@ -161,7 +161,7 @@ $('#round_limit_input').change(function(){
     var black_cards_res = players.val() * points.val() - players.val() + 1;
     var white_cards_res = players.val() * 12 + 10;
     min_amount_black_cards.html(black_cards_res);
-    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() < 10  ].filter(Boolean).length==3;
+    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() < 9  ].filter(Boolean).length==3;
     min_amount_white_cards.html(white_cards_res);
     if(!button.is(':disabled')){
         if(!flag || parseInt(min_amount_black_cards.text()) > parseInt(current_black_cards.text()) || parseInt(min_amount_white_cards.text()) > parseInt(current_white_cards.text())){
@@ -187,7 +187,7 @@ $('#round_limit_input').change(function(){
     }     
 });
 $('#lobby_title_input').change(function(){
-    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 10].filter(Boolean).length==3;
+    var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 9].filter(Boolean).length==3;
     if(!button.is(':disabled')){
         if(!flag || parseInt(min_amount_black_cards.text()) > parseInt(current_black_cards.text()) || parseInt(min_amount_white_cards.text()) > parseInt(current_white_cards.text())){
             button.prop('disabled',true);
@@ -220,7 +220,7 @@ $('#add_decks_btn').click(function(){
             return 0;
         }
         var added_decks_list = $('#added_decks_list');
-        var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 10 ].filter(Boolean).length==3;
+        var flag = [$('#lobby_title_input').val().length != 0, points.val()>=3, players.val()>=3 && players.val() <= 9 ].filter(Boolean).length==3;
         var deck_id =  array['deck_id'];
         var title =  array['title'];
         var white_cards = array['white_cards'];

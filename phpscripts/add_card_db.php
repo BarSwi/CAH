@@ -12,8 +12,8 @@ if($color=="white" && empty($text)){
 	exit();
 }
 if($color == "black"){
-	$count = 	substr_count($text, ' ___');
-	if($count == 0 || $count > 3) {
+	$count_space = 	substr_count($text, ' ___');
+	if($count_space == 0 || $count_space > 3) {
 	echo "0";
 	exit();
 	}
@@ -21,6 +21,14 @@ if($color == "black"){
 	if($count != 0) {
 	echo "0";
 	exit();
+	}
+	if($color == "white" && strlen($text)> 170){
+		echo "0";
+		exit();
+	}
+	if($color == "black" && strlen($text)> 200){
+		echo "0";
+		exit();
 	}
 }
 try{
@@ -37,7 +45,12 @@ try{
 		exit();
 	}
 	$pdo->beginTransaction();
-	$sql = "INSERT INTO cards (deck_code, value, color) VALUES ('$deck_code', :text, '$color')";
+	if($color=="white"){
+		$sql = "INSERT INTO cards (deck_code, value, color) VALUES ('$deck_code', :text, '$color')";
+	}
+	else{
+		$sql = "INSERT INTO cards (deck_code, value, color, blank_space) VALUES ('$deck_code', :text, '$color', $count_space)";
+	}
 	$stmt = $pdo->prepare($sql);
 	$stmt->execute(['text' => $text]);
 	$sql = "UPDATE decks SET $color"."_cards = $color"."_cards + 1 WHERE BINARY deck_code = '$deck_code'";

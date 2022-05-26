@@ -16,6 +16,7 @@ function changeTheme()
 }
 check.addEventListener("click", changeTheme);
 
+
 $(document).ready(function(){
 	var side_rules = $('#side_rules');
 	var game_rules = $('#game_rules');
