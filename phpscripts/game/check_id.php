@@ -28,11 +28,12 @@ try{
             $row = $stmt->fetch();
             array_push($array_exit, $row['blank_space']);
         }
-        $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id AND chooser = 0";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['id'=>$id]);
-        $row = $stmt->fetch();
-        array_push($array_exit, $row['nick']);
+        // $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id AND chooser = 1";
+        // $stmt = $pdo->prepare($sql);
+        // $stmt->execute(['id'=>$id]);
+        // $row = $stmt->fetch();
+        // array_push($array_exit, $row['nick']);
+        array_push($array_exit, 'baster324');
     }
     echo json_encode($array_exit);
 }

@@ -17,12 +17,14 @@
 			$sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick'";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
-			if($stmt->rowCount()>0){
-				echo "1";
+			if($stmt->rowCount()>0){	
 				if($_SESSION['login']==true){
 					if($_SESSION['game']==true){
 						$row = $stmt->fetch();
 						$lobby_id = $row['lobby_id'];
+						$sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL, winner = NULL WHERE lobby_id = :id AND owner = '$nick'";
+						$stmt=$pdo->prepare($sql);
+						$stmt->execute(['id'=>$lobby_id]);
 						$sql = "DELETE FROM players_in_lobby WHERE nick = '$nick'";
 						$stmt = $pdo->prepare($sql);
 						$stmt->execute();
@@ -38,11 +40,11 @@
 					}
 				}
 			}
-			$sql = "SELECT * FROM lobby WHERE last_change < $delete OR players_in_lobby < 1";
+			$sql = "SELECT * FROM lobby WHERE (last_change < $delete AND last_change_round < $delete) OR players_in_lobby < 1";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
 			$row = $stmt->fetchAll();
-			$sql = "DELETE FROM lobby WHERE last_change < $delete OR players_in_lobby < 1";
+			$sql = "DELETE FROM lobby WHERE (last_change < $delete AND last_change_round < $delete) OR players_in_lobby < 1";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
 			foreach($row as $lobby){

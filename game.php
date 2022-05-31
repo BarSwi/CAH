@@ -32,7 +32,7 @@
 			header('Location: index.php');
 			exit();
 		}
-		if($lobby_before['last_change'] < $delete || ($delete2 > $lobby_before['last_change_players'] && $lobby_before['players_in_lobby']==0)){
+		if(($lobby_before['last_change'] < $delete && $lobby_before['last_change_round'] < $delete) || ($delete2 > $lobby_before['last_change_players'] && $lobby_before['players_in_lobby']<=0)){
 			$sql = "DELETE FROM lobby WHERE lobby_id = '$lobby_id'";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
@@ -235,33 +235,8 @@
 			<div id = "right">
 			<div id = "white_cards_cont">
  
-					<div class = "white_card_picked">sdsaadsadasdasdasdsa dasdasdasdsadasda adsadasdasdasdsa dasdasdasdsadasdaadsadasdasdasdsa dasdasdasdsadasdaadsadasdasdasdsa dasdasdasdsadasdaadsadasdasdasdsa dasdasdasfz  dfasd</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">sdsad</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">sdsad</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
-					<div class = "white_card_picked">test</div>
+
+
 
 			</div>
 			<div style = "clear: both;"></div>

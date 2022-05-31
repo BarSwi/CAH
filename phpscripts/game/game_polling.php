@@ -66,11 +66,45 @@ try{
             echo "0";
             exit();
         }
-        $sql = "SELECT * FROM lobby WHERE (last_change > :time_change OR last_change_players > :time_change2) AND lobby_id = :id";
+        $sql = "SELECT * FROM lobby WHERE (last_change > :time_change OR last_change_players > :time_change2 OR last_change_round > :time_change3) AND lobby_id = :id";
         $stmt =  $pdo->prepare($sql);
-        $stmt->execute(['time_change'=>$time,'time_change2'=>$time,'id'=>$id]);
+        $stmt->execute(['time_change'=>$time,'time_change2'=>$time,'time_change3'=>$time, 'id'=>$id]);
         if($stmt->rowCount()>0){
             $time_change = $stmt->fetch();
+            if($time_change['last_change_round']>$time){
+                $time = floor(microtime(true)*1000);
+                $players = $time_change['players_in_lobby'];
+                $sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute(['id'=>$id]);
+                $cards = $stmt->fetchAll();
+                if($stmt->rowCount()!=$players-1){
+                    array_push($array_exit, $time, $stmt->rowCount(), 'round');
+                    echo json_encode($array_exit);
+                    exit();
+                }
+                else{
+                    $time = floor(microtime(true)*1000);
+                    foreach($cards as $card){
+                        $owner = $card['owner'];
+                        $card_id = $card['ID'];
+                        $sql = "SELECT * FROM cards_in_lobby WHERE owner = '$owner' AND choosen IS NOT NULL AND lobby_id = :id ORDER BY `cards_in_lobby`.`choosen` ASC";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute(['id'=>$id]);
+                        $values = $stmt->fetchAll();
+                        $array_inside = [];
+                        array_push($array_inside, $card_id);
+                        foreach($values as $value){
+
+                            array_push($array_inside, $value['value']);
+                        }
+                        array_push($array_exit, $array_inside);
+                    }
+                    array_push($array_exit, $time, 'round_end');
+                    echo json_encode($array_exit);
+                    exit();
+                }
+            }
             if($time_change['last_change_players']>$time){
                 $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id ORDER BY `players_in_lobby`.`ID` ASC";
                 $stmt = $pdo->prepare($sql);
@@ -101,7 +135,7 @@ try{
             }
         }
         if($counter == 3600){
-            echo "1";
+            echo $time;
             exit();
         }
         usleep(600000);
