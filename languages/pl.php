@@ -89,5 +89,6 @@
 	"points"=>"Punkty: ",
 	"Selecting"=>"Wybiera",
 	"Select" => "WYBIERZ",
+	"Selecting_information"=>"W tej rundzie wybierasz wygrywającą kartę.",
 	);
 	

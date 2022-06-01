@@ -21,8 +21,14 @@ try{
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
     $row = $stmt->fetch();
-    $players = $row['players_in_lobby'];
     if($number != $row['blank_space']){
+        echo '0';
+        exit();
+    }
+    $sql = "SELECT * FROM cards_in_lobby WHERE owner = '$nick' AND lobby_id = :id AND color = 'white' AND choosen IS NOT NULL";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id'=>$id]);
+    if($stmt->rowCount()!=0){
         echo '0';
         exit();
     }
@@ -33,10 +39,6 @@ try{
         $stmt->execute(['card'=>$card]);
         $counter += 1;
     }
-    $time = floor(microtime(true) * 1000);
-    $sql = "UPDATE lobby SET last_change_round = '$time' WHERE lobby_id = :id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['id'=>$id]);
     $sql = "SELECT * FROM cards_in_lobby WHERE owner IS NULL AND lobby_id = :id AND color = 'white' LIMIT $number";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
@@ -50,6 +52,11 @@ try{
         $stmt->execute();
         array_push($array_exit, $array_inside);
     }
+    $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id'=>$id]);
+    $row = $stmt->fetch();
+    $players = $row['players_in_lobby'];
     $sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
@@ -57,7 +64,14 @@ try{
         $sql = "UPDATE  lobby SET round_started = 0 WHERE lobby_id = :id";
         $stmt= $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
+        $sql = "UPDATE  lobby SET reset = 0 WHERE lobby_id = :id";
+        $stmt= $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
     }
+    $time = floor(microtime(true) * 1000);
+    $sql = "UPDATE lobby SET last_change_round = '$time' WHERE lobby_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id'=>$id]);
     echo json_encode($array_exit);
     $pdo->commit();
 }

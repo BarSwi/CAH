@@ -26,7 +26,7 @@ try{
     $sql = "DELETE FROM players_in_lobby WHERE nick = :kick AND lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['kick'=>$kick, 'id'=>$id]);
-    $sql = "UPDATE cards_in_lobby SET owner = NULL WHERE lobby_id = :id AND owner = '$nick'";
+    $sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL, winner = NULL WHERE lobby_id = :id AND owner = '$kick'";
     $stmt=$pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
     $sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = :id";

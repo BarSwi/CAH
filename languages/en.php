@@ -89,5 +89,6 @@
 	"points"=>"Points: ",
 	"Selecting"=>"Selecting",
 	"Select" => "SELECT",
+	"Selecting_information"=>"You are selecting a winning card during this round.",
 	);
 ?>

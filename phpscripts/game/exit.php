@@ -17,11 +17,14 @@ try{
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $row = $stmt->fetch();
+    $chooser = $row['chooser'];
+    $player_id = $row['ID'];
     $lobby_id = $row['lobby_id'];
     $sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $row = $stmt->fetch();
+    $game_started = $row['game_started'];
     $owner = $row['owner'];
     $last_change_players = floor(microtime(true) * 1000);;
     $last_change_lobby = $row['last_change'];
@@ -50,6 +53,18 @@ try{
             if($abs>3000){
                 $new_owner = $row['nick'];
                 $sql = "UPDATE lobby SET owner = '$new_owner' WHERE lobby_id = '$lobby_id'";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute();
+            }
+        }
+    }
+    if($game_started==1){
+        if($chooser == 1){
+            $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$lobby_id' AND ID > $player_id LIMIT 1";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            if($stmt->rowCount()==0){
+                $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$lobby_id' LIMIT 1";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();
             }

@@ -92,9 +92,14 @@
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute(['id'=>$lobby_id]);
 			$black_card = $stmt->fetch();
-			$sql = "UPDATE cards_in_lobby SET owner = '$user' WHERE lobby_id = :id AND color = 'white' AND owner IS NULL ORDER BY RAND() LIMIT 10";
-			$stmt=$pdo->prepare($sql);
+			$sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'white' AND owner = '$user'";
+			$stmt = $pdo->prepare($sql);
 			$stmt->execute(['id'=>$lobby_id]);
+			if($stmt->rowCount()<10){
+				$sql = "UPDATE cards_in_lobby SET owner = '$user' WHERE lobby_id = :id AND color = 'white' AND owner IS NULL ORDER BY RAND() LIMIT 10";
+				$stmt=$pdo->prepare($sql);
+				$stmt->execute(['id'=>$lobby_id]);
+			}
 			$sql = "SELECT * FROM cards_in_lobby WHERE owner = '$user'";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
@@ -102,6 +107,11 @@
 
 		}
 		$_SESSION['game']= true;
+		$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+		$row = $stmt->fetch();
+		$chooser = $row['chooser'];
 		$sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id' ORDER BY 'ID' ASC";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
@@ -221,8 +231,8 @@
 					} 
 					echo
 					'
-					<div class = "player_after player"><div class = "player_left"><span '.$class.'>'.$player['nick'].$icon.'</span>
-					<div class = "points">'.$lang['points'].$player['points'].'</div>
+					<div class = "player_after player" id = "'.$player['nick'].'"><div class = "player_left"><span '.$class.'>'.$player['nick'].$icon.'</span>
+					<div class = "points">'.$lang['points'].'<span class = "value">'.$player['points'].'</span></div>
 					</div>
 					<div class = "player_right">';
 					if($player['chooser']==1) echo $lang['Selecting'];
@@ -240,17 +250,22 @@
 
 			</div>
 			<div style = "clear: both;"></div>
-			<div id = "UI">
-			<div id = "my_cards">';
+			<div id = "UI">';
+			if($chooser == 1) $style = 'style = "display: none;"';
+			else $style = '';
+			echo '<div id = "my_cards"'.$style.'>';
 				foreach($my_cards as $card){
 					echo '<label id = '.$card['ID'].' class = "white_card">'.$card['value'].'<input type = "checkbox" id = check'.$card['ID'].' class = "white_check"/></label>';
 				}
 			echo '</div>
 			<div id = "menu">
-			<div id = "btn">'.$lang['Select'].'</div>
-			</div>
-			</div>
-		</div>';
+				<div id = "btn">'.$lang['Select'].'</div>
+			</div>';
+			if($chooser == 1){
+				echo '<div id = "select_info">'.$lang['Selecting_information'].'</div>';
+			}
+		echo '</div>
+		</div></div>';
 	}
 	?>
 	<script src = "js/game.js"></script>

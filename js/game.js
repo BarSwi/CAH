@@ -27,6 +27,7 @@ $(window).on('beforeunload', function(){
 kickflag = true;
 $(document).ready(function(){
     window.selected_cards = [];
+    window.winner = [];
     $.ajax({
         type: 'post',
         url: 'phpscripts/game/check_id.php',
@@ -56,7 +57,6 @@ function polling(time){
             success: function(res){
                 if(window.unload == true) return 0;
                 if(res=="0"){
-                    alert(res);
                     window.location = "index.php";
                     return 0;
                 }
@@ -81,14 +81,23 @@ function polling(time){
 $(document).on('mouseover', '.player', function(){
     if(kickflag==true && window.owner && window.nick){
         if(window.owner==window.nick){
-            if($(this).children('.nick').text()!=window.owner){
-                if(window.hl=="pl") var text = "Wyrzuć";
-                if(window.hl=="en") var text = "Kick";
-                if($(this).children().length < 2) {
+            if($(this).children('.player_left').length){
+                if($(this).children('.player_left').children('.nick').text()!=window.owner){
+                    if(window.hl=="pl") var text = "Wyrzuć";
+                    if(window.hl=="en") var text = "Kick";
                     $(this).append('<div class = "kick">'+text+'</div>');
+        
+                    kickflag = false;
                 }
-    
-                kickflag = false;
+            }
+            else{
+                if($(this).children('.nick').text()!=window.owner){
+                    if(window.hl=="pl") var text = "Wyrzuć";
+                    if(window.hl=="en") var text = "Kick";
+                    $(this).append('<div class = "kick">'+text+'</div>');
+        
+                    kickflag = false;
+                }
             }
         }
     }
@@ -104,7 +113,12 @@ $(document).on('mouseleave', '.player', function(){
 })
 $(document).on('click', '.kick', function(){
     if(window.owner==window.nick){
-        var kick = $(this).siblings('.nick').text();
+        if($(this).siblings('.player_left').length){
+            var kick = $(this).siblings('.player_left').children('.nick').text();
+        }
+        else{
+            var kick = $(this).siblings('.nick').text();
+        }
         $(this).parent().remove();
         $.ajax({
             type: 'post',
@@ -177,40 +191,104 @@ $(document).on('change','.white_check', function(e){
         return 0;
     }
 });
+$(document).on('change', '.select_check', function(){
+    if(window.nick != window.chooser){
+        let card_id = $(this).attr("class").split(/\s+/)[1];
+        let card_handler = $('.'+card_id);
+        if($(this).prop('checked')==true){
+            if(window.winner.length == 0){
+                card_handler.css({'background-color': '#8FE738', 'opacity': 1});
+                window.winner.push(card_id);
+            }
+            else{
+                let remove_card = window.winner;
+                $('.'+remove_card).removeAttr('style');
+                $('.'+remove_card).prop('checked', false);
+                window.winner = [];
+                card_handler.css({'background-color': '#8FE738', 'opacity': 1});
+                window.winner.push(card_id);
+            }
+        }
+        else{
+            window.winner = window.winner.filter(e => e !== card_id);
+            card_handler.removeAttr('style');
+        }
+        if(window.winner.length == 1){
+            $('#btn').css({'pointer-events': 'auto', 'opacity': '1'});
+        }
+        else{
+            $('#btn').removeAttr('style');
+        }
+        
+    }
+    else{
+        //  $(this).css('pointer-events', 'none');
+        //  return 0;
+    }
+});
 $('#btn').click(function(){
     if(selected_flag==false){
-        if(window.selected_cards.length == 0 ){
-            return;
-        }
-        if(window.nick != window.chooser){
-            $(this).css('display', 'none');
-            if(window.selected_cards.length == window.black ){
-                let array = JSON.stringify(window.selected_cards);
-                for(let i = 0; i<window.selected_cards.length; i++){
-                    $('#'+window.selected_cards[i]).remove();
+            if(window.nick != window.chooser){
+                if(window.selected_cards.length == 0 ){
+                    $(this).removeAttr('style');
+                    return;
                 }
-                window.selected_cards = [];
+                if(window.selected_cards.length < window.black){
+                    $(this).removeAttr('style');
+                    return;
+                }
+                if(window.selected_cards.length == window.black ){
+                    let array = JSON.stringify(window.selected_cards);
+                    for(let i = 0; i<window.selected_cards.length; i++){
+                        $('#'+window.selected_cards[i]).remove();
+                    }
+                    window.selected_cards = [];
+                    $.ajax({
+                        type: 'post',
+                        url: '../phpscripts/game/selected_cards.php',
+                        async: false,
+                        data: {array:array, id:id},
+                        success: function(res){
+                            if(res=="0"){
+                                alert('error');
+                                window.location.reload();
+                            }
+                            else{
+                                selected_flag = true;
+                                $('#btn').css('display', 'none');
+                                let array = JSON.parse(res);
+                                for(let i = 0; i<array.length; i++){
+                                    $('#my_cards').append("<label id = "+array[i][0]+" class = 'white_card'>"+array[i][1]+"<input type = 'checkbox' id = 'check"+array[i][0]+"' class = 'white_check''></label>");
+                                    
+                                }
+                                $('.white_card').css('pointer-events','none');
+                            }
+                        }
+                    })
+                }
+        }
+        else{
+            if(window.winner.length != 1){
+                $(this).removeAttr('style');
+                return;
+            }
+            else{
+                let winner = window.winner;
                 $.ajax({
                     type: 'post',
-                    url: '../phpscripts/game/selected_cards.php',
-                    async: false,
-                    data: {array:array, id:id},
+                    url: '../phpscripts/game/winner.php',
+                    data: {winner:winner, id:id},
                     success: function(res){
-                        if(res=="0"){
+                        alert(res);
+                        if(res=='0'){
                             alert('error');
-                            window.location.reload();
                         }
                         else{
+                            $('#btn').css('display', 'none');
                             selected_flag = true;
-                            let array = JSON.parse(res);
-                            for(let i = 0; i<array.length; i++){
-                                $('#my_cards').append("<label id = "+array[i][0]+" class = 'white_card'>"+array[i][1]+"<input type = 'checkbox' id = 'check"+array[i][0]+"' class = 'white_check''></label>");
-                                
-                            }
-                            $('.white_card').css('pointer-events','none');
                         }
                     }
-                })
+                });
             }
         }
     }
@@ -259,18 +337,29 @@ function polling_res(param){
             if(window.hl = "en"){
                 var points = "Points: ";
             }
+            if(window.owner != owner){
+                if(owner==window.nick){
+                    window.owner = window.nick;
+                }
+            }
             for(var i = 0; i< param.length-3; i++){
                 if(param[i][2]==1){
+                    window.chooser = param[i][0];
                     if(window.hl = "pl") var select = "Wybiera";
                     if(window.hl="en")   var select = "Selecting";
                 }
                 else var select = "";
                 if(param[i][0]==owner){
-                    players.append('<div class = "player_after player"><div class = "player_left"><span class = "nick owner">'+param[i][0]+'<i class = "icon-crown"></i></span><div class = "points">'+points+param[i][1]+'</div></div><div class = "player_right">'+select+'</div><div style = "clear:both;"></div></div>');
+                    players.append('<div class = "player_after player" id = "'+param[i][0]+'"><div class = "player_left"><span class = "nick owner">'+param[i][0]+'<i class = "icon-crown"></i></span><div class = "points">'+points+'<span class = "value">'+param[i][1]+'</span></div></div><div class = "player_right">'+select+'</div><div style = "clear:both;"></div></div>');
                 }
                 else{
-                    players.append('<div class = "player_after player"><div class = "player_left"><span class = "nick">'+param[i][0]+'</span><div class = "points">'+points+param[i][1]+'</div></div><div class = "player_right">'+select+'</div><div style = "clear:both;"></div></div>');
+                    players.append('<div class = "player_after player" id = "'+param[i][0]+'"><div class = "player_left"><span class = "nick">'+param[i][0]+'</span><div class = "points">'+points+'<span class = "value">'+param[i][1]+'</span>    </div></div><div class = "player_right">'+select+'</div><div style = "clear:both;"></div></div>');
                 }
+            }
+            if(window.chooser == window.nick){
+                $('#my_cards').css('display','none');
+                if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
+                if(hl=="en") var text = "You are selecting a winning card during this round.";
             }
             polling(time);
         }
@@ -295,6 +384,10 @@ function polling_res(param){
     }
     if(param[param.length-1]=="round_end"){
         time = param[param.length-2];
+        if(window.chooser != window.nick){
+            var style = 'style = "pointer-events: none;"';
+        }
+        else var style = '';
         let white_cards_cont = $('#white_cards_cont');
         white_cards_cont.children().remove();   
         let i = param.length-2;
@@ -302,10 +395,43 @@ function polling_res(param){
         for(let j = 0; j<i; j++){
            let k = param[j].length-1;
            for(let m = 0; m<k;m++){
-                white_cards_cont.append('<label class = "white_card_picked '+paramShuffled[j][0]+'">'+paramShuffled[j][m+1]+'<input type = "checkbox" id = "select'+paramShuffled[j][0]+'"></label>');
+                white_cards_cont.append('<label  class = "selected white_card_picked '+paramShuffled[j][0]+'"'+style+'>'+paramShuffled[j][m+1]+'<input type = "checkbox" class = "select_check '+paramShuffled[j][0]+'"></label>');
            }
         }
         polling(time);
+    }
+    if(param[param.length-1] == 'winner_selected'){
+        time = param[0];
+        let nick = param[1];
+        let card = param[2];
+        nick_handler = $('#'+nick);
+        nick_handler.css('background-color', 'green');
+        new_value = parseInt(nick_handler.children('.player_left').children('.points').children('.value').text())
+        nick_handler.children('.player_left').children('.points').children('.value').text(new_value);
+        $('.'+card).css('background-color', 'green');
+        polling(time);
+    }
+    if(param[param.length-1]=='reset'){
+        time = param[0];
+        window.chooser = param[1];
+        if(window.nick != window.chooser){
+            information = $('#select_info');
+            $('.player').reomveAttr('style');
+            $('#btn').removeAttr('style');
+            $('#white_cards_cont').children().remove();
+            $('.white_card').removeAttr('style');
+            if(information.length){
+                $('#my_cards').removeAttr('style');
+                information.remove();
+            }
+        }
+        else{
+            $('#my_cards').css('display','none');
+            if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
+            if(hl=="en") var text = "You are selecting a winning card during this round.";
+
+        }
+        selected_flag = false;
     }
 
 }

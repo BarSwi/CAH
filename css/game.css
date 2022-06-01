@@ -212,6 +212,7 @@ h1{
 .white_card_picked{
 	height: 10.16vw;
 	min-width: 7.55vw;
+	opacity: 85%;
 	max-width: 7.55vw;	
 	word-wrap: break-word;
 	font-size: 0.7vw;
@@ -336,4 +337,14 @@ input[type="checkbox"]{
 }
 .shown{
 	background-color: #8FE738;
+}
+#select_info{
+	text-align: center;
+	opacity: 80%;
+	margin-top: 2vw;
+	font-size: 3vw;
+}
+.selected:hover{
+	opacity: 100%;
+	cursor: pointer;
 }
