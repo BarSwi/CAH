@@ -58,9 +58,6 @@ try{
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$lobby_id]);
     }
-    // $sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
-    // $stmt= $pdo->prepare($sql);
-    // $stmt->execute(['id'=>$lobby_id]);
     $sql  = "UPDATE cards_in_lobby SET winner = NULL WHERE lobby_id = :id";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
@@ -70,6 +67,10 @@ try{
     $sql  = "UPDATE lobby SET last_change_round = '$time' WHERE lobby_id = :id";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
+    // usleep(700000);
+    // $sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
+    // $stmt= $pdo->prepare($sql);
+    // $stmt->execute(['id'=>$lobby_id]);
     
 }
 catch(PDOException $e){
