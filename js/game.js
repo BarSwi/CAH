@@ -113,6 +113,7 @@ $(document).on('mouseleave', '.player', function(){
 })
 $(document).on('click', '.kick', function(){
     if(window.owner==window.nick){
+        kickflag = true;
         if($(this).siblings('.player_left').length){
             var kick = $(this).siblings('.player_left').children('.nick').text();
         }
@@ -133,13 +134,12 @@ $(document).on('click', '.kick', function(){
         });
     }
 });
-$('#start').click(function(){
+$(document).on('click', '#start', function(){
     $.ajax({
         type: 'post',
         url: '../phpscripts/game/start_game.php',
         success: function(res){
             if(res=="0"){
-                alert('error');
                 return 0;
             }
         }
@@ -192,7 +192,7 @@ $(document).on('change','.white_check', function(e){
     }
 });
 $(document).on('change', '.select_check', function(){
-    if(window.nick != window.chooser){
+    if(window.nick == window.chooser){
         let card_id = $(this).attr("class").split(/\s+/)[1];
         let card_handler = $('.'+card_id);
         if($(this).prop('checked')==true){
@@ -273,13 +273,12 @@ $('#btn').click(function(){
                 return;
             }
             else{
-                let winner = window.winner;
+                let winner = JSON.stringify(window.winner);
                 $.ajax({
                     type: 'post',
                     url: '../phpscripts/game/winner.php',
                     data: {winner:winner, id:id},
                     success: function(res){
-                        alert(res);
                         if(res=='0'){
                             alert('error');
                         }
@@ -311,7 +310,6 @@ function polling_res(param){
             for(var i = 0; i< param.length-3; i++){
                 if(param[i][0]==owner){
                     $('#players').append('<div class = "player_before owner player"><span class = "nick">'+param[i][0]+'<i class = "icon-crown"></i></span></div>');
-                    alert(owner);
                 }
                 else{
                     $('#players').append('<div class = "player_before player"><span class = "nick">'+param[i][0]+'</span></div>');
@@ -320,9 +318,13 @@ function polling_res(param){
             if(window.owner != owner){
                 if(owner==window.nick){
                     window.owner = window.nick;
+                    if(players_in_lobby.html() >= 3){
+                        var className = "class = 'active'";
+                    }
+                    else var className = "class = 'inactive'";
                     if(window.hl=="pl") var text = "W celu wystartowania rozgrywki potrzeba conajmniej 3 graczy. Każda poczekalnia zostaje usunięta po godzinie nieaktywności.";
                     if(window.hl=="en") var text = "In order to start the game you need at least 3 players. Each lobby is deleted after one hour of inactivity.";
-                    $('#middle').html('<div id = "start" class = "inactive">START</div><div id = "information">'+text+'</div>');
+                    $('#middle').html('<div id = "start" '+className+'>START</div><div id = "information">'+text+'</div>');
                 }
             }
             polling(time);
@@ -406,7 +408,7 @@ function polling_res(param){
         let card = param[2];
         nick_handler = $('#'+nick);
         nick_handler.css('background-color', 'green');
-        new_value = parseInt(nick_handler.children('.player_left').children('.points').children('.value').text())
+        let new_value = parseInt(nick_handler.children('.player_left').children('.points').children('.value').text()) +1;
         nick_handler.children('.player_left').children('.points').children('.value').text(new_value);
         $('.'+card).css('background-color', 'green');
         polling(time);
@@ -414,9 +416,10 @@ function polling_res(param){
     if(param[param.length-1]=='reset'){
         time = param[0];
         window.chooser = param[1];
+        alert(param[1]);
         if(window.nick != window.chooser){
-            information = $('#select_info');
-            $('.player').reomveAttr('style');
+            let information = $('#select_info');
+            $('.player').removeAttr('style');
             $('#btn').removeAttr('style');
             $('#white_cards_cont').children().remove();
             $('.white_card').removeAttr('style');
@@ -427,11 +430,17 @@ function polling_res(param){
         }
         else{
             $('#my_cards').css('display','none');
+            $('.player').removeAttr('style');
+            $('#btn').removeAttr('style');
+            $('#white_cards_cont').children().remove();
+            $('.white_card').removeAttr('style');
             if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
             if(hl=="en") var text = "You are selecting a winning card during this round.";
+            $('#UI').append('<div id = "select_info">'+text+'</div>');
 
         }
         selected_flag = false;
+        polling(time);
     }
 
 }

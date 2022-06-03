@@ -19,7 +19,6 @@
 			$stmt->execute();
 			if($stmt->rowCount()>0){	
 				if($_SESSION['login']==true){
-					if($_SESSION['game']==true){
 						$row = $stmt->fetch();
 						$chooser = $row['chooser'];
 						$player_id = $row['ID'];
@@ -50,7 +49,6 @@
 								$stmt->execute();
 							}
 						}
-					}
 				}
 			}
 			$sql = "SELECT * FROM lobby WHERE (last_change < $delete AND (last_change_round is NULL OR last_change_round < $delete)) OR players_in_lobby < 1";
@@ -200,54 +198,67 @@
 		</div>
 		<div id ="middle_container">
 			<div id = "navbar">
-				<button id = "refresh"><?=$lang['Refresh']?></button>
-				<?= $lang['active_lobbies']?>
-				<input type = "search" id = "search" placeholder = <?= $lang['Search'] ?>></input>
+				<?php
+				if($_SESSION['login']==true){
+					echo '<button id = "refresh">'.$lang['Refresh'].'</button>'
+					.$lang['active_lobbies'].'
+					<input type = "search" id = "search" placeholder = '.$lang['Search'].'></input>';
+				}
+				else{
+					echo $lang['active_lobbies'];
+				}
+				?>
 			</div>
 			<div id = "lobbies">
 				<?php
-					foreach($lobbies as $lobby){
-						$id = $lobby['ID'];
-						$owner = $lobby['owner'];
-						$title = $lobby['lobby_title'];
-						$password = $lobby['lobby_password'];
-						$max_players = $lobby['max_players'];
-						$players = $lobby['players_in_lobby'];
-						if($max_players == $players) $player_status = 'class = "players_in_lobby max"';
-						else $player_status = 'class = "players_in_lobby free"';
-						if($lobby['game_started']==true){
-							$status = $lang['game_started'];
-							$class = 'class = "started status"';						} 
-						else
-						{
-							$status = $lang['game_waiting'];
-							$class = 'class = "not_started status"';
-						} 
-						echo 
-						'<div class = "lobby" id ='.$id.'>';	
-							if(!empty($password)) echo '<i class = "icon-lock"></i>';
-							echo
-							'<div class = "lobby_owner">'.
-								$owner
-							.'<i class = "icon-crown" ></i></div>
-							<div class = "lobby_title">„'.
-								$title	
-							.'”</div>
-							<div '.$class.'><br>'.
-								$status
-							.'</div><br>
-							<div '.$player_status.'>'.
-								$players
-							.'/'.$max_players.'<i class = "icon-adult"></i></div><br>';
-							if(!empty($password))
-							{ echo 
-							'<input class = "lobby_password" type = "password" placeholder = '.$lang['login_password'].'></input>';
-							}
-						echo	
-						'<br><div class = "join">'.$lang['join'].'</div>
-						</div>';
-
+					if($_SESSION['login']==true){
+						foreach($lobbies as $lobby){
+							$id = $lobby['ID'];
+							$owner = $lobby['owner'];
+							$title = $lobby['lobby_title'];
+							$password = $lobby['lobby_password'];
+							$max_players = $lobby['max_players'];
+							$players = $lobby['players_in_lobby'];
+							if($max_players == $players) $player_status = 'class = "players_in_lobby max"';
+							else $player_status = 'class = "players_in_lobby free"';
+							if($lobby['game_started']==true){
+								$status = $lang['game_started'];
+								$class = 'class = "started status"';						} 
+							else
+							{
+								$status = $lang['game_waiting'];
+								$class = 'class = "not_started status"';
+							} 
+							echo 
+							'<div class = "lobby" id ='.$id.'>';	
+								if(!empty($password)) echo '<i class = "icon-lock"></i>';
+								echo
+								'<div class = "lobby_owner">'.
+									$owner
+								.'<i class = "icon-crown" ></i></div>
+								<div class = "lobby_title">„'.
+									$title	
+								.'”</div>
+								<div '.$class.'><br>'.
+									$status
+								.'</div><br>
+								<div '.$player_status.'>'.
+									$players
+								.'/'.$max_players.'<i class = "icon-adult"></i></div><br>';
+								if(!empty($password))
+								{ echo 
+								'<input class = "lobby_password" type = "password" placeholder = '.$lang['login_password'].'></input>';
+								}
+							echo	
+							'<br><div class = "join">'.$lang['join'].'</div>
+							</div>';
+	
+						}
 					}
+					else{
+						echo '<h1>'.$lang['lobbies_no_login'].'</h1>';
+					}
+				
 				?>
 			</div>
 		</div>

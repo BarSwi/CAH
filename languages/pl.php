@@ -90,5 +90,6 @@
 	"Selecting"=>"Wybiera",
 	"Select" => "WYBIERZ",
 	"Selecting_information"=>"W tej rundzie wybierasz wygrywającą kartę.",
+	"lobbies_no_login"=>"Musisz być zalogowany w celu uzyskania dostepu do aktywnych poczekalni!",
 	);
 	

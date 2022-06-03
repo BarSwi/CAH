@@ -752,3 +752,8 @@ input[type="search"]:focus, input[type="search"]:hover{
 .max{
 	color: rgb(150, 9, 9);
 }
+#lobbies h1{
+	text-align: center;
+	display: block;
+	margin: 50px;
+}

@@ -5,7 +5,8 @@ if(!isset($_SESSION['login']) || $_SESSION['login']==false){
     echo "0";
     exit();
 }
-$card_id = $_POST['winner'];
+$card_id = json_decode($_POST['winner']);
+$card_id = $card_id[0];
 $lobby_id = $_POST['id'];
 $nick = $_SESSION['user'];
 $time = floor(microtime(true)*1000);
@@ -26,7 +27,7 @@ try{
     }
     $player = $stmt->fetch();
     $player_id = $player['ID'];
-    $sql = "SELECT * FROM cards_in_lobby WHERE ID = winner";
+    $sql = "SELECT * FROM cards_in_lobby WHERE ID = '$card_id'";
     $stmt=$pdo->prepare($sql);
     $stmt->execute();
     $card = $stmt->fetch();
@@ -34,7 +35,7 @@ try{
     $sql  = "UPDATE players_in_lobby SET points = points + 1 WHERE nick = '$owner'";
     $stmt= $pdo->prepare($sql);
     $stmt->execute();
-    $sql  = "UPDATE cards_in_lobby SET winner = 1 WHERE ID = winner";
+    $sql  = "UPDATE cards_in_lobby SET winner = 1 WHERE ID = '$card_id'";
     $stmt= $pdo->prepare($sql);
     $stmt->execute();
     $sql  = "UPDATE lobby SET last_change_round = '$time' WHERE lobby_id = :id";
@@ -42,20 +43,34 @@ try{
     $stmt->execute(['id'=>$lobby_id]);
     $pdo->commit();
     sleep(5);
+    $time = floor(microtime(true)*1000);
     $sql  = "UPDATE lobby SET reset = 1 WHERE lobby_id = :id";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
     $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id AND ID > $player_id LIMIT 1";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute(['id'=>$id]);
+    $stmt->execute(['id'=>$lobby_id]);
+    $sql = "UPDATE players_in_lobby SET chooser = 0 WHERE lobby_id = :id AND ID = $player_id LIMIT 1";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id'=>$lobby_id]);
     if($stmt->rowCount()==0){
         $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id LIMIT 1";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(['id'=>$id]);
+        $stmt->execute(['id'=>$lobby_id]);
     }
+    // $sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
+    // $stmt= $pdo->prepare($sql);
+    // $stmt->execute(['id'=>$lobby_id]);
+    $sql  = "UPDATE cards_in_lobby SET winner = NULL WHERE lobby_id = :id";
+    $stmt= $pdo->prepare($sql);
+    $stmt->execute(['id'=>$lobby_id]);
+    $sql  = "UPDATE cards_in_lobby SET choosen = NULL, owner = NULL WHERE lobby_id = :id AND choosen IS NOT NULL AND color = 'white'";
+    $stmt= $pdo->prepare($sql);
+    $stmt->execute(['id'=>$lobby_id]);
     $sql  = "UPDATE lobby SET last_change_round = '$time' WHERE lobby_id = :id";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
+    
 }
 catch(PDOException $e){
     $pdo->rollBack();

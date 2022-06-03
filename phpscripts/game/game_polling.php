@@ -11,6 +11,7 @@ session_write_close();
 
 if(empty($_POST['time'])){
     $time = floor(microtime(true) * 1000);
+    usleep(300000);
 }
 else $time = $_POST['time'];
 $id = $_POST['id'];
@@ -60,6 +61,7 @@ try{
         exit();
     }
     while(true){
+        $time_res = floor(microtime(true)*1000);
         $sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick' AND lobby_id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
@@ -83,7 +85,6 @@ try{
         if($stmt->rowCount()>0){
             $time_change = $stmt->fetch();
             if($time_change['last_change_round']>$time){
-                $time = $time_change['last_change_round'];
                 if($round_started==1){
                     $players = $time_change['players_in_lobby'];
                     $sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
@@ -91,12 +92,11 @@ try{
                     $stmt->execute(['id'=>$id]);
                     $cards = $stmt->fetchAll();
                     if($stmt->rowCount()!=$players-1){
-                        array_push($array_exit, $time, $stmt->rowCount(), 'round');
+                        array_push($array_exit, $time_res, $stmt->rowCount(), 'round');
                         echo json_encode($array_exit);
                         exit();
                     }
                     else{
-                        $time = $time_change['last_change_round'];
                         foreach($cards as $card){
                             $owner = $card['owner'];
                             $card_id = $card['ID'];
@@ -112,7 +112,7 @@ try{
                             }
                             array_push($array_exit, $array_inside);
                         }
-                        array_push($array_exit, $time, 'round_end');
+                        array_push($array_exit, $time_res, 'round_end');
                         echo json_encode($array_exit);
                         exit();
                     }
@@ -125,7 +125,7 @@ try{
                         $winner = $stmt->fetch();
                         $winner_nick = $winner['owner'];
                         $winner_card = $winner['ID'];
-                        array_push($array_exit, $time, $winner_nick, $winner_card, 'winner_selected');
+                        array_push($array_exit, $time_res, $winner_nick, $winner_card, 'winner_selected');
                         echo json_encode($array_exit);
                         exit();
                     }
@@ -135,13 +135,14 @@ try{
                         $stmt->execute(['id'=>$id]);
                         $row = $stmt->fetch();
                         $chooser = $row['nick'];
-                        array_push($array_exit, $time, $chooser, 'reset');
+                        array_push($array_exit, $time_res, $chooser, 'reset');
                         echo json_encode($array_exit);
                         exit();
                     }
                 }
             }
             if($time_change['last_change_players']>$time){
+                usleep(20000);
                 $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id ORDER BY `players_in_lobby`.`ID` ASC";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute(['id'=>$id]);
@@ -151,17 +152,15 @@ try{
                 $stmt->execute(['id'=>$id]);
                 $row = $stmt->fetch();
                 $owner = $row['owner'];
-                $time = $time_change['last_change_players'];
                 foreach($array as $player){
                     array_push($array_exit, [$player['nick'], $player['points'], $player['chooser']]);
                 }
-                array_push($array_exit, $time, $owner, "players");
+                array_push($array_exit, $time_res, $owner, "players");
                 echo json_encode($array_exit);
                 exit();
             }
             if($time_change['last_change']>$time){
-                $time = $time_change['last_change'];
-                array_push($array_exit, $time, 'game');
+                array_push($array_exit, $time_res, 'game');
                 echo json_encode($array_exit);
                 exit();
             }

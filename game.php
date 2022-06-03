@@ -1,6 +1,6 @@
 <?php
+	usleep(100000);
 	ini_set('display_errors','0');
-	usleep(20000);
 	include "languages/config.php";	
     if(!isset($_SESSION['login']) || $_SESSION['login']==false){
 		header('Location: index.php');
@@ -8,26 +8,28 @@
 	} 
 	require_once('phpscripts/connect_users.php');
 	$lobby_id = $_GET['id'];
-	
-	$last_change = floor(microtime(true) * 1000);
-	$delete = $last_change - 3600000;
-	$delete2 = $last_change - 5000;
-	$user = $_SESSION['user'];
 	$dsn = "mysql:host=".$host.";dbname=".$db_name;
 	$pdo = new PDO($dsn, $db_user, $db_password);
 	$pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	$pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+	$last_change = floor(microtime(true) * 1000);
+	$delete = $last_change - 3600000;
+	$delete2 = $last_change - 5000;
+	$sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetch();
+	$last_change_lobby = $row['last_change'];
+	$last_change_players = $last_change;
+	$abs = abs($last_change_players - $last_change_lobby);
+	$user = $_SESSION['user'];
 	try{
 		$pdo->beginTransaction();
 		$sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
 		$lobby_before = $stmt->fetch();
-		if($lobby_before['players_in_lobby'] + 1 > $lobby_before['max_players']){
-			header('Location: index.php');
-			exit();
-		}
 		if($stmt->rowCount() == 0){
 			header('Location: index.php');
 			exit();
@@ -43,46 +45,52 @@
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
 		}
-		$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
-		$stmt = $pdo->prepare($sql);
-		$stmt->execute();
-		if($stmt->rowCount()==0){
-			$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
-			$stmt = $pdo->prepare($sql);
-				$stmt->execute();
-			$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
-			$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$lobby_id'";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
-		}
-		else{
+		if($abs>2000){
 			$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
-			$lobbies = $stmt->fetchAll();
-			$sql = "DELETE FROM players_in_lobby WHERE nick = '$user' AND lobby_id = '$lobby_id'";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
-			foreach($lobbies as $lobby_del){
-				$lobby_del_var = $lobby_del['lobby_id'];
-				$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_del_var'";
+			if($stmt->rowCount()==0){
+				$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
+				$stmt = $pdo->prepare($sql);
+					$stmt->execute();
+				$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
-				$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_del_var'";
+				$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$lobby_id'";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
 			}
-			$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
-			$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
-			$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$lobby_id'";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
+			else{
+				$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
+				$stmt = $pdo->prepare($sql);
+				$stmt->execute();
+				$lobbies = $stmt->fetchAll();
+				$sql = "DELETE FROM players_in_lobby WHERE nick = '$user' AND lobby_id = '$lobby_id'";
+				$stmt = $pdo->prepare($sql);
+				$stmt->execute();
+				foreach($lobbies as $lobby_del){
+					$lobby_del_var = $lobby_del['lobby_id'];
+					$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_del_var'";
+					$stmt = $pdo->prepare($sql);
+					$stmt->execute();
+					$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_del_var'";
+					$stmt = $pdo->prepare($sql);
+					$stmt->execute();
+				}
+				$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
+				$stmt = $pdo->prepare($sql);
+				$stmt->execute();	
+				$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
+				$stmt = $pdo->prepare($sql);
+				$stmt->execute();
+				$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$lobby_id'";
+				$stmt = $pdo->prepare($sql);
+				$stmt->execute();
+			}
+			if($lobby_before['players_in_lobby'] + 1 > $lobby_before['max_players']){
+				header('Location: index.php');
+				exit();
+			}
 		}
 		if($lobby_before['game_started']==1){
 			$sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'white'";
@@ -103,8 +111,11 @@
 			$sql = "SELECT * FROM cards_in_lobby WHERE owner = '$user'";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
+			if($stmt->rowCount()==0){
+				Header('Location: '.$_SERVER['PHP_SELF']);
+				Exit();
+			}
 			$my_cards = $stmt->fetchAll();
-
 		}
 		$_SESSION['game']= true;
 		$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
@@ -112,6 +123,7 @@
 		$stmt->execute();
 		$row = $stmt->fetch();
 		$chooser = $row['chooser'];
+		usleep(50000);
 		$sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id' ORDER BY 'ID' ASC";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
