@@ -8,6 +8,7 @@ $array = json_decode($_POST['array']);
 $id = $_POST['id'];
 $number = count($array);
 $array_exit= [];
+$time = floor(microtime(true)*1000);
 $nick = $_SESSION['user'];
 try{
     require_once('../connect_users.php');
@@ -16,6 +17,23 @@ try{
     $pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     $pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id'=>$id]);
+    $row = $stmt->fetch();
+    $limit = $row['players_in_lobby'];
+    if($limit < 3){
+        $sql = "UPDATE lobby SET last_change = '$time', game_started = 0, reset = 0, round_started = 0 WHERE lobby_id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        $sql = "UPDATE players_in_lobby SET chooser = 0, points = 0 WHERE lobby_id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        $sql = "UPDATE cards_in_lobby SET choosen = NULL, owner = NULL WHERE lobby_id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        exit();
+    }
     $pdo->beginTransaction();
     $sql = "SELECT * FROM cards_in_lobby WHERE color = 'black' AND choosen = 1 AND lobby_id = :id";
     $stmt = $pdo->prepare($sql);
@@ -61,14 +79,10 @@ try{
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
     if($stmt->rowCount()==$players-1){
-        $sql = "UPDATE  lobby SET round_started = 0 WHERE lobby_id = :id";
-        $stmt= $pdo->prepare($sql);
-        $stmt->execute(['id'=>$id]);
-        $sql = "UPDATE  lobby SET reset = 0 WHERE lobby_id = :id";
+        $sql = "UPDATE  lobby SET round_started = 0, reset = 0 WHERE lobby_id = :id";
         $stmt= $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
     }
-    $time = floor(microtime(true) * 1000);
     $sql = "UPDATE lobby SET last_change_round = '$time' WHERE lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);

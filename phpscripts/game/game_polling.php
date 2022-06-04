@@ -11,7 +11,6 @@ session_write_close();
 
 if(empty($_POST['time'])){
     $time = floor(microtime(true) * 1000);
-    usleep(300000);
 }
 else $time = $_POST['time'];
 $id = $_POST['id'];
@@ -40,13 +39,10 @@ try{
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
     if($stmt->rowCount()==0){
-        $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$nick', :id, 0, false, :time_change)";
+        $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change_players) VALUES ('$nick', :id, 0, false, :time_change)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=> $id, 'time_change' => $time]);
-        $sql = "UPDATE lobby SET last_change_players = '$time' WHERE lobby_id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['id'=>$id]);
-        $sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = :id";
+        $sql = "UPDATE lobby SET last_change_players = '$time', players_in_lobby = players_in_lobby+1 WHERE lobby_id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
     }
@@ -84,6 +80,11 @@ try{
         $stmt->execute(['time_change'=>$time,'time_change2'=>$time,'time_change3'=>$time, 'id'=>$id]);
         if($stmt->rowCount()>0){
             $time_change = $stmt->fetch();
+            if($time_change['last_change']>$time){
+                array_push($array_exit, $time_res, 'game');
+                echo json_encode($array_exit);
+                exit();
+            }
             if($time_change['last_change_round']>$time){
                 if($round_started==1){
                     $players = $time_change['players_in_lobby'];
@@ -130,19 +131,25 @@ try{
                         exit();
                     }
                     else if ($reset==1){
-                        $sql = "SELECT * FROM players_in_lobby WHERE chooser = 1 AND lobby_id = :id";
+                        $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id ORDER BY `players_in_lobby`.`ID` ASC";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute(['id'=>$id]);
+                        $array = $stmt->fetchAll();
+                        $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
                         $stmt = $pdo->prepare($sql);
                         $stmt->execute(['id'=>$id]);
                         $row = $stmt->fetch();
-                        $chooser = $row['nick'];
-                        array_push($array_exit, $time_res, $chooser, 'reset');
+                        $owner = $row['owner'];
+                        foreach($array as $player){
+                            array_push($array_exit, [$player['nick'], $player['points'], $player['chooser']]);
+                        }
+                        array_push($array_exit, $time_res, $owner, "reset");
                         echo json_encode($array_exit);
                         exit();
                     }
                 }
             }
             if($time_change['last_change_players']>$time){
-                usleep(20000);
                 $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id ORDER BY `players_in_lobby`.`ID` ASC";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute(['id'=>$id]);
@@ -156,11 +163,6 @@ try{
                     array_push($array_exit, [$player['nick'], $player['points'], $player['chooser']]);
                 }
                 array_push($array_exit, $time_res, $owner, "players");
-                echo json_encode($array_exit);
-                exit();
-            }
-            if($time_change['last_change']>$time){
-                array_push($array_exit, $time_res, 'game');
                 echo json_encode($array_exit);
                 exit();
             }

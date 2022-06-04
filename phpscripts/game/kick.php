@@ -29,12 +29,24 @@ try{
     $sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL, winner = NULL WHERE lobby_id = :id AND owner = '$kick'";
     $stmt=$pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
-    $sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = :id";
+    $sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby+1 WHERE lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
-    $sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1 WHERE lobby_id = :id";
+    $sql = "SELECT * FROM players_in_lobby WHERE nick = '$kick' AND lobby_id = :id AND chooser = 1";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
+    if($stmt->rowCount()!=0){
+        $player = $stmt->fetch();
+        $player_id = $player['ID'];
+        $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id AND ID > $player_id LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        if($stmt->rowCount()==0){
+            $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id LIMIT 1";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id'=>$id]);
+        }
+    }
     $pdo->commit();
 }
 catch(PDOException $e){

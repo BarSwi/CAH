@@ -1,6 +1,6 @@
 <?php
 	usleep(100000);
-	ini_set('display_errors','0');
+	//ini_set('display_errors','0');
 	include "languages/config.php";	
     if(!isset($_SESSION['login']) || $_SESSION['login']==false){
 		header('Location: index.php');
@@ -34,6 +34,9 @@
 			header('Location: index.php');
 			exit();
 		}
+		if($lobby_before['reset']==1 && $lobby_before['game_started']==0){
+			sleep(1);
+		}
 		if(($lobby_before['last_change'] < $delete && $lobby_before['last_change_round'] < $delete) || ($delete2 > $lobby_before['last_change_players'] && $lobby_before['players_in_lobby']<=0)){
 			$sql = "DELETE FROM lobby WHERE lobby_id = '$lobby_id'";
 			$stmt = $pdo->prepare($sql);
@@ -56,9 +59,6 @@
 				$sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$lobby_id'";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
-				$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$lobby_id'";
-				$stmt = $pdo->prepare($sql);
-				$stmt->execute();
 			}
 			else{
 				$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
@@ -70,20 +70,14 @@
 				$stmt->execute();
 				foreach($lobbies as $lobby_del){
 					$lobby_del_var = $lobby_del['lobby_id'];
-					$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_del_var'";
-					$stmt = $pdo->prepare($sql);
-					$stmt->execute();
-					$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_del_var'";
+					$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1, last_change_players = '$last_change' WHERE lobby_id = '$lobby_del_var'";
 					$stmt = $pdo->prepare($sql);
 					$stmt->execute();
 				}
 				$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();	
-				$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
-				$stmt = $pdo->prepare($sql);
-				$stmt->execute();
-				$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$lobby_id'";
+				$sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$lobby_id'";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
 			}

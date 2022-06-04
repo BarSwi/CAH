@@ -253,6 +253,9 @@ $('#btn').click(function(){
                                 alert('error');
                                 window.location.reload();
                             }
+                            if(res=='1'){
+                                return 0;
+                            }
                             else{
                                 selected_flag = true;
                                 $('#btn').css('display', 'none');
@@ -274,6 +277,8 @@ $('#btn').click(function(){
             }
             else{
                 let winner = JSON.stringify(window.winner);
+                $('#btn').css('display', 'none');
+                selected_flag = true;
                 $.ajax({
                     type: 'post',
                     url: '../phpscripts/game/winner.php',
@@ -282,9 +287,26 @@ $('#btn').click(function(){
                         if(res=='0'){
                             alert('error');
                         }
+                        if(res=='1'){
+                            $('.'+winner).remove();
+                            $('#btn').css('display', '');
+                            selected_flag = false;
+                            return 0;
+                        }
                         else{
-                            $('#btn').css('display', 'none');
-                            selected_flag = true;
+                            setTimeout(function(){
+                                $.ajax({
+                                    type: 'post',
+                                    url: '../phpscripts/game/reset.php',
+                                    data: {id:id},
+                                    success: function(res){
+                                        if(res=="0"){
+                                            alert('error');
+                                            return 0;
+                                        }
+                                    }
+                                });
+                            },650);
                         }
                     }
                 });
@@ -359,7 +381,9 @@ function polling_res(param){
                 }
             }
             if(window.chooser == window.nick){
+                selected_flag = false;  
                 $('#my_cards').css('display','none');
+                $('#btn').css('display', '');
                 if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
                 if(hl=="en") var text = "You are selecting a winning card during this round.";
             }
@@ -371,7 +395,8 @@ function polling_res(param){
         polling = function(){};
         setTimeout(function(){
             window.location.reload();
-        }, 500);
+        },500)
+
 
     }
     if(param[param.length-1]=="round"){
@@ -414,33 +439,61 @@ function polling_res(param){
         polling(time);
     }
     if(param[param.length-1]=='reset'){
-        time = param[0];
-        window.chooser = param[1];
-        alert(param[1]);
-        if(window.nick != window.chooser){
-            let information = $('#select_info');
-            $('.player').removeAttr('style');
-            $('#btn').removeAttr('style');
-            $('#white_cards_cont').children().remove();
-            $('.white_card').removeAttr('style');
-            if(information.length){
-                $('#my_cards').removeAttr('style');
-                information.remove();
+        var owner = param[param.length-2];
+        setTimeout(function(){
+            var players = $('#players');
+            $('.player_after').remove();
+            time = param[param.length-3];
+            if(window.hl = "pl"){
+                var points = "Punkty: ";
             }
-        }
-        else{
-            $('#my_cards').css('display','none');
-            $('.player').removeAttr('style');
-            $('#btn').removeAttr('style');
-            $('#white_cards_cont').children().remove();
-            $('.white_card').removeAttr('style');
-            if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
-            if(hl=="en") var text = "You are selecting a winning card during this round.";
-            $('#UI').append('<div id = "select_info">'+text+'</div>');
-
-        }
+            if(window.hl = "en"){
+                var points = "Points: ";
+            }
+            if(window.owner != owner){
+                if(owner==window.nick){
+                    window.owner = window.nick;
+                }
+            }
+            for(var i = 0; i< param.length-3; i++){
+                if(param[i][2]==1){
+                    window.chooser = param[i][0];
+                    if(window.hl = "pl") var select = "Wybiera";
+                    if(window.hl="en")   var select = "Selecting";
+                }
+                else var select = "";
+                if(param[i][0]==owner){
+                    players.append('<div class = "player_after player" id = "'+param[i][0]+'"><div class = "player_left"><span class = "nick owner">'+param[i][0]+'<i class = "icon-crown"></i></span><div class = "points">'+points+'<span class = "value">'+param[i][1]+'</span></div></div><div class = "player_right">'+select+'</div><div style = "clear:both;"></div></div>');
+                }
+                else{
+                    players.append('<div class = "player_after player" id = "'+param[i][0]+'"><div class = "player_left"><span class = "nick">'+param[i][0]+'</span><div class = "points">'+points+'<span class = "value">'+param[i][1]+'</span>    </div></div><div class = "player_right">'+select+'</div><div style = "clear:both;"></div></div>');
+                }
+            }
+            if(window.nick != window.chooser){
+                let information = $('#select_info');
+                $('.player').removeAttr('style');
+                $('#btn').removeAttr('style');
+                $('#white_cards_cont').children().remove();
+                $('#my_cards').removeAttr('style');
+                $('.white_card').removeAttr('style');
+                if(information.length){
+                    information.remove();
+                }
+            }
+            else{
+                $('#my_cards').css('display','none');
+                $('.player').removeAttr('style');
+                $('#btn').removeAttr('style');
+                $('#white_cards_cont').children().remove();
+                $('.white_card').removeAttr('style');
+                if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
+                if(hl=="en") var text = "You are selecting a winning card during this round.";
+                $('#UI').append('<div id = "select_info">'+text+'</div>');
+    
+            }
+            polling(time);
+        },700)
         selected_flag = false;
-        polling(time);
     }
 
 }

@@ -282,13 +282,14 @@ input#topcheck:checked + .check:before
 	-webkit-box-shadow: 0px 1px 6px 0px var(--input-border);
 	-moz-box-shadow: 0px 1px 6px 0px var(--input-border);
 	font-size: 15px;
+	opacity: 70%;
 	box-shadow: 0px 1px 6px 0px var(--input-border);
 	width: 140px;
 }
-#input_login:focus, #input_password:focus
+#input_login:focus, #input_password:focus, #input_password:hover, #input_login:hover
 {
 	outline: none;
-	transform: scaleY(1.05);
+	opacity: 1;
 	
 }
 #login_button

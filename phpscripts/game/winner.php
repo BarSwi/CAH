@@ -31,6 +31,10 @@ try{
     $stmt=$pdo->prepare($sql);
     $stmt->execute();
     $card = $stmt->fetch();
+    if($card['choosen']==NULL){
+        echo '1';
+        exit();
+    }
     $owner = $card['owner'];
     $sql  = "UPDATE players_in_lobby SET points = points + 1 WHERE nick = '$owner'";
     $stmt= $pdo->prepare($sql);
@@ -42,15 +46,15 @@ try{
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
     $pdo->commit();
-    sleep(5);
+    sleep(4);
     $time = floor(microtime(true)*1000);
     $sql  = "UPDATE lobby SET reset = 1 WHERE lobby_id = :id";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
-    $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id AND ID > $player_id LIMIT 1";
+    $sql = "UPDATE players_in_lobby SET chooser = 0 WHERE lobby_id = :id AND ID = $player_id LIMIT 1";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
-    $sql = "UPDATE players_in_lobby SET chooser = 0 WHERE lobby_id = :id AND ID = $player_id LIMIT 1";
+    $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id AND ID > $player_id LIMIT 1";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
     if($stmt->rowCount()==0){
@@ -67,10 +71,6 @@ try{
     $sql  = "UPDATE lobby SET last_change_round = '$time' WHERE lobby_id = :id";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
-    // usleep(700000);
-    // $sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
-    // $stmt= $pdo->prepare($sql);
-    // $stmt->execute(['id'=>$lobby_id]);
     
 }
 catch(PDOException $e){
