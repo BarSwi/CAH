@@ -21,6 +21,9 @@
 				if($_SESSION['login']==true){
 						$row = $stmt->fetch();
 						$chooser = $row['chooser'];
+						$reset = $row['reset'];
+						$game_started = $row['game_started'];
+						$round_started = $row['round_started'];
 						$player_id = $row['ID'];
 						$lobby_id = $row['lobby_id'];
 						$sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL, winner = NULL WHERE lobby_id = :id AND owner = '$nick'";
@@ -48,6 +51,11 @@
 								$stmt = $pdo->prepare($sql);
 								$stmt->execute();
 							}
+						}
+						if($round_started == 0 && $game_started ==1 && $reset == 1){
+							$sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
+							$stmt= $pdo->prepare($sql);
+							$stmt->execute(['id'=>$lobby_id]);
 						}
 				}
 			}

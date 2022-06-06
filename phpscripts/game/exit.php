@@ -23,6 +23,8 @@ try{
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $row = $stmt->fetch();
+    $round_started = $row['round_started'];
+    $reset = $row['reset'];
     $game_started = $row['game_started'];
     $owner = $row['owner'];
     $last_change_players = floor(microtime(true) * 1000);;
@@ -68,6 +70,14 @@ try{
                     $stmt = $pdo->prepare($sql);
                     $stmt->execute();
                 }
+                $sql = "UPDATE cards_in_lobby SET choosen = NULL, owner = NULL WHERE owner = (SELECT nick FROM players_in_lobby WHERE chooser = 1 AND lobby_id = '$lobby_id') AND choosen IS NOT NULL";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute();
+            }
+            if($round_started == 0 && $reset == 1){
+                $sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
+                $stmt= $pdo->prepare($sql);
+                $stmt->execute(['id'=>$lobby_id]);
             }
         }
         $_SESSION['game']= false;

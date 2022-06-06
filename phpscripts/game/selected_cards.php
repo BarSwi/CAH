@@ -21,6 +21,19 @@ try{
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
     $row = $stmt->fetch();
+    $round_started = $row['round_started'];
+    $reset = $row['reset']; 
+    if($round_started == 0 ){
+        if($reset==1){
+            $sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
+            $stmt= $pdo->prepare($sql);
+            $stmt->execute(['id'=>$id]);
+        }
+        else{
+            echo '0';
+            exit();
+        }
+    }
     $limit = $row['players_in_lobby'];
     if($limit < 3){
         $sql = "UPDATE lobby SET last_change = '$time', game_started = 0, reset = 0, round_started = 0 WHERE lobby_id = :id";
@@ -52,7 +65,7 @@ try{
     }
     $counter = 1;
     foreach($array as $card){
-        $sql = "UPDATE cards_in_lobby SET choosen = $counter WHERE ID = :card";
+        $sql = "UPDATE cards_in_lobby SET choosen = $counter WHERE ID = :card AND owner = '$nick'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['card'=>$card]);
         $counter += 1;

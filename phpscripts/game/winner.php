@@ -46,7 +46,7 @@ try{
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
     $pdo->commit();
-    sleep(4);
+    sleep(3);
     $time = floor(microtime(true)*1000);
     $sql  = "UPDATE lobby SET reset = 1 WHERE lobby_id = :id";
     $stmt= $pdo->prepare($sql);

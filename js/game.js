@@ -48,11 +48,11 @@ $(document).ready(function(){
     });
         polling();
 });
-function polling(time){
+function polling(time, round){
         $.ajax({
             type: 'post',
             cache: false,
-            data: {time:time, id:id, personal_id:window.personal_id},
+            data: {time:time, id:id, personal_id:window.personal_id, round:round},
             url: 'phpscripts/game/game_polling.php',
             success: function(res){
                 if(window.unload == true) return 0;
@@ -140,7 +140,8 @@ $(document).on('click', '#start', function(){
         url: '../phpscripts/game/start_game.php',
         success: function(res){
             if(res=="0"){
-                return 0;
+                alert('error');
+                window.location.reload();
             }
         }
     });
@@ -222,8 +223,8 @@ $(document).on('change', '.select_check', function(){
         
     }
     else{
-        //  $(this).css('pointer-events', 'none');
-        //  return 0;
+        $(this).css('pointer-events', 'none');
+        return 0;
     }
 });
 $('#btn').click(function(){
@@ -252,9 +253,6 @@ $('#btn').click(function(){
                             if(res=="0"){
                                 alert('error');
                                 window.location.reload();
-                            }
-                            if(res=='1'){
-                                return 0;
                             }
                             else{
                                 selected_flag = true;
@@ -288,9 +286,10 @@ $('#btn').click(function(){
                             alert('error');
                         }
                         if(res=='1'){
-                            $('.'+winner).remove();
+                            $('.'+window.winner[0]).remove();
                             $('#btn').css('display', '');
                             selected_flag = false;
+                            window.winner = [];
                             return 0;
                         }
                         else{
@@ -369,8 +368,8 @@ function polling_res(param){
             for(var i = 0; i< param.length-3; i++){
                 if(param[i][2]==1){
                     window.chooser = param[i][0];
-                    if(window.hl = "pl") var select = "Wybiera";
-                    if(window.hl="en")   var select = "Selecting";
+                    if(window.hl == "pl") var select = "Wybiera";
+                    if(window.hl=="en")   var select = "Selecting";
                 }
                 else var select = "";
                 if(param[i][0]==owner){
@@ -381,9 +380,11 @@ function polling_res(param){
                 }
             }
             if(window.chooser == window.nick){
-                selected_flag = false;  
+                $('.shown').remove();
+                selected_flag = false;
+                $('.white_card_picked').removeAttr('style');
                 $('#my_cards').css('display','none');
-                $('#btn').css('display', '');
+                $('#btn').removeAttr('style');
                 if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
                 if(hl=="en") var text = "You are selecting a winning card during this round.";
             }
@@ -395,19 +396,20 @@ function polling_res(param){
         polling = function(){};
         setTimeout(function(){
             window.location.reload();
-        },500)
-
+        },200)
+        // Timeout changed from 500 to 200 *optimalization* 06.06 01:38 
 
     }
     if(param[param.length-1]=="round"){
         time = param[0];
         let i = param[1];
+        var round = param[2];
         let white_cards_cont = $('#white_cards_cont');
         white_cards_cont.children().remove();
         for(let k=0; k<i;k++){
             white_cards_cont.append('<div class = "white_card_picked"></div>');
         }
-        polling(time);
+        polling(time, round);
     }
     if(param[param.length-1]=="round_end"){
         time = param[param.length-2];
@@ -418,11 +420,10 @@ function polling_res(param){
         let white_cards_cont = $('#white_cards_cont');
         white_cards_cont.children().remove();   
         let i = param.length-2;
-        paramShuffled = param.slice(0, param.length-2).sort((a, b) => 0.5 - Math.random());
         for(let j = 0; j<i; j++){
            let k = param[j].length-1;
            for(let m = 0; m<k;m++){
-                white_cards_cont.append('<label  class = "selected white_card_picked '+paramShuffled[j][0]+'"'+style+'>'+paramShuffled[j][m+1]+'<input type = "checkbox" class = "select_check '+paramShuffled[j][0]+'"></label>');
+                white_cards_cont.append('<label  class = "selected white_card_picked '+param[j][0]+'"'+style+'>'+param[j][m+1]+'<input type = "checkbox" class = "select_check '+param[j][0]+'"></label>');
            }
         }
         polling(time);
@@ -491,9 +492,11 @@ function polling_res(param){
                 $('#UI').append('<div id = "select_info">'+text+'</div>');
     
             }
-            polling(time);
+            let round = 1;
+            polling(time, round);
         },700)
         selected_flag = false;
+        window.winner = [];
     }
 
 }

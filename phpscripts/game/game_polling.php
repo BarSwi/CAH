@@ -47,15 +47,20 @@ try{
         $stmt->execute(['id'=>$id]);
     }
     $counter = 0;
-    $sql = "SELECT * FROM lobby WHERE lobby_id =  :id";
-    $stmt =  $pdo->prepare($sql);
-    $stmt->execute(['id'=>$id]);
-    $row = $stmt->fetch();
-    $round_started = $row['round_started'];
-    if($stmt->rowCount() == 0){
-        echo "0";
-        exit();
+    if(empty($_POST['round'])){
+        $sql = "SELECT * FROM lobby WHERE lobby_id =  :id";
+        $stmt =  $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        $row = $stmt->fetch();
+        $round_started = $row['round_started'];
+        if($stmt->rowCount() == 0){
+            echo "0";
+            exit();
+        }
     }
+    else{
+        $round_started = 1;
+    } 
     while(true){
         $time_res = floor(microtime(true)*1000);
         $sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick' AND lobby_id = :id";
@@ -85,7 +90,7 @@ try{
                 echo json_encode($array_exit);
                 exit();
             }
-            if($time_change['last_change_round']>$time){
+            if($time_change['last_change_round']>$time-50){
                 if($round_started==1){
                     $players = $time_change['players_in_lobby'];
                     $sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
@@ -93,7 +98,7 @@ try{
                     $stmt->execute(['id'=>$id]);
                     $cards = $stmt->fetchAll();
                     if($stmt->rowCount()!=$players-1){
-                        array_push($array_exit, $time_res, $stmt->rowCount(), 'round');
+                        array_push($array_exit, $time_res, $stmt->rowCount(), 1, 'round');
                         echo json_encode($array_exit);
                         exit();
                     }

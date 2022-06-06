@@ -4,6 +4,7 @@ html
 }
 body{
 	margin: 0;
+	overflow: hidden;
 }
 body#dark
 {
@@ -550,7 +551,6 @@ input[type="button"]{
 	transition: all .1s ease-in-out;
 	font-weight: 900;
 	overflow-wrap: break-word;
-
 	border: 2px solid var(--rules-border);
 }
 .rules:hover{
@@ -573,10 +573,10 @@ input.rules:checked + label {
 	text-align: left;
 	clear: both;
 	overflow-wrap: break-word;
-	max-height: calc(100vh - 185px);
+	max-height: calc(100vh - 181px);
 	display: none;
 	font-size: 20px;
-	overflow: auto;
+	overflow: auto !important;
 	padding: 5px 5px 24px 0;
 	background-color: var(--rules-background);
 	border-bottom-right-radius: 5px;
@@ -612,7 +612,6 @@ ol li, ul li{
 #navbar{
 	background-color: var(--navbar);
 	border: 2px solid var(--navbar-border);
-	border-left: none;
 	padding: 5px;
 	border-bottom-style:dotted;
 	position: relative;
@@ -643,7 +642,7 @@ input[type="search"]:focus, input[type="search"]:hover{
 	border-bottom-left-radius: 5px;
 	display: flex;
 	flex-wrap: wrap;
-	overflow: auto;
+	overflow: auto !important;
 	border-bottom-right-radius: 5px;;
 	position: relative;
 	max-height: calc(100vh - 166px);
