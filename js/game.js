@@ -193,38 +193,40 @@ $(document).on('change','.white_check', function(e){
     }
 });
 $(document).on('change', '.select_check', function(){
-    if(window.nick == window.chooser){
-        let card_id = $(this).attr("class").split(/\s+/)[1];
-        let card_handler = $('.'+card_id);
-        if($(this).prop('checked')==true){
-            if(window.winner.length == 0){
-                card_handler.css({'background-color': '#8FE738', 'opacity': 1});
-                window.winner.push(card_id);
+    if(selected_flag == false){
+        if(window.nick == window.chooser){
+            let card_id = $(this).attr("class").split(/\s+/)[1];
+            let card_handler = $('.'+card_id);
+            if($(this).prop('checked')==true){
+                if(window.winner.length == 0){
+                    card_handler.css({'background-color': '#8FE738', 'opacity': 1});
+                    window.winner.push(card_id);
+                }
+                else{
+                    let remove_card = window.winner;
+                    $('.'+remove_card).removeAttr('style');
+                    $('.'+remove_card).prop('checked', false);
+                    window.winner = [];
+                    card_handler.css({'background-color': '#8FE738', 'opacity': 1});
+                    window.winner.push(card_id);
+                }
             }
             else{
-                let remove_card = window.winner;
-                $('.'+remove_card).removeAttr('style');
-                $('.'+remove_card).prop('checked', false);
-                window.winner = [];
-                card_handler.css({'background-color': '#8FE738', 'opacity': 1});
-                window.winner.push(card_id);
+                window.winner = window.winner.filter(e => e !== card_id);
+                card_handler.removeAttr('style');
             }
+            if(window.winner.length == 1){
+                $('#btn').css({'pointer-events': 'auto', 'opacity': '1'});
+            }
+            else{
+                $('#btn').removeAttr('style');
+            }
+            
         }
         else{
-            window.winner = window.winner.filter(e => e !== card_id);
-            card_handler.removeAttr('style');
+            $(this).css('pointer-events', 'none');
+            return 0;
         }
-        if(window.winner.length == 1){
-            $('#btn').css({'pointer-events': 'auto', 'opacity': '1'});
-        }
-        else{
-            $('#btn').removeAttr('style');
-        }
-        
-    }
-    else{
-        $(this).css('pointer-events', 'none');
-        return 0;
     }
 });
 $('#btn').click(function(){
@@ -293,19 +295,21 @@ $('#btn').click(function(){
                             return 0;
                         }
                         else{
-                            setTimeout(function(){
-                                $.ajax({
-                                    type: 'post',
-                                    url: '../phpscripts/game/reset.php',
-                                    data: {id:id},
-                                    success: function(res){
-                                        if(res=="0"){
-                                            alert('error');
-                                            return 0;
-                                        }
-                                    }
-                                });
-                            },650);
+                        //     Nie do końca potrzebne, ale na razie zostawiam
+
+                        //     setTimeout(function(){
+                        //         $.ajax({
+                        //             type: 'post',
+                        //             url: '../phpscripts/game/reset.php',
+                        //             data: {id:id},
+                        //             success: function(res){
+                        //                 if(res=="0"){
+                        //                     alert('error');
+                        //                     return 0;
+                        //                 }
+                        //             }
+                        //         });
+                        //     },650);
                         }
                     }
                 });
@@ -318,6 +322,7 @@ $('#btn').click(function(){
 function polling_res(param){
     if(param[param.length-1]=="players"){
         var owner = param[param.length-2];
+        // players_in_lobby exists only when game_started = 0
         if($('#players_in_lobby').length){
             var players_in_lobby = $('#players_in_lobby');
             var start = $('#start');
@@ -351,6 +356,7 @@ function polling_res(param){
             polling(time);
         }
         else{
+            // var players exists only when game_started = 1
             var players = $('#players');
             $('.player_after').remove();
             time = param[param.length-3];
@@ -387,6 +393,10 @@ function polling_res(param){
                 $('#btn').removeAttr('style');
                 if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
                 if(hl=="en") var text = "You are selecting a winning card during this round.";
+                if(!$('#select_info').length){
+                    $('#UI').append('<div id = "select_info">'+text+'</div>');
+                }
+
             }
             polling(time);
         }
@@ -432,16 +442,30 @@ function polling_res(param){
         time = param[0];
         let nick = param[1];
         let card = param[2];
+        let game_status = param[3];
         nick_handler = $('#'+nick);
         nick_handler.css('background-color', 'green');
         let new_value = parseInt(nick_handler.children('.player_left').children('.points').children('.value').text()) +1;
         nick_handler.children('.player_left').children('.points').children('.value').text(new_value);
         $('.'+card).css('background-color', 'green');
+        if(game_status == 1){
+            if(window.hl = "pl"){
+                var text = "Zwycięzca";
+            }
+            if(window.hl = "en"){
+                var text = "Winner";
+            }
+            nick_handler.children('.player_right').text(text);
+          //  window.game_won = true;
+        }
         polling(time);
     }
     if(param[param.length-1]=='reset'){
         var owner = param[param.length-2];
+        window.black = param[param.length-4];
+        var black_value = param[param.length-5];
         setTimeout(function(){
+            $('#black_card').text(black_value);
             var players = $('#players');
             $('.player_after').remove();
             time = param[param.length-3];
@@ -456,7 +480,7 @@ function polling_res(param){
                     window.owner = window.nick;
                 }
             }
-            for(var i = 0; i< param.length-3; i++){
+            for(var i = 0; i< param.length-5; i++){
                 if(param[i][2]==1){
                     window.chooser = param[i][0];
                     if(window.hl = "pl") var select = "Wybiera";

@@ -53,6 +53,7 @@ try{
         $stmt->execute(['id'=>$id]);
         $row = $stmt->fetch();
         $round_started = $row['round_started'];
+        $max_points = $row['lobby_points_limit'];
         if($stmt->rowCount() == 0){
             echo "0";
             exit();
@@ -131,11 +132,24 @@ try{
                         $winner = $stmt->fetch();
                         $winner_nick = $winner['owner'];
                         $winner_card = $winner['ID'];
-                        array_push($array_exit, $time_res, $winner_nick, $winner_card, 'winner_selected');
+                        $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id AND points = $max_points";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute(['id'=>$id]);
+                        if($stmt->rowCount()==1){
+                            $game_end = 1;
+                        }
+                        else $game_end = 0;
+                        array_push($array_exit, $time_res, $winner_nick, $winner_card, $game_end, 'winner_selected');
                         echo json_encode($array_exit);
                         exit();
                     }
                     else if ($reset==1){
+                        $sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'black' AND choosen = 1 LIMIT 1";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute(['id'=>$id]);
+                        $row = $stmt->fetch();
+                        $black_card_val = $row['value'];
+                        $black_card_blank = $row['blank_space'];
                         $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id ORDER BY `players_in_lobby`.`ID` ASC";
                         $stmt = $pdo->prepare($sql);
                         $stmt->execute(['id'=>$id]);
@@ -148,7 +162,7 @@ try{
                         foreach($array as $player){
                             array_push($array_exit, [$player['nick'], $player['points'], $player['chooser']]);
                         }
-                        array_push($array_exit, $time_res, $owner, "reset");
+                        array_push($array_exit,$black_card_val, $black_card_blank, $time_res, $owner, "reset");
                         echo json_encode($array_exit);
                         exit();
                     }

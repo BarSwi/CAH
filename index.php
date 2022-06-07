@@ -26,6 +26,22 @@
 						$round_started = $row['round_started'];
 						$player_id = $row['ID'];
 						$lobby_id = $row['lobby_id'];
+						$sql = "SELECT * FROM lobby WHERE lobby_id = :id";
+						$stmt=$pdo->prepare($sql);
+						$stmt->execute(['id'=>$lobby_id]);
+						$row = $stmt->fetch();
+						if($row['owner']==$nick){
+							$sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id' LIMIT 1";
+							$stmt = $pdo->prepare($sql);
+							$stmt->execute();
+							$row = $stmt->fetch();
+							if($stmt->rowCount()!=0){
+								$new_owner = $row['nick'];
+								$sql = "UPDATE lobby SET owner = '$new_owner' WHERE lobby_id = :id";
+								$stmt=$pdo->prepare($sql);
+								$stmt->execute(['id'=>$lobby_id]);
+							}
+						}
 						$sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL, winner = NULL WHERE lobby_id = :id AND owner = '$nick'";
 						$stmt=$pdo->prepare($sql);
 						$stmt->execute(['id'=>$lobby_id]);
