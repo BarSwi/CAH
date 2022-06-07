@@ -91,7 +91,21 @@ try{
     $sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
+    $cards = $stmt->fetchAll();
     if($stmt->rowCount()==$players-1){
+        $array = [];
+        foreach($cards as $card){
+            array_push($array, [$card['value'], $card['owner'], $card['choosen']]);
+        }
+        shuffle($array);
+        for($i = 0; $i<count($array); $i++){
+            $value = $array[$i][0];
+            $owner = $array[$i][1];
+            $choosen = $array[$i][2];
+            $sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) VALUES('$value', '$owner', $choosen, '$id')";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+        }
         $sql = "UPDATE  lobby SET round_started = 0, reset = 0 WHERE lobby_id = :id";
         $stmt= $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);

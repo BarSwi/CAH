@@ -40,6 +40,9 @@ try{
         $sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL, winner = NULL WHERE lobby_id = :id AND owner = '$nick'";
         $stmt=$pdo->prepare($sql);
         $stmt->execute(['id'=>$lobby_id]);
+        $sql  = "DELETE FROM cardsShuffled WHERE lobby_id = :id AND owner = '$nick'";
+        $stmt= $pdo->prepare($sql);
+        $stmt->execute(['id'=>$lobby_id]);
         $sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_id'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();

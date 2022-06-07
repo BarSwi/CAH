@@ -84,6 +84,9 @@ try{
     $sql  = "UPDATE cards_in_lobby SET choosen = NULL, owner = NULL WHERE lobby_id = :id AND choosen IS NOT NULL AND color = 'white'";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
+    $sql  = "DELETE FROM cardsShuffled WHERE lobby_id = :id";
+    $stmt= $pdo->prepare($sql);
+    $stmt->execute(['id'=>$lobby_id]);
     $sql  = "UPDATE lobby SET last_change_round = '$time' WHERE lobby_id = :id";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
