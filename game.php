@@ -249,12 +249,17 @@
 			
 			echo' </div></div>
 			<div id = "right">
-			<div id = "white_cards_cont">
- 
-
-
-
-			</div>
+			<div id = "white_cards_cont">';
+			if($lobby['round_started']==1){
+				$sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen IS NOT NULL AND lobby_id = :id";
+				$stmt=$pdo->prepare($sql);
+				$stmt->execute(['id'=>$lobby_id]);
+				$count = $stmt->rowCount();
+				for($i = 0; $i<$count; $i++){
+					echo '<div class = "white_card_picked"></div>';
+				}
+			}
+			echo '</div>
 			<div style = "clear: both;"></div>
 			<div id = "UI">';
 			if($chooser == 1) $style = 'style = "display: none;"';

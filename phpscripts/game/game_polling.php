@@ -60,7 +60,7 @@ try{
         }
     }
     else{
-        $round_started = 1;
+        $round_started = $_POST['round'];
     } 
     while(true){
         $time_res = floor(microtime(true)*1000);
