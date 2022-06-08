@@ -188,7 +188,8 @@ h1{
 	transition: .1s ease;
 	font-size: 0.7em;
 	float: left;
-	background-color: rgb(167, 11, 11);
+	color: red;
+	background-color: black;
 }
 .crown_btn{
 	display: block;

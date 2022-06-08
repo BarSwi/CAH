@@ -16,7 +16,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;900&display=swap" rel="stylesheet">
-	<link href = "fontello/icons/css/fontello.css" type ="text/css" rel = "stylesheet">
+	<link href = "fontello/css/fontello.css" type ="text/css" rel = "stylesheet">
 	<script src="js/jquery-3.6.0.min.js"></script>
 	<script src = "js/FormSubmitLang.js"></script> 
 	<script src = "js/captcha.js"></script>
