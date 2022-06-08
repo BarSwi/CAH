@@ -83,8 +83,6 @@ $(document).on('mouseover', '.player', function(){
         if(window.owner==window.nick){
             if($(this).children('.player_left').length){
                 if($(this).children('.player_left').children('.nick').text()!=window.owner){
-                    // if(window.hl=="pl") var text = "Wyrzuć";
-                    // if(window.hl=="en") var text = "Kick";
                     $(this).append('<div class = "player_menu"><div class = "kick"><i class = "icon-user-times"></i></div><div class = "crown_btn"><i class = "icon-crown"></i></div>');
         
                     kickflag = false;
@@ -92,8 +90,6 @@ $(document).on('mouseover', '.player', function(){
             }
             else{
                 if($(this).children('.nick').text()!=window.owner){
-                    // if(window.hl=="pl") var text = "Wyrzuć";
-                    // if(window.hl=="en") var text = "Kick";
                     $(this).append('<div class = "player_menu"><div class = "kick"><i class = "icon-user-times"></i></div><div class = "crown_btn"><i class = "icon-crown"></i></div>');
         
                     kickflag = false;
