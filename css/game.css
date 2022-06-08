@@ -180,24 +180,31 @@ h1{
 	padding: 3px;
 	width: max-content;
 	height: max-content;
-	margin: 0 auto 0 auto;
+	margin: 3px auto 0 auto;
 }
-.kick{
+.kick, .crown_btn{
 	border-radius: 5px;
 	padding: 3px;
 	transition: .1s ease;
-	font-size: 0.7em;
+	font-size: 15px;
 	float: left;
-	color: red;
-	background-color: black;
+	opacity: 75%;
+	color: rgb(151, 16, 16);
+	background-color: rgb(17, 17, 17);
 }
 .crown_btn{
+	margin-left: 5px;
+}
+.crown_btn .icon-crown{
+	margin-top: 2px;
 	display: block;
-	margin-left: 3px;
-	float: left;
+}
+.icon-crown{
+	height: 17px !important;
 }
 .kick:hover, .kick:focus, .crown_btn:hover, .crown_btn:focus{
 	cursor: pointer;
+	opacity: 1;
 	transform: scale(1.05);
 }
 #black_card_cont{
