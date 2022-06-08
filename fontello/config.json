@@ -47,6 +47,12 @@
       "css": "cancel",
       "code": 59395,
       "src": "fontawesome"
+    },
+    {
+      "uid": "fb1c59faa93eb6e2248c2456625b08a2",
+      "css": "user-times",
+      "code": 62005,
+      "src": "fontawesome"
     }
   ]
 }
