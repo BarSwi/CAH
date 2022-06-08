@@ -63,7 +63,9 @@ try{
         $round_started = $_POST['round'];
     } 
     while(true){
-        $time_res = floor(microtime(true)*1000);
+        if(!isset($time_res)){
+            $time_res = floor(microtime(true)*1000);
+        }
         $sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick' AND lobby_id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
@@ -91,32 +93,42 @@ try{
                 echo json_encode($array_exit);
                 exit();
             }
-            if($time_change['last_change_round']>$time-50){
+            if($time_change['last_change_round']>$time){
                 if($round_started==1){
                     $players = $time_change['players_in_lobby'];
                     $sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
                     $stmt = $pdo->prepare($sql);
                     $stmt->execute(['id'=>$id]);
-                    $cards = $stmt->fetchAll();
-                    if($stmt->rowCount()!=$players-1){
+                    if($stmt->rowCount()!=$players-1 || $players<3){
                         array_push($array_exit, $time_res, $stmt->rowCount(), 1, 'round');
                         echo json_encode($array_exit);
                         exit();
                     }
                     else{
+                        $counter_2 = 0;
+                        $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute(['id'=>$id]);
+                        while($stmt->rowCount()!=$players-1){
+                            $counter_2 +=1;
+                            usleep(100000);
+                            $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1 AND owner IS NOT NULL";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute(['id'=>$id]);
+                            if($counter_2==10){
+                                echo $time;
+                                exit();
+                            }
+                        }
+                        $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute(['id'=>$id]);
+                        $cards = $stmt->fetchAll();
                         foreach($cards as $card){
                             $owner = $card['owner'];
                             $card_id = $card['ID'];
-                            $sql = "SELECT * FROM cards_in_lobby WHERE owner = '$owner' AND choosen IS NOT NULL AND lobby_id = :id ORDER BY `cards_in_lobby`.`choosen` ASC";
-                            $stmt = $pdo->prepare($sql);
-                            $stmt->execute(['id'=>$id]);
-                            $values = $stmt->fetchAll();
                             $array_inside = [];
-                            array_push($array_inside, $card_id);
-                            foreach($values as $value){
-    
-                                array_push($array_inside, $value['value']);
-                            }
+                            array_push($array_inside, $card_id, $card['value']);
                             array_push($array_exit, $array_inside);
                         }
                         array_push($array_exit, $time_res, 'round_end');
@@ -126,7 +138,7 @@ try{
                 }
                 else if($round_started == 0){
                     if($reset==0){
-                        $sql = "SELECT * FROM cards_in_lobby WHERE winner = 1 AND lobby_id = :id";
+                        $sql = "SELECT * FROM cardsShuffled WHERE winner = 1 AND lobby_id = :id";
                         $stmt= $pdo->prepare($sql);
                         $stmt->execute(['id'=>$id]);
                         $winner = $stmt->fetch();
@@ -194,6 +206,7 @@ try{
             echo $time;
             exit();
         }
+        $time_res = floor(microtime(true)*1000);
         usleep(600000);
     }
 

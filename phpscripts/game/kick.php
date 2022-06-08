@@ -27,7 +27,7 @@ try{
     $round_started = $row['round_started'];
     $reset = $row['reset'];
     $game_started = $row['game_started'];
-    $sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL, winner = NULL WHERE lobby_id = :id AND owner = '$kick'";
+    $sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL WHERE lobby_id = :id AND owner = '$kick'";
     $stmt=$pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
     $sql  = "DELETE FROM cardsShuffled WHERE lobby_id = :id AND owner = '$kick'";

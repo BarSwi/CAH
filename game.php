@@ -117,7 +117,8 @@
 		$stmt->execute();
 		$row = $stmt->fetch();
 		$chooser = $row['chooser'];
-		usleep(50000);
+		$pdo->commit();
+		usleep(200000);
 		$sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id' ORDER BY 'ID' ASC";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
@@ -130,7 +131,6 @@
 			header('Location: index.php');
 			exit();
 		}
-		$pdo->commit();
 	}
 	catch(PDOException $e){
 		$pdo->rollBack();

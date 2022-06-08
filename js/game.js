@@ -63,8 +63,9 @@ function polling(time, round){
                 if(res[0] == "<"){
                     polling();
                 }
-                if(res[0]== 1){
-                    polling();
+                if(res[0] == 1){
+                    alert(res);
+                    polling(res);
                 }
                 else{
                     let array = JSON.parse(res);
@@ -256,6 +257,10 @@ $('#btn').click(function(){
                                 alert('error');
                                 window.location.reload();
                             }
+                            // bugfix
+                            // if(res=="1"){
+
+                            // }
                             else{
                                 selected_flag = true;
                                 $('#btn').css('display', 'none');

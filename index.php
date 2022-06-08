@@ -42,7 +42,7 @@
 								$stmt->execute(['id'=>$lobby_id]);
 							}
 						}
-						$sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL, winner = NULL WHERE lobby_id = :id AND owner = '$nick'";
+						$sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL WHERE lobby_id = :id AND owner = '$nick'";
 						$stmt=$pdo->prepare($sql);
 						$stmt->execute(['id'=>$lobby_id]);
 						$sql  = "DELETE FROM cardsShuffled WHERE lobby_id = :id AND owner = '$nick'";
@@ -104,7 +104,7 @@
 		catch(PDOException $e){
 			$pdo->rollBack();
 			$error_message = $e->getMessage();
-			//echo $error_message;
+			echo $error_message;
 	
 		}
 	}

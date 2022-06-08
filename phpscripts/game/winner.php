@@ -27,7 +27,7 @@ try{
     }
     $player = $stmt->fetch();
     $player_id = $player['ID'];
-    $sql = "SELECT * FROM cards_in_lobby WHERE ID = '$card_id'";
+    $sql = "SELECT * FROM cardsShuffled WHERE ID = '$card_id'";
     $stmt=$pdo->prepare($sql);
     $stmt->execute();
     $card = $stmt->fetch();
@@ -39,7 +39,7 @@ try{
     $sql  = "UPDATE players_in_lobby SET points = points + 1 WHERE nick = '$owner'";
     $stmt= $pdo->prepare($sql);
     $stmt->execute();
-    $sql  = "UPDATE cards_in_lobby SET winner = 1 WHERE ID = '$card_id'";
+    $sql  = "UPDATE cardsShuffled SET winner = 1 WHERE ID = '$card_id'";
     $stmt= $pdo->prepare($sql);
     $stmt->execute();
     $sql  = "UPDATE lobby SET last_change_round = '$time' WHERE lobby_id = :id";
@@ -78,7 +78,7 @@ try{
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$lobby_id]);
     }
-    $sql  = "UPDATE cards_in_lobby SET winner = NULL WHERE lobby_id = :id";
+    $sql  = "UPDATE cardsShuffled SET winner = NULL WHERE lobby_id = :id";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
     $sql  = "UPDATE cards_in_lobby SET choosen = NULL, owner = NULL WHERE lobby_id = :id AND choosen IS NOT NULL AND color = 'white'";

@@ -91,8 +91,11 @@ try{
     $sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
-    $cards = $stmt->fetchAll();
     if($stmt->rowCount()==$players-1){
+        $sql = "SELECT * FROM `cards_in_lobby` WHERE lobby_id =:id AND choosen IS NOT NULL AND color = 'white' ORDER BY `cards_in_lobby`.`owner` DESC, `cards_in_lobby`.`choosen` ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        $cards = $stmt->fetchAll();
         $array = [];
         foreach($cards as $card){
             array_push($array, [$card['value'], $card['owner'], $card['choosen']]);
