@@ -85,7 +85,7 @@ $(document).on('mouseover', '.player', function(){
                 if($(this).children('.player_left').children('.nick').text()!=window.owner){
                     if(window.hl=="pl") var text = "Wyrzuć";
                     if(window.hl=="en") var text = "Kick";
-                    $(this).append('<div class = "kick">'+text+'</div>');
+                    $(this).append('<div class = "player_menu"><div class = "kick">'+text+'</div><i class = "icon-crown crown_btn"/></div>');
         
                     kickflag = false;
                 }
@@ -94,7 +94,7 @@ $(document).on('mouseover', '.player', function(){
                 if($(this).children('.nick').text()!=window.owner){
                     if(window.hl=="pl") var text = "Wyrzuć";
                     if(window.hl=="en") var text = "Kick";
-                    $(this).append('<div class = "kick">'+text+'</div>');
+                    $(this).append('<div class = "player_menu"><div class = "kick">'+text+'</div><i class = "icon-crown crown_btn"/></div>');
         
                     kickflag = false;
                 }
@@ -105,7 +105,7 @@ $(document).on('mouseover', '.player', function(){
 $(document).on('mouseleave', '.player', function(){
     if(kickflag==false){
         if(window.owner==window.nick){
-        $(this).children('.kick').remove() ;
+        $(this).children('.player_menu').remove() ;
         kickflag = true;
         }
     }
@@ -114,11 +114,11 @@ $(document).on('mouseleave', '.player', function(){
 $(document).on('click', '.kick', function(){
     if(window.owner==window.nick){
         kickflag = true;
-        if($(this).siblings('.player_left').length){
-            var kick = $(this).siblings('.player_left').children('.nick').text();
+        if($(this).parent().siblings('.player_left').length){
+            var kick = $(this).parent().siblings('.player_left').children('.nick').text();
         }
         else{
-            var kick = $(this).siblings('.nick').text();
+            var kick = $(this).parent().siblings('.nick').text();
         }
         $(this).parent().remove();
         $.ajax({
@@ -128,6 +128,28 @@ $(document).on('click', '.kick', function(){
             success: function(res){
                 if(res=="0"){
                     window.location = "index.php";
+                    return 0;
+                }
+            }
+        });
+    }
+});
+$(document).on('click', '.crown_btn', function(){
+    if(window.owner==window.nick){
+        if($(this).parent().siblings('.player_left').length){
+            var new_owner = $(this).parent().siblings('.player_left').children('.nick').text();
+        }
+        else{
+            var new_owner = $(this).parent().siblings('.nick').text();
+        }
+        $.ajax({
+            type: 'post',
+            data: {id:id, new_owner:new_owner},
+            url: '../phpscripts/game/change_owner.php',
+            success: function(res){
+                window.owner = new_owner;
+                if(res=='0'){
+                    window.location.reload();
                     return 0;
                 }
             }

@@ -176,16 +176,26 @@ h1{
 	position: relative;
 	top: 2px;
 }
+.player_menu{
+	padding: 3px;
+	width: max-content;
+	height: max-content;
+	margin: 0 auto 0 auto;
+}
 .kick{
 	border-radius: 5px;
-	padding: 5px;
-	width: max-content;
-	margin: 10px auto 0 auto;
+	padding: 3px;
 	transition: .1s ease;
 	font-size: 0.7em;
+	float: left;
 	background-color: rgb(167, 11, 11);
 }
-.kick:hover, .kick:focus{
+.crown_btn{
+	display: block;
+	margin-left: 3px;
+	float: left;
+}
+.kick:hover, .kick:focus, .crown_btn:hover, .crown_btn:focus{
 	cursor: pointer;
 	transform: scale(1.05);
 }
