@@ -231,46 +231,48 @@ $('#refresh').click(function(){
 				window.location.reload();
 				return 0;
 			}
-			lobbies.html('');
 			var result = JSON.parse(res);
-			for(var i = 0; i< result.length; i++){
-				var id = result[i]['ID'];
-				var owner = result[i]['owner'];
-				var title = result[i]['lobby_title'];
-				var password = result[i]['lobby_password'];
-				var max_players = result[i]['max_players'];
-				var players = result[i]['players_in_lobby'];
-				var game_started = result[i]['game_started'];
-				if(players==max_players) var player_status = "class = 'players_in_lobby max'";
-				else  var player_status = "class = 'players_in_lobby free'";
-				if(hl=="pl"){
-					var placeholder = "Hasło";
-					var join = "DOŁĄCZ";
+			if(result.length!=0){
+				lobbies.html('');
+				for(var i = 0; i< result.length; i++){
+					var id = result[i]['ID'];
+					var owner = result[i]['owner'];
+					var title = result[i]['lobby_title'];
+					var password = result[i]['lobby_password'];
+					var max_players = result[i]['max_players'];
+					var players = result[i]['players_in_lobby'];
+					var game_started = result[i]['game_started'];
+					if(players==max_players) var player_status = "class = 'players_in_lobby max'";
+					else  var player_status = "class = 'players_in_lobby free'";
+					if(hl=="pl"){
+						var placeholder = "Hasło";
+						var join = "DOŁĄCZ";
+					}
+					if(hl=="en"){
+						var placeholder = "Password";
+						var join = "JOIN";
+					}
+					if(game_started==1){
+						var status_class = 'class = "started status"';
+						if(hl=="pl") var status = "Gra wystartowała";
+						if(hl=="en") var status = "Game started";
+					}
+					if(game_started==0){
+						var status_class = 'class = "not_started status"';
+						if(hl=="pl") var status = "Gra czeka na rozpoczęcie";
+						if(hl=="en") var status = "Game is waiting for start";
+					}
+					if(password.length) var el1 = '<i class = "icon-lock"></i>';
+					else var el1 = '';
+					var el2 = '<div class = "lobby_owner">'+owner+'<i class = "icon-crown" ></i></div>';
+					var el3 = '<div class = "lobby_title">„'+title+'”</div>';
+					var el4 = '<div '+status_class+'><br>'+status+'</div><br>';
+					var el5 = '<div '+player_status+'>'+players+'/'+max_players+'<i class = "icon-adult"></i></div><br>';
+					if(password.length) var el6 = '<input class = "lobby_password" type = "password" placeholder ='+placeholder+'></input>';
+					else var el6 ='';
+					var el7 = '<br><div class = "join">'+join+'</div></div>';
+					lobbies.append('<div class = "lobby" id ='+id+'>'+el1+el2+el3+el4+el5+el6+el7);
 				}
-				if(hl=="en"){
-					var placeholder = "Password";
-					var join = "JOIN";
-				}
-				if(game_started==1){
-					var status_class = 'class = "started status"';
-					if(hl=="pl") var status = "Gra wystartowała";
-					if(hl=="en") var status = "Game started";
-				}
-				if(game_started==0){
-					var status_class = 'class = "not_started status"';
-					if(hl=="pl") var status = "Gra czeka na rozpoczęcie";
-					if(hl=="en") var status = "Game is waiting for start";
-				}
-				if(password.length) var el1 = '<i class = "icon-lock"></i>';
-				else var el1 = '';
-				var el2 = '<div class = "lobby_owner">'+owner+'<i class = "icon-crown" ></i></div>';
-				var el3 = '<div class = "lobby_title">„'+title+'”</div>';
-				var el4 = '<div '+status_class+'><br>'+status+'</div><br>';
-				var el5 = '<div '+player_status+'>'+players+'/'+max_players+'<i class = "icon-adult"></i></div><br>';
-				if(password.length) var el6 = '<input class = "lobby_password" type = "password" placeholder ='+placeholder+'></input>';
-				else var el6 ='';
-				var el7 = '<br><div class = "join">'+join+'</div></div>';
-				lobbies.append('<div class = "lobby" id ='+id+'>'+el1+el2+el3+el4+el5+el6+el7);
 			}
 		}
 	})

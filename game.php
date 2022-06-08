@@ -65,7 +65,7 @@
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
 				$lobbies = $stmt->fetchAll();
-				$sql = "DELETE FROM players_in_lobby WHERE nick = '$user' AND lobby_id = '$lobby_id'";
+				$sql = "DELETE FROM players_in_lobby WHERE nick = '$user'";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
 				foreach($lobbies as $lobby_del){

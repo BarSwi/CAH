@@ -34,7 +34,7 @@ try{
         $sql = "DELETE FROM players_in_lobby WHERE nick = '$nick'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
-        $sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$lobby_id'";
+        $sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_id'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();  
         $sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL WHERE lobby_id = :id AND owner = '$nick'";
@@ -43,9 +43,6 @@ try{
         $sql  = "DELETE FROM cardsShuffled WHERE lobby_id = :id AND owner = '$nick'";
         $stmt= $pdo->prepare($sql);
         $stmt->execute(['id'=>$lobby_id]);
-        $sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_id'";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
         $sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick' AND lobby_id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);

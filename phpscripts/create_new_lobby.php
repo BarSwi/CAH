@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors','0');
+//ini_set('display_errors','0');
 session_start();
 if(!isset($_SESSION['login']) || $_SESSION['login']==false){
     echo "0";
@@ -26,7 +26,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 try{
     foreach($decks as $deck){
-        $sql = "SELECT * FROM decks WHERE deck_code = :deck_code";
+        $sql = "SELECT * FROM decks WHERE BINARY deck_code = :deck_code";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['deck_code' => $deck]);
         $row = $stmt->fetch();
@@ -37,7 +37,7 @@ try{
         echo "0";
         exit();
     }
-    if(strlen($title)>18){
+    if(strlen($title)>19){
         echo "0";
         exit();
     }
@@ -52,7 +52,7 @@ try{
 			$randomString .= $characters[$index];
             $hash = password_hash($randomString, PASSWORD_DEFAULT);
 		}
-		$sql = "SELECT * FROM lobby WHERE BINARY lobby_id = '$hash'";
+		$sql = "SELECT * FROM lobby WHERE lobby_id = '$hash'";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
 		if($stmt->rowCount() == 1) $flag = true;
@@ -67,40 +67,44 @@ try{
 		$sql = "SELECT * FROM players_in_lobby WHERE BINARY nick = '$user'";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
+        $row = $stmt->fetch();
+        $lobby_id = $row['lobby_id'];
 		if($stmt->rowCount() > 0){
-			echo "2";
-			exit();
-		}
-		else{
-            $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_points_limit, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$hash', '$password', $max_points, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
+            $sql = "DELETE FROM players_in_lobby WHERE BINARY nick = '$user'";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
-            $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$hash', 0, false, '$last_change')";
-			$stmt = $pdo->prepare($sql);
-				$stmt->execute();
-			$sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$hash'";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
-			$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$hash'";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
-            foreach($decks as $deck){
-                $sql = "SELECT * FROM cards WHERE deck_code = :deck_code";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute(['deck_code' => $deck]);
-                $row = $stmt->fetchAll();
-                foreach($row as $card){
-                    $color = $card['color'];
-                    $value = $card['value'];
-                    $blank_space = $card['blank_space'];
-                    if($color=="white"){
-                        $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color) VALUES('$hash', '$value', '$color')";
-                    }
-                    else    $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color, blank_space) VALUES('$hash', '$value', '$color', $blank_space)";
-
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->execute();
+            $sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_id'";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();  
+		}
+        $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_points_limit, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$hash', '$password', $max_points, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$hash', 0, false, '$last_change')";
+        $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+        $sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$hash'";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$hash'";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        foreach($decks as $deck){
+            $sql = "SELECT * FROM cards WHERE BINARY deck_code = :deck_code";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['deck_code' => $deck]);
+            $row = $stmt->fetchAll();
+            foreach($row as $card){
+                $color = $card['color'];
+                $value = $card['value'];
+                $blank_space = $card['blank_space'];
+                if($color=="white"){
+                    $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color) VALUES('$hash', '$value', '$color')";
                 }
+                else    $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color, blank_space) VALUES('$hash', '$value', '$color', $blank_space)";
+
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute();
             }
         }
         echo $hash;
