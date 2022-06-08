@@ -83,18 +83,18 @@ $(document).on('mouseover', '.player', function(){
         if(window.owner==window.nick){
             if($(this).children('.player_left').length){
                 if($(this).children('.player_left').children('.nick').text()!=window.owner){
-                    if(window.hl=="pl") var text = "Wyrzuć";
-                    if(window.hl=="en") var text = "Kick";
-                    $(this).append('<div class = "player_menu"><div class = "kick">'+text+'</div><i class = "icon-crown crown_btn"/></div>');
+                    // if(window.hl=="pl") var text = "Wyrzuć";
+                    // if(window.hl=="en") var text = "Kick";
+                    $(this).append('<div class = "player_menu"><div class = "kick">x</div><i class = "icon-crown crown_btn"/></div>');
         
                     kickflag = false;
                 }
             }
             else{
                 if($(this).children('.nick').text()!=window.owner){
-                    if(window.hl=="pl") var text = "Wyrzuć";
-                    if(window.hl=="en") var text = "Kick";
-                    $(this).append('<div class = "player_menu"><div class = "kick">'+text+'</div><i class = "icon-crown crown_btn"/></div>');
+                    // if(window.hl=="pl") var text = "Wyrzuć";
+                    // if(window.hl=="en") var text = "Kick";
+                    $(this).append('<div class = "player_menu"><div class = "kick">x</div><i class = "icon-crown crown_btn"/></div>');
         
                     kickflag = false;
                 }
