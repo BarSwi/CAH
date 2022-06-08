@@ -64,7 +64,6 @@ function polling(time, round){
                     polling();
                 }
                 if(res[0] == 1){
-                    alert(res);
                     polling(res);
                 }
                 else{
@@ -262,6 +261,8 @@ $('#btn').click(function(){
 
                             // }
                             else{
+                                $('.shown').remove();
+                                $('#white_cards_cont').append('<div class = "white_card_picked"></div>');
                                 selected_flag = true;
                                 $('#btn').css('display', 'none');
                                 let array = JSON.parse(res);
@@ -420,7 +421,7 @@ function polling_res(param){
         let i = param[1];
         var round = param[2];
         let white_cards_cont = $('#white_cards_cont');
-        white_cards_cont.children().remove();
+        white_cards_cont.children().not('.shown').remove();
         for(let k=0; k<i;k++){
             white_cards_cont.append('<div class = "white_card_picked"></div>');
         }

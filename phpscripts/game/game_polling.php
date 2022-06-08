@@ -94,108 +94,126 @@ try{
                 exit();
             }
             if($time_change['last_change_round']>$time){
-                if($round_started==1){
-                    $players = $time_change['players_in_lobby'];
-                    $sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->execute(['id'=>$id]);
-                    if($stmt->rowCount()!=$players-1 || $players<3){
-                        array_push($array_exit, $time_res, $stmt->rowCount(), 1, 'round');
-                        echo json_encode($array_exit);
-                        exit();
-                    }
-                    else{
-                        $counter_2 = 0;
-                        $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1";
+                if($time_change['last_change_players'] <= $time || $time_change['last_change_round']< $time_change['last_change_players'])
+                {
+                    $time_res = $time_change['last_change_round'];
+                    if($round_started==1){
+                        $players = $time_change['players_in_lobby'];
+                        $sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
                         $stmt = $pdo->prepare($sql);
                         $stmt->execute(['id'=>$id]);
-                        while($stmt->rowCount()!=$players-1){
-                            $counter_2 +=1;
-                            usleep(100000);
-                            $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1 AND owner IS NOT NULL";
+                        if($stmt->rowCount()!=$players-1 || $players<3){
+                            array_push($array_exit, $time_res, $stmt->rowCount(), 1, 'round');
+                            echo json_encode($array_exit);
+                            exit();
+                        }
+                        else{
+                            $counter_2 = 0;
+                            $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1";
                             $stmt = $pdo->prepare($sql);
                             $stmt->execute(['id'=>$id]);
-                            if($counter_2==10){
-                                echo $time;
-                                exit();
+                            while($stmt->rowCount()!=$players-1){
+                                $counter_2 +=1;
+                                usleep(300000);
+                                $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1 AND owner IS NOT NULL";
+                                $stmt = $pdo->prepare($sql);
+                                $stmt->execute(['id'=>$id]);
+                                if($counter_2==3){
+                                    echo $time;
+                                    exit();
+                                }
                             }
+                            $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id ORDER BY `cardsShuffled`.`owner` DESC, `cardsShuffled`.`choosen` ASC";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute(['id'=>$id]);
+                            $cards = $stmt->fetchAll();
+                            foreach($cards as $card){
+                                $owner = $card['owner'];
+                                $card_id = $card['ID'];
+                                if(!isset($last_owner)) $last_owner = $owner;
+                                if(!isset($last_card)) $last_card = $card_id;
+                                if($last_owner == $owner){
+                                    $card_id = $last_card;
+                                }
+                                else{
+                                    $last_owner = $owner;
+                                    $last_card = $card_id;
+                                }
+                                $array_inside = [];
+                                array_push($array_inside, $card_id, $card['value']);
+                                array_push($array_exit, $array_inside);
+                            }
+                            array_push($array_exit, $time_res, 'round_end');
+                            echo json_encode($array_exit);
+                            exit();
                         }
-                        $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute(['id'=>$id]);
-                        $cards = $stmt->fetchAll();
-                        foreach($cards as $card){
-                            $owner = $card['owner'];
-                            $card_id = $card['ID'];
-                            $array_inside = [];
-                            array_push($array_inside, $card_id, $card['value']);
-                            array_push($array_exit, $array_inside);
+                    }
+                    else if($round_started == 0){
+                        if($reset==0){
+                            $sql = "SELECT * FROM cardsShuffled WHERE winner = 1 AND lobby_id = :id";
+                            $stmt= $pdo->prepare($sql);
+                            $stmt->execute(['id'=>$id]);
+                            $winner = $stmt->fetch();
+                            $winner_nick = $winner['owner'];
+                            $winner_card = $winner['ID'];
+                            $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id AND points = $max_points";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute(['id'=>$id]);
+                            if($stmt->rowCount()==1){
+                                $game_end = 1;
+                            }
+                            else $game_end = 0;
+                            array_push($array_exit, $time_res, $winner_nick, $winner_card, $game_end, 'winner_selected');
+                            echo json_encode($array_exit);
+                            exit();
                         }
-                        array_push($array_exit, $time_res, 'round_end');
-                        echo json_encode($array_exit);
-                        exit();
+                        else if ($reset==1){
+                            $sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'black' AND choosen = 1 LIMIT 1";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute(['id'=>$id]);
+                            $row = $stmt->fetch();
+                            $black_card_val = $row['value'];
+                            $black_card_blank = $row['blank_space'];
+                            $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id ORDER BY `players_in_lobby`.`ID` ASC";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute(['id'=>$id]);
+                            $array = $stmt->fetchAll();
+                            $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute(['id'=>$id]);
+                            $row = $stmt->fetch();
+                            $owner = $row['owner'];
+                            foreach($array as $player){
+                                array_push($array_exit, [$player['nick'], $player['points'], $player['chooser']]);
+                            }
+                            array_push($array_exit,$black_card_val, $black_card_blank, $time_res, $owner, "reset");
+                            echo json_encode($array_exit);
+                            exit();
+                        }
                     }
                 }
-                else if($round_started == 0){
-                    if($reset==0){
-                        $sql = "SELECT * FROM cardsShuffled WHERE winner = 1 AND lobby_id = :id";
-                        $stmt= $pdo->prepare($sql);
-                        $stmt->execute(['id'=>$id]);
-                        $winner = $stmt->fetch();
-                        $winner_nick = $winner['owner'];
-                        $winner_card = $winner['ID'];
-                        $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id AND points = $max_points";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute(['id'=>$id]);
-                        if($stmt->rowCount()==1){
-                            $game_end = 1;
-                        }
-                        else $game_end = 0;
-                        array_push($array_exit, $time_res, $winner_nick, $winner_card, $game_end, 'winner_selected');
-                        echo json_encode($array_exit);
-                        exit();
-                    }
-                    else if ($reset==1){
-                        $sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'black' AND choosen = 1 LIMIT 1";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute(['id'=>$id]);
-                        $row = $stmt->fetch();
-                        $black_card_val = $row['value'];
-                        $black_card_blank = $row['blank_space'];
-                        $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id ORDER BY `players_in_lobby`.`ID` ASC";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute(['id'=>$id]);
-                        $array = $stmt->fetchAll();
-                        $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute(['id'=>$id]);
-                        $row = $stmt->fetch();
-                        $owner = $row['owner'];
-                        foreach($array as $player){
-                            array_push($array_exit, [$player['nick'], $player['points'], $player['chooser']]);
-                        }
-                        array_push($array_exit,$black_card_val, $black_card_blank, $time_res, $owner, "reset");
-                        echo json_encode($array_exit);
-                        exit();
-                    }
-                }
+                
             }
             if($time_change['last_change_players']>$time){
-                $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id ORDER BY `players_in_lobby`.`ID` ASC";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute(['id'=>$id]);
-                $array = $stmt->fetchAll();
-                $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute(['id'=>$id]);
-                $row = $stmt->fetch();
-                $owner = $row['owner'];
-                foreach($array as $player){
-                    array_push($array_exit, [$player['nick'], $player['points'], $player['chooser']]);
+                if($time_change['last_change_round']<=$time || $time_change['last_change_players'] < $time_change['last_change_round']){
+                    $time_res = $time_change['last_change_players'];
+                    $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id ORDER BY `players_in_lobby`.`ID` ASC";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute(['id'=>$id]);
+                    $array = $stmt->fetchAll();
+                    $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute(['id'=>$id]);
+                    $row = $stmt->fetch();
+                    $owner = $row['owner'];
+                    foreach($array as $player){
+                        array_push($array_exit, [$player['nick'], $player['points'], $player['chooser']]);
+                    }
+                    array_push($array_exit, $time_res, $owner, "players");
+                    echo json_encode($array_exit);
+                    exit();
                 }
-                array_push($array_exit, $time_res, $owner, "players");
-                echo json_encode($array_exit);
-                exit();
+
             }
             else{
                 echo "0";
@@ -216,5 +234,3 @@ catch(PDOException $e){
     echo $error_message;
     
 }
-
-

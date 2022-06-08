@@ -259,14 +259,38 @@
 					echo '<div class = "white_card_picked"></div>';
 				}
 			}
+			else{
+				$sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id ORDER BY `cardsShuffled`.`owner` DESC, `cardsShuffled`.`choosen` ASC";
+				$stmt = $pdo->prepare($sql);
+				$stmt->execute(['id'=>$lobby_id]);
+				$cards = $stmt->fetchAll();
+				foreach($cards as $card){
+					$owner = $card['owner'];
+					$card_id = $card['ID'];
+					if(!isset($last_owner)) $last_owner = $owner;
+					if(!isset($last_card)) $last_card = $card_id;
+					if($last_owner == $owner){
+						$card_id = $last_card;
+					}
+					else{
+						$last_owner = $owner;
+						$last_card = $card_id;
+					}
+					if($chooser == 1) $style = "";
+					else $style = 'style = "pointer-events: none;"';
+					echo '<label class = "white_card_picked '.$card_id.'"'.$style.'>'.$card['value'].'<input type = "checkbox" class = "select_check '.$card_id.'"></label>';
+				}
+			}
 			echo '</div>
 			<div style = "clear: both;"></div>
 			<div id = "UI">';
 			if($chooser == 1) $style = 'style = "display: none;"';
 			else $style = '';
+			if($lobby['round_started']==0) $style_card = 'style ="pointer-events: none;"';
+			else $style_card = "";
 			echo '<div id = "my_cards"'.$style.'>';
 				foreach($my_cards as $card){
-					echo '<label id = '.$card['ID'].' class = "white_card">'.$card['value'].'<input type = "checkbox" id = check'.$card['ID'].' class = "white_check"/></label>';
+					echo '<label id = '.$card['ID'].' class = "white_card" '.$style_card.'>'.$card['value'].'<input type = "checkbox" id = check'.$card['ID'].' class = "white_check"></label>';
 				}
 			echo '</div>
 			<div id = "menu">
