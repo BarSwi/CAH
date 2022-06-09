@@ -239,7 +239,7 @@
 			<div id = "lobbies">
 				<?php
 					if($_SESSION['login']==true){
-						if(empty($lobby)){
+						if(empty($lobbies)){
 							echo '<h1>'.$lang['no_lobbies_found'].'</h1>';
 						}
 						foreach($lobbies as $lobby){

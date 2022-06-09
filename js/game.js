@@ -274,10 +274,6 @@ $('#btn').click(function(){
                                 alert('error');
                                 window.location.reload();
                             }
-                            // bugfix
-                            // if(res=="1"){
-
-                            // }
                             else{
                                 $('.shown').remove();
                                 $('#white_cards_cont').append('<div class = "white_card_picked"></div>');
