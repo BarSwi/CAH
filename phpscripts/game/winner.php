@@ -2,7 +2,7 @@
 session_start();
 ignore_user_abort(true);
 if(!isset($_SESSION['login']) || $_SESSION['login']==false){
-    echo "0";
+    echo "2";
     exit();
 }
 $card_id = json_decode($_POST['winner']);

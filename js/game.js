@@ -270,8 +270,18 @@ $('#btn').click(function(){
                         async: false,
                         data: {array:array, id:id},
                         success: function(res){
+                            if(res=="2"){
+                                alert('Unexpected Error');
+                                window.chooser = window.nick;
+                                $('.white_card').css('pointer-events','none');
+                                $('#my_cards').css('display', 'none');
+                            }
+                            if(res=="1"){
+                                alert('Unexpected Error');
+                                $('.white_card').css('pointer-events','none');
+                            }
                             if(res=="0"){
-                                alert('error');
+                                alert('Unexpected Error');
                                 window.location.reload();
                             }
                             else{
@@ -305,7 +315,8 @@ $('#btn').click(function(){
                     data: {winner:winner, id:id},
                     success: function(res){
                         if(res=='0'){
-                            alert('error');
+                            alert('Unexpected Error');
+                           
                         }
                         if(res=='1'){
                             $('.'+window.winner[0]).remove();
@@ -313,6 +324,10 @@ $('#btn').click(function(){
                             selected_flag = false;
                             window.winner = [];
                             return 0;
+                        }
+                        if(res=="2"){
+                            alert('Unexpected Error');
+                            window.location.href = "index.php"; 
                         }
                         else{
                         //     Nie do końca potrzebne, ale na razie zostawiam

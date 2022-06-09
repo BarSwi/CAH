@@ -17,6 +17,14 @@ try{
     $pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     $pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id AND chooser = 1 AND nick = '$nick'";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id'=>$id]);
+    if($stmt->rowCount()!=0){
+        echo '2';
+        exit();
+    }
+    if($stmt)
     $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
@@ -30,7 +38,7 @@ try{
             $stmt->execute(['id'=>$id]);
         }
         else{
-            echo '0';
+            echo '1';
             exit();
         }
     }
