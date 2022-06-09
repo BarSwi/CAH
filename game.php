@@ -259,7 +259,7 @@
 					echo '<div class = "white_card_picked"></div>';
 				}
 			}
-			else{
+			if($lobby['round_started']==0 && $lobby['reset']==0){
 				$sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id ORDER BY `cardsShuffled`.`owner` DESC, `cardsShuffled`.`choosen` ASC";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute(['id'=>$lobby_id]);
@@ -286,7 +286,7 @@
 			<div id = "UI">';
 			if($chooser == 1) $style = 'style = "display: none;"';
 			else $style = '';
-			if($lobby['round_started']==0) $style_card = 'style ="pointer-events: none;"';
+			if($lobby['round_started']==0 && $lobby['reset']==0) $style_card = 'style ="pointer-events: none;"';
 			else $style_card = "";
 			echo '<div id = "my_cards"'.$style.'>';
 				foreach($my_cards as $card){

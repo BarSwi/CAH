@@ -209,7 +209,7 @@ try{
                     foreach($array as $player){
                         array_push($array_exit, [$player['nick'], $player['points'], $player['chooser']]);
                     }
-                    array_push($array_exit, $time_res, $owner, "players");
+                    array_push($array_exit, $time_res, $owner, $round_started, "players");
                     echo json_encode($array_exit);
                     exit();
                 }

@@ -26,6 +26,7 @@ $(window).on('beforeunload', function(){
 });
 kickflag = true;
 $(document).ready(function(){
+    window.scrollTo(0, 0);
     window.selected_cards = [];
     window.winner = [];
     $.ajax({
@@ -171,9 +172,14 @@ $(document).on('change','.white_check', function(e){
         if(window.chooser != window.nick){
             if(window.black > window.selected_cards.length){
                 let id = $(this).parent().attr('id');
-                $(this).parent().css({'background-color': '#8FE738', 'opacity': '1'});
+                $(this).parent().css({'background-color': '#164135', 'opacity': '1', 'color': 'white'});
                 window.selected_cards.push(id);
-                white_cards_cont.append('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                if($('.shown').length){
+                    $('.shown').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                }
+                else{
+                    white_cards_cont.prepend('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                }
     
                 
             }
@@ -184,10 +190,15 @@ $(document).on('change','.white_check', function(e){
                     $('#' + id).children().prop('checked', false);
                     window.selected_cards = window.selected_cards.slice(0, -1);
                     white_cards_cont.children('.'+id).remove();
-                    $(this).parent().css({'background-color': '#8FE738', 'opacity': '1'});
+                    $(this).parent().css({'background-color': '#164135', 'opacity': '1', 'color': 'white'});
                     id = $(this).parent().attr('id');
                     window.selected_cards.push(id);
-                    white_cards_cont.append('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                    if($('.shown').length){
+                        $('.shown').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                    }
+                    else{
+                        white_cards_cont.prepend('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                    }
                 }
             }
             if($(this).prop("checked")==false){
@@ -217,7 +228,7 @@ $(document).on('change', '.select_check', function(){
             let card_handler = $('.'+card_id);
             if($(this).prop('checked')==true){
                 if(window.winner.length == 0){
-                    card_handler.css({'background-color': '#8FE738', 'opacity': 1});
+                    card_handler.css({'background-color': '#164135', 'opacity': '1', 'color': 'white'});
                     window.winner.push(card_id);
                 }
                 else{
@@ -225,7 +236,7 @@ $(document).on('change', '.select_check', function(){
                     $('.'+remove_card).removeAttr('style');
                     $('.'+remove_card).prop('checked', false);
                     window.winner = [];
-                    card_handler.css({'background-color': '#8FE738', 'opacity': 1});
+                    card_handler.css({'background-color': '#164135', 'opacity': '1', 'color': 'white'});
                     window.winner.push(card_id);
                 }
             }
@@ -306,6 +317,7 @@ $('#btn').click(function(){
                 return;
             }
             else{
+                $('.white_card_picked').css('pointer-events','none');
                 let winner = JSON.stringify(window.winner);
                 $('#btn').css('display', 'none');
                 selected_flag = true;
@@ -316,11 +328,13 @@ $('#btn').click(function(){
                     success: function(res){
                         if(res=='0'){
                             alert('Unexpected Error');
+                        
                            
                         }
                         if(res=='1'){
                             $('.'+window.winner[0]).remove();
                             $('#btn').css('display', '');
+                            $('.white_card_picked').removeAttr('style');
                             selected_flag = false;
                             window.winner = [];
                             return 0;
@@ -356,19 +370,20 @@ $('#btn').click(function(){
 
 function polling_res(param){
     if(param[param.length-1]=="players"){
-        var owner = param[param.length-2];
+        var owner = param[param.length-3];
+        var round = param[param.length-2];
         // players_in_lobby exists only when game_started = 0
         if($('#players_in_lobby').length){
             var players_in_lobby = $('#players_in_lobby');
             var start = $('#start');
             $('.player_before').remove();
-            players_in_lobby.html(param.length-3);
+            players_in_lobby.html(param.length-4);
             if(players_in_lobby.html() >= 3){
                 start.prop('class', 'active');
             }
             else start.prop('class', 'inactive');
-            time = param[param.length-3];
-            for(var i = 0; i< param.length-3; i++){
+            time = param[param.length-4];
+            for(var i = 0; i< param.length-4; i++){
                 if(param[i][0]==owner){
                     $('#players').append('<div class = "player_before owner player"><span class = "nick">'+param[i][0]+'<i class = "icon-crown"></i></span></div>');
                 }
@@ -394,7 +409,7 @@ function polling_res(param){
             // var players exists only when game_started = 1
             var players = $('#players');
             $('.player_after').remove();
-            time = param[param.length-3];
+            time = param[param.length-4];
             if(window.hl = "pl"){
                 var points = "Punkty: ";
             }
@@ -406,7 +421,7 @@ function polling_res(param){
                     window.owner = window.nick;
                 }
             }
-            for(var i = 0; i< param.length-3; i++){
+            for(var i = 0; i< param.length-4; i++){
                 if(param[i][2]==1){
                     window.chooser = param[i][0];
                     if(window.hl == "pl") var select = "Wybiera";
@@ -433,7 +448,7 @@ function polling_res(param){
                 }
 
             }
-            polling(time);
+            polling(time, round);
         }
     }
     if(param[param.length-1]=="game"){
@@ -457,6 +472,7 @@ function polling_res(param){
         polling(time, round);
     }
     if(param[param.length-1]=="round_end"){
+        $('#my_cards').css('display','none');
         time = param[param.length-2];
         if(window.chooser != window.nick){
             var style = 'style = "pointer-events: none;"';
@@ -479,10 +495,10 @@ function polling_res(param){
         let card = param[2];
         let game_status = param[3];
         nick_handler = $('#'+nick);
-        nick_handler.css('background-color', 'green');
+        nick_handler.addClass('blink');
         let new_value = parseInt(nick_handler.children('.player_left').children('.points').children('.value').text()) +1;
         nick_handler.children('.player_left').children('.points').children('.value').text(new_value);
-        $('.'+card).css('background-color', 'green');
+        $('.'+card).css({'background-color': '#164135', 'color':'white'});
         if(game_status == 1){
             if(window.hl = "pl"){
                 var text = "Zwycięzca";
@@ -531,7 +547,7 @@ function polling_res(param){
             }
             if(window.nick != window.chooser){
                 let information = $('#select_info');
-                $('.player').removeAttr('style');
+                $('.player').removeClass('blink');
                 $('#btn').removeAttr('style');
                 $('#white_cards_cont').children().remove();
                 $('#my_cards').removeAttr('style');
@@ -542,7 +558,7 @@ function polling_res(param){
             }
             else{
                 $('#my_cards').css('display','none');
-                $('.player').removeAttr('style');
+                $('.player').removeClass('blink');
                 $('#btn').removeAttr('style');
                 $('#white_cards_cont').children().remove();
                 $('.white_card').removeAttr('style');
@@ -556,6 +572,7 @@ function polling_res(param){
         },700)
         selected_flag = false;
         window.winner = [];
+        window.selected_cards = [];
     }
 
 }

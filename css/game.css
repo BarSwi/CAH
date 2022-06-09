@@ -9,29 +9,20 @@ body{
     background-color: rgb(038, 036, 044);
 	color:  #DCDCDC;
 	--color:#DCDCDC;
-	--link-color: #DCDCDC;
 	--text-color: #dadada;
-	--login-button-shadow:#339966;
-	--theme-toggler-background: #1f1f1f;
 	--start-game: rgb(53, 50, 61);
 	--start-game-border: rgb(26, 25, 31);
 	--start-game-shadow: rgb(26, 25, 31);
-	--theme-toggler-border: #262626;
-	--theme-toggler-shadow: rgba(0, 0, 0, 1);
-	--theme-togglerinside-background: white;
-	--theme-togglerinside-background: white;
+	--select-btn: rgb(53, 50, 61);
+	--select-btn-border: rgb(26, 25, 31);
+	--select-btn-shadow: rgb(26, 25, 31);
 	--players-list:rgb(057, 053, 065 );
 	--players-top-border: rgb(108, 104, 117);
-	--theme-togglerinside-border: #999999;
-	--register-link-color: #0099ff;
+	--player-border: rgb(108, 104, 117);
 	--start_game: #666699;
 	--webkit-scrollbar-track: rgb(057, 053, 065);
 	--webit-scrollbar-thumb: grey;
 	--webkit-scrollbar-thumb-border:  rgb(057, 053, 065);
-	--my-cards-button-border: #660099;
-	--rules-border: #3d3d3d;
-	--rules-background: rgb(057, 053, 065 );
-	--forgot-password-email-input-border: #d5d5d5;
 }
 ::-webkit-scrollbar{
 	width: 15px;
@@ -209,23 +200,25 @@ h1{
 }
 #black_card_cont{
 	float:left;
-	border-bottom: 1px solid black;
+	border-bottom: 0.14vw solid var(--player-border);
+	border-right: 0.14vw solid var(--player-border);
 	padding: 1.042vw;
-	height: 15.625vw;
-	width: 13vw;
-	background-color: red;
+	height: 15.565vw;
+	width: 12.90vw;
+	background-color: rgb(057, 053, 065 );
 }
 #white_cards_cont{
 	float: left;
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
-	min-height: 15.625vw;
-	padding: 1.04vw;
+	min-height: 16.555vw;
+	padding: 0.57vw;
 	flex-direction: row;
 	flex-wrap: wrap;
-	width: calc(100% - 1.04vw);
-	background-color: yellow;
+	border-bottom: 0.14vw solid var(--player-border);
+	width: calc(100% - 0.57vw);
+	background-color: rgb(057, 053, 065 );
 }
 .white_card_picked{
 	height: 10.16vw;
@@ -235,7 +228,7 @@ h1{
 	word-wrap: break-word;
 	font-size: 0.7vw;
 	float: left;
-	margin: 0.13vw;
+	margin: 0.19vw;
 	color: black;
 	border-radius: 0.42vw;
 	background-color: rgb(243, 242, 242);
@@ -253,8 +246,10 @@ h1{
 	height: 14.59vw;
 }
 .players_started{
-	width: 15.1vw;
-	background-color: green;
+	overflow: auto !important;
+	width: calc(15.1vw - 0.14vw);
+	background-color: var(--players-list);
+	border-right: 0.14vw solid var(--players-top-border);
 	height: 100%;
 }
 #my_cards{
@@ -267,7 +262,6 @@ h1{
 	min-height: 10.9375vw;
 	max-height: 13.8vw;
 	width: calc(100% - 0.9vw);
-	background-color: purple;
 }
 .white_card{
 	margin: 1vw 0.2vw 1vw 0.2vw;
@@ -294,15 +288,14 @@ input[type="checkbox"]{
 	display: none;
 }
 .player_after{
-	background-color: grey;
-
-	border-bottom: 1px solid black;
+	background-color: rgb(69, 64, 78);
+	border-bottom: 0.14vw solid var(--player-border);
 	display: block;
 	min-height: 2.81vw;
 	overflow: hidden;
 	font-size: 0.9375vw;
-	width: calc(100% - 0.52vw);
-	padding: 0.26vw;
+	width: calc(100% - 0.4vw);
+	padding: 0.23vw;
 	position: relative;
 }
 .player_left{
@@ -330,9 +323,10 @@ input[type="checkbox"]{
 }
 #btn{
 	pointer-events: none;
-	background-color: red;
+	background-color: var(--select-btn);
+	border: 0.14vw solid var(--select-btn-border);
 	width: max-content;
-	border-radius: 0.26vw;
+	border-radius: 0.3vw;
 	padding: 0.52vw;
 	opacity: 50%;
 	font-size: 1.5625vw;
@@ -340,12 +334,14 @@ input[type="checkbox"]{
 	transition: 0.2s ease;
 }
 #btn:hover, #btn:focus{
+	-webkit-box-shadow: 0px 0px 3px 1px var(--select-btn-shadow);
+	-moz-box-shadow: 0px 0px 3px 1px var(--select-btn-shadow);
+	box-shadow: 0px 0px 3px 1px var(--select-btn-shadow);
 	cursor: pointer;
 	transform: scale(1.1);
 }
 #left{
 	width: 15.104vw;
-	background-color: red;
 	float: left;
 	height: 100vh
 }
@@ -354,7 +350,8 @@ input[type="checkbox"]{
 	float: left;
 }
 .shown{
-	background-color: #8FE738;
+	background-color: #164135;
+	color: white;
 }
 #select_info{
 	text-align: center;
@@ -365,4 +362,15 @@ input[type="checkbox"]{
 .selected:hover{
 	opacity: 100%;
 	cursor: pointer;
+}
+.blink{
+	animation: blinking 0.75s infinite steps(2, end);
+}
+@keyframes blinking{
+	0%{
+		background-color: rgb(69, 64, 78);
+	}
+	100%{
+		background-color: rgb(98, 94, 105);
+	}
 }
