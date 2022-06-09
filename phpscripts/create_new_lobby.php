@@ -90,7 +90,7 @@ try{
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         foreach($decks as $deck){
-            $sql = "SELECT * FROM cards WHERE BINARY deck_code = :deck_code";
+            $sql = "SELECT * FROM cards WHERE BINARY deck_code = :deck_code ORDER BY RAND()";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['deck_code' => $deck]);
             $row = $stmt->fetchAll();
