@@ -108,21 +108,21 @@ try{
                             exit();
                         }
                         else{
-                            $counter_2 = 0;
-                            $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1";
-                            $stmt = $pdo->prepare($sql);
-                            $stmt->execute(['id'=>$id]);
-                            while($stmt->rowCount()!=$players-1){
-                                $counter_2 +=1;
-                                usleep(300000);
-                                $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1 AND owner IS NOT NULL";
-                                $stmt = $pdo->prepare($sql);
-                                $stmt->execute(['id'=>$id]);
-                                if($counter_2==3){
-                                    echo $time;
-                                    exit();
-                                }
-                            }
+                            // $counter_2 = 0;
+                            // $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1";
+                            // $stmt = $pdo->prepare($sql);
+                            // $stmt->execute(['id'=>$id]);
+                            // if($stmt->rowCount()!=$players-1){
+                            //     $counter_2 +=1;
+                            //     usleep(300000);
+                            //     $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1 AND owner IS NOT NULL";
+                            //     $stmt = $pdo->prepare($sql);
+                            //     $stmt->execute(['id'=>$id]);
+                            //     if($counter_2==3){
+                            //         echo $time;
+                            //         exit();
+                            //     }
+                            // }
                             $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id ORDER BY `cardsShuffled`.`owner` DESC, `cardsShuffled`.`choosen` ASC";
                             $stmt = $pdo->prepare($sql);
                             $stmt->execute(['id'=>$id]);
@@ -130,6 +130,12 @@ try{
                             foreach($cards as $card){
                                 $owner = $card['owner'];
                                 $card_id = $card['ID'];
+                                $choosen = $card['choosen'];
+                                if(isset($last_owner) && $last_owner == $owner && isset($last_choosen) && $last_choosen == $choosen)
+                                {
+                                    continue;
+                                }
+                                if(!isset($last_choosen)) $last_choosen = $choosen;
                                 if(!isset($last_owner)) $last_owner = $owner;
                                 if(!isset($last_card)) $last_card = $card_id;
                                 if($last_owner == $owner){
@@ -139,6 +145,7 @@ try{
                                     $last_owner = $owner;
                                     $last_card = $card_id;
                                 }
+                                $last_choosen = $choosen;
                                 $array_inside = [];
                                 array_push($array_inside, $card_id, $card['value']);
                                 array_push($array_exit, $array_inside);

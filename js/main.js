@@ -232,7 +232,12 @@ $('#refresh').click(function(){
 				return 0;
 			}
 			var result = JSON.parse(res);
-			if(result.length!=0){
+			if(result.length==0){
+				if(hl=="pl") var text = "Obecnie nie ma aktywnych żadnych poczekalni 😔";
+				if(hl=="en") var text = "There are currently no active lobbies 😔";
+				lobbies.html('<h1>'+text+'</h1>');
+			}
+			else if(result.length!=0){
 				lobbies.html('');
 				for(var i = 0; i< result.length; i++){
 					var id = result[i]['ID'];

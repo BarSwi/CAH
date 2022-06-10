@@ -7,15 +7,28 @@ $pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $id = $_POST['id'];
 try{
-    $pdo->beginTransaction();
     $sql = "SELECT * FROM lobby WHERE ID = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
+    $lobby = $stmt->fetch();
+    $remove_id = $lobby['lobby_id'];
+    if($lobby['players_in_lobby']==0){
+        $sql = "DELETE FROM lobby WHERE lobby_id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$remove_id]);
+        $sql = "DELETE FROM players_in_lobby WHERE lobby_id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$remove_id]);
+        $sql = "DELETE FROM cards_in_lobby WHERE lobby_id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$remove_id]);
+        echo '0';
+        exit();
+    }
     if($stmt->rowCount()==0){
         echo "0";
         exit();
     }
-    $lobby = $stmt->fetch();
     if(!empty($lobby['lobby_password'])){
         $password = $_POST['password'];
         if($password!=$lobby['lobby_password']){
@@ -29,9 +42,7 @@ try{
     else{
         echo $lobby['lobby_id'];
     }
-    $pdo->commit();
 }
 catch(PDOException $e){
-    $pdo->rollBack();
     $error_message = $e->getMessage();
 }

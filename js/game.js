@@ -42,12 +42,13 @@ $(document).ready(function(){
             lang = result[3];
             window.black = result[4];
             window.chooser = result[5];
+            window.round = result[6];
             if(lang=="pl") window.hl = "pl";
             if(lang=="en") window.hl = "en";
             
         }
     });
-        polling();
+        polling(0, window.round);
 });
 function polling(time, round){
         $.ajax({
@@ -175,7 +176,7 @@ $(document).on('change','.white_check', function(e){
                 $(this).parent().css({'background-color': '#164135', 'opacity': '1', 'color': 'white'});
                 window.selected_cards.push(id);
                 if($('.shown').length){
-                    $('.shown').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                    $('.shown:last-of-type').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
                 }
                 else{
                     white_cards_cont.prepend('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
@@ -194,7 +195,7 @@ $(document).on('change','.white_check', function(e){
                     id = $(this).parent().attr('id');
                     window.selected_cards.push(id);
                     if($('.shown').length){
-                        $('.shown').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                        $('.shown:last-of-type').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');$('.shown').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
                     }
                     else{
                         white_cards_cont.prepend('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
@@ -296,13 +297,15 @@ $('#btn').click(function(){
                                 window.location.reload();
                             }
                             else{
+                                let my_cards = $('#my_cards');
                                 $('.shown').remove();
                                 $('#white_cards_cont').append('<div class = "white_card_picked"></div>');
                                 selected_flag = true;
                                 $('#btn').css('display', 'none');
                                 let array = JSON.parse(res);
+                                my_cards.empty();
                                 for(let i = 0; i<array.length; i++){
-                                    $('#my_cards').append("<label id = "+array[i][0]+" class = 'white_card'>"+array[i][1]+"<input type = 'checkbox' id = 'check"+array[i][0]+"' class = 'white_check''></label>");
+                                    my_cards.append("<label id = "+array[i][0]+" class = 'white_card'>"+array[i][1]+"<input type = 'checkbox' id = 'check"+array[i][0]+"' class = 'white_check''></label>");
                                     
                                 }
                                 $('.white_card').css('pointer-events','none');
@@ -487,7 +490,7 @@ function polling_res(param){
                 white_cards_cont.append('<label  class = "selected white_card_picked '+param[j][0]+'"'+style+'>'+param[j][m+1]+'<input type = "checkbox" class = "select_check '+param[j][0]+'"></label>');
            }
         }
-        polling(time);
+        polling(time, 0);
     }
     if(param[param.length-1] == 'winner_selected'){
         time = param[0];

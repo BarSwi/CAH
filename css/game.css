@@ -368,9 +368,9 @@ input[type="checkbox"]{
 }
 @keyframes blinking{
 	0%{
-		background-color: rgb(69, 64, 78);
+		background-color: rgb(98, 94, 105)
 	}
 	100%{
-		background-color: rgb(98, 94, 105);
+		background-color: rgb(69, 64, 78)
 	}
 }

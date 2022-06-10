@@ -55,15 +55,6 @@ try{
         $stmt->execute(['id'=>$id]);
         exit();
     }
-    $pdo->beginTransaction();
-    $sql = "SELECT * FROM cards_in_lobby WHERE color = 'black' AND choosen = 1 AND lobby_id = :id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['id'=>$id]);
-    $row = $stmt->fetch();
-    if($number != $row['blank_space']){
-        echo '0';
-        exit();
-    }
     $sql = "SELECT * FROM cards_in_lobby WHERE owner = '$nick' AND lobby_id = :id AND color = 'white' AND choosen IS NOT NULL";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
@@ -78,19 +69,34 @@ try{
         $stmt->execute(['card'=>$card]);
         $counter += 1;
     }
-    $sql = "SELECT * FROM cards_in_lobby WHERE owner IS NULL AND lobby_id = :id AND color = 'white' LIMIT $number";
+    $pdo->beginTransaction();
+    $sql = "SELECT * FROM cards_in_lobby WHERE color = 'black' AND choosen = 1 AND lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
-    $rows = $stmt->fetchAll();
-    foreach($rows as $row){
-        $ID = $row['ID'];
-        $value = $row['value'];
-        $array_inside = [$ID, $value];
-        $sql = "UPDATE cards_in_lobby SET owner = '$nick' WHERE ID = '$ID'";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        array_push($array_exit, $array_inside);
+    $row = $stmt->fetch();
+    if($number != $row['blank_space']){
+        echo '0';
+        exit();
     }
+    //Problem when more than 1 person click submit at the same time
+    for($i = 0 ;$i<$number; $i++){
+        $sql = "UPDATE cards_in_lobby SET owner = '$nick' WHERE ID = (SELECT ID FROM (SELECT ID FROM cards_in_lobby WHERE owner IS NULL AND lobby_id = :id AND color = 'white' ORDER BY RAND() LIMIT 1) AS t)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+    }
+    // $sql = "SELECT * FROM cards_in_lobby WHERE owner IS NULL AND lobby_id = :id AND color = 'white' LIMIT $number";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute(['id'=>$id]);
+    // $rows = $stmt->fetchAll();
+    // foreach($rows as $row){
+    //     $ID = $row['ID'];
+    //     $value = $row['value'];
+    //     $array_inside = [$ID, $value];
+    //     $sql = "UPDATE cards_in_lobby SET owner = '$nick' WHERE ID = '$ID'";
+    //     $stmt = $pdo->prepare($sql);
+    //     $stmt->execute();
+    //     array_push($array_exit, $array_inside);
+    // }
     $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
@@ -124,6 +130,16 @@ try{
     $sql = "UPDATE lobby SET last_change_round = '$time' WHERE lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
+    $sql = "SELECT * FROM cards_in_lobby WHERE owner = '$nick' AND lobby_id = :id AND choosen IS NULL";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id'=>$id]);
+    $my_cards = $stmt->fetchAll();
+    foreach($my_cards as $card){
+        $ID = $card['ID'];
+        $value = $card['value'];
+        $array_inside = [$ID, $value];
+        array_push($array_exit, $array_inside);
+    }
     echo json_encode($array_exit);
     $pdo->commit();
 }
