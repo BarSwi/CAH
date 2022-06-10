@@ -138,6 +138,10 @@ try{
         $sql = "UPDATE cards_in_lobby SET owner = '$nick' WHERE ID = (SELECT ID FROM (SELECT ID FROM cards_in_lobby WHERE owner IS NULL AND lobby_id = :id AND color = 'white' ORDER BY RAND() LIMIT 1) AS t)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
+        $sql = "SELECT * FROM cards_in_lobby WHERE owner = '$nick' AND lobby_id = :id AND choosen IS NULL";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id'=>$id]);
+        $my_cards = $stmt->fetchAll();
     }
     foreach($my_cards as $card){
         $ID = $card['ID'];
