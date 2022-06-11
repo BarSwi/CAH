@@ -25,6 +25,7 @@ $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 try{
+    // 1 query instead of loop
     foreach($decks as $deck){
         $sql = "SELECT * FROM decks WHERE BINARY deck_code = :deck_code";
         $stmt = $pdo->prepare($sql);
@@ -50,8 +51,8 @@ try{
 		for ($i = 0; $i < 7; $i++) {
 			$index = rand(0, strlen($characters) - 1);
 			$randomString .= $characters[$index];
-            $hash = password_hash($randomString, PASSWORD_DEFAULT);
 		}
+        $hash = password_hash($randomString, PASSWORD_DEFAULT);
 		$sql = "SELECT * FROM lobby WHERE lobby_id = '$hash'";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();

@@ -68,6 +68,7 @@
 				$sql = "DELETE FROM players_in_lobby WHERE nick = '$user'";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
+				// Change into 1 query instead of loop
 				foreach($lobbies as $lobby_del){
 					$lobby_del_var = $lobby_del['lobby_id'];
 					$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1, last_change_players = '$last_change' WHERE lobby_id = '$lobby_del_var'";

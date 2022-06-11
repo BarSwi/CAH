@@ -63,6 +63,7 @@ try{
         exit();
     }
     $counter = 1;
+    // Change into 1 query instead of loop
     foreach($array as $card){
         $sql = "UPDATE cards_in_lobby SET choosen = $counter WHERE ID = :card AND owner = '$nick'";
         $stmt = $pdo->prepare($sql);
@@ -78,25 +79,10 @@ try{
         echo '0';
         exit();
     }
-    //Problem when more than 1 person click submit at the same time
-    for($i = 0 ;$i<$number; $i++){
-        $sql = "UPDATE cards_in_lobby SET owner = '$nick' WHERE ID = (SELECT ID FROM (SELECT ID FROM cards_in_lobby WHERE owner IS NULL AND lobby_id = :id AND color = 'white' ORDER BY RAND() LIMIT 1) AS t)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['id'=>$id]);
-    }
-    // $sql = "SELECT * FROM cards_in_lobby WHERE owner IS NULL AND lobby_id = :id AND color = 'white' LIMIT $number";
-    // $stmt = $pdo->prepare($sql);
-    // $stmt->execute(['id'=>$id]);
-    // $rows = $stmt->fetchAll();
-    // foreach($rows as $row){
-    //     $ID = $row['ID'];
-    //     $value = $row['value'];
-    //     $array_inside = [$ID, $value];
-    //     $sql = "UPDATE cards_in_lobby SET owner = '$nick' WHERE ID = '$ID'";
-    //     $stmt = $pdo->prepare($sql);
-    //     $stmt->execute();
-    //     array_push($array_exit, $array_inside);
-    // }
+    $sql = "UPDATE cards_in_lobby SET owner = '$nick' WHERE owner is NULL AND lobby_id = :id AND color = 'white' ORDER BY RAND() LIMIT $number";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id'=>$id]);
+
     $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
@@ -106,23 +92,9 @@ try{
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
     if($stmt->rowCount()==$players-1){
-        $sql = "SELECT * FROM `cards_in_lobby` WHERE lobby_id =:id AND choosen IS NOT NULL AND color = 'white' ORDER BY `cards_in_lobby`.`owner` DESC, `cards_in_lobby`.`choosen` ASC";
+        $sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) SELECT value, owner, choosen, lobby_id FROM cards_in_lobby WHERE lobby_id=:id AND choosen IS NOT NULL AND color = 'white' ORDER BY RAND()";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
-        $cards = $stmt->fetchAll();
-        $array = [];
-        foreach($cards as $card){
-            array_push($array, [$card['value'], $card['owner'], $card['choosen']]);
-        }
-        shuffle($array);
-        for($i = 0; $i<count($array); $i++){
-            $value = $array[$i][0];
-            $owner = $array[$i][1];
-            $choosen = $array[$i][2];
-            $sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) VALUES('$value', '$owner', $choosen, '$id')";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-        }
         $sql = "UPDATE  lobby SET round_started = 0, reset = 0 WHERE lobby_id = :id";
         $stmt= $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
@@ -135,7 +107,8 @@ try{
     $stmt->execute(['id'=>$id]);
     $my_cards = $stmt->fetchAll();
     if($stmt->rowCount()!=10){
-        $sql = "UPDATE cards_in_lobby SET owner = '$nick' WHERE ID = (SELECT ID FROM (SELECT ID FROM cards_in_lobby WHERE owner IS NULL AND lobby_id = :id AND color = 'white' ORDER BY RAND() LIMIT 1) AS t)";
+        // Prevention
+        $sql = "UPDATE cards_in_lobby SET owner = '$nick' WHERE owner is NULL AND lobby_id = :id AND color = 'white' ORDER BY RAND() LIMIT $number";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
         $sql = "SELECT * FROM cards_in_lobby WHERE owner = '$nick' AND lobby_id = :id AND choosen IS NULL";

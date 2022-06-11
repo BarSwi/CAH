@@ -108,21 +108,6 @@ try{
                             exit();
                         }
                         else{
-                            // $counter_2 = 0;
-                            // $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1";
-                            // $stmt = $pdo->prepare($sql);
-                            // $stmt->execute(['id'=>$id]);
-                            // if($stmt->rowCount()!=$players-1){
-                            //     $counter_2 +=1;
-                            //     usleep(300000);
-                            //     $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id AND choosen = 1 AND owner IS NOT NULL";
-                            //     $stmt = $pdo->prepare($sql);
-                            //     $stmt->execute(['id'=>$id]);
-                            //     if($counter_2==3){
-                            //         echo $time;
-                            //         exit();
-                            //     }
-                            // }
                             $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id ORDER BY `cardsShuffled`.`owner` DESC, `cardsShuffled`.`choosen` ASC";
                             $stmt = $pdo->prepare($sql);
                             $stmt->execute(['id'=>$id]);

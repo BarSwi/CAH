@@ -78,22 +78,12 @@
 						}
 				}
 			}
-			$sql = "SELECT * FROM lobby WHERE (last_change < $delete AND (last_change_round is NULL OR last_change_round < $delete)) OR players_in_lobby < 1";
+			$sql = "DELETE cards_in_lobby, players_in_lobby FROM cards_in_lobby LEFT JOIN players_in_lobby ON cards_in_lobby.lobby_id = players_in_lobby.lobby_id WHERE cards_in_lobby.lobby_id IN (SELECT lobby_id FROM lobby WHERE (last_change < $delete AND (last_change_round < $delete OR last_change_round IS NULL)) OR players_in_lobby < 1)";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
-			$row = $stmt->fetchAll();
 			$sql = "DELETE FROM lobby WHERE (last_change < $delete AND (last_change_round < $delete OR last_change_round IS NULL)) OR players_in_lobby < 1";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
-			foreach($row as $lobby){
-				$id = $lobby['lobby_id'];
-				$sql = "DELETE FROM players_in_lobby WHERE lobby_id = '$id'";
-				$stmt = $pdo->prepare($sql);
-				$stmt->execute();
-				$sql = "DELETE FROM cards_in_lobby WHERE lobby_id = '$id'";
-				$stmt = $pdo->prepare($sql);
-				$stmt->execute();
-			}
 			$sql = "SELECT * FROM lobby";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
@@ -104,7 +94,7 @@
 		catch(PDOException $e){
 			$pdo->rollBack();
 			$error_message = $e->getMessage();
-			echo $error_message;
+			echo $error_message.'<br>';
 	
 		}
 	}
