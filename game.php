@@ -250,9 +250,9 @@
 			
 			echo' </div></div>
 			<div id = "right">
-			<div id = "white_cards_cont">';
+			<div id = "white_cards_cont"><div id = "white_cards_shown"></div>';
 			if($lobby['round_started']==1){
-				$sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen IS NOT NULL AND lobby_id = :id";
+				$sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
 				$stmt=$pdo->prepare($sql);
 				$stmt->execute(['id'=>$lobby_id]);
 				$count = $stmt->rowCount();
@@ -287,7 +287,11 @@
 			<div id = "UI">';
 			if($chooser == 1) $style = 'style = "display: none;"';
 			else $style = '';
-			if($lobby['round_started']==0 && $lobby['reset']==0) $style_card = 'style ="pointer-events: none;"';
+			if($lobby['round_started']==0 && $lobby['reset']==0){
+				$style_card = 'style ="pointer-events: none;"';
+				$style = 'style = "display: none;"';
+				$style_btn = 'style = "display: none;"';
+			}
 			else $style_card = "";
 			echo '<div id = "my_cards"'.$style.'>';
 				foreach($my_cards as $card){
@@ -295,7 +299,7 @@
 				}
 			echo '</div>
 			<div id = "menu">
-				<div id = "btn">'.$lang['Select'].'</div>
+				<div id = "btn" '.$style_btn.'>'.$lang['Select'].'</div>
 			</div>';
 			if($chooser == 1){
 				echo '<div id = "select_info">'.$lang['Selecting_information'].'</div>';

@@ -65,7 +65,7 @@ function polling(time, round){
                 if(res[0] == "<"){
                     polling();
                 }
-                if(res[0] == 1){
+                if(typeof res[0] == 'number'){
                     polling(res);
                 }
                 else{
@@ -168,7 +168,7 @@ $(document).on('click', '#start', function(){
 });
 $(document).on('change','.white_check', function(e){
     if(selected_flag == false){
-        let white_cards_cont  = $('#white_cards_cont');
+        let white_cards_shown  = $('#white_cards_shown');
         let text = $(this).parent().text();
         if(window.chooser != window.nick){
             if(window.black > window.selected_cards.length){
@@ -179,7 +179,7 @@ $(document).on('change','.white_check', function(e){
                     $('.shown:last-of-type').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
                 }
                 else{
-                    white_cards_cont.prepend('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                    white_cards_shown.prepend('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
                 }
     
                 
@@ -190,15 +190,15 @@ $(document).on('change','.white_check', function(e){
                     $('#' + id).removeAttr('style');
                     $('#' + id).children().prop('checked', false);
                     window.selected_cards = window.selected_cards.slice(0, -1);
-                    white_cards_cont.children('.'+id).remove();
+                    white_cards_shown.children('.'+id).remove();
                     $(this).parent().css({'background-color': '#164135', 'opacity': '1', 'color': 'white'});
                     id = $(this).parent().attr('id');
                     window.selected_cards.push(id);
                     if($('.shown').length){
-                        $('.shown:last-of-type').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');$('.shown').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                        $('.shown:last-of-type').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
                     }
                     else{
-                        white_cards_cont.prepend('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                        white_cards_shown.prepend('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
                     }
                 }
             }
@@ -206,7 +206,7 @@ $(document).on('change','.white_check', function(e){
                 $(this).parent().removeAttr('style');
                 let id = $(this).parent().attr('id');
                 window.selected_cards = window.selected_cards.filter(e => e !== id);
-                white_cards_cont.children('.'+id).remove();
+                white_cards_shown.children('.'+id).remove();
             }
             if(window.black == window.selected_cards.length){
                 $('#btn').css({'pointer-events': 'auto', 'opacity': '1'});
@@ -468,7 +468,7 @@ function polling_res(param){
         let i = param[1];
         var round = param[2];
         let white_cards_cont = $('#white_cards_cont');
-        white_cards_cont.children().not('.shown').remove();
+        white_cards_cont.children().not('#white_cards_shown').remove();
         for(let k=0; k<i;k++){
             white_cards_cont.append('<div class = "white_card_picked"></div>');
         }
@@ -482,7 +482,7 @@ function polling_res(param){
         }
         else var style = '';
         let white_cards_cont = $('#white_cards_cont');
-        white_cards_cont.children().remove();   
+        white_cards_cont.children().not('#white_cards_shown').remove();   
         let i = param.length-2;
         for(let j = 0; j<i; j++){
            let k = param[j].length-1;
@@ -552,7 +552,7 @@ function polling_res(param){
                 let information = $('#select_info');
                 $('.player').removeClass('blink');
                 $('#btn').removeAttr('style');
-                $('#white_cards_cont').children().remove();
+                $('#white_cards_cont').children().not('#white_cards_shown').remove();
                 $('#my_cards').removeAttr('style');
                 $('.white_card').removeAttr('style');
                 if(information.length){
@@ -563,7 +563,7 @@ function polling_res(param){
                 $('#my_cards').css('display','none');
                 $('.player').removeClass('blink');
                 $('#btn').removeAttr('style');
-                $('#white_cards_cont').children().remove();
+                $('#white_cards_cont').children().not('#white_cards_shown').remove();
                 $('.white_card').removeAttr('style');
                 if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
                 if(hl=="en") var text = "You are selecting a winning card during this round.";

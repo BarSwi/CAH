@@ -145,6 +145,10 @@ try{
                             $sql = "SELECT * FROM cardsShuffled WHERE winner = 1 AND lobby_id = :id";
                             $stmt= $pdo->prepare($sql);
                             $stmt->execute(['id'=>$id]);
+                            if($stmt->rowCount()==0){
+                                echo $time_res;
+                                exit();
+                            }
                             $winner = $stmt->fetch();
                             $winner_nick = $winner['owner'];
                             $winner_card = $winner['ID'];

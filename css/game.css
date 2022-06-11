@@ -217,7 +217,7 @@ h1{
 	flex-direction: row;
 	flex-wrap: wrap;
 	border-bottom: 0.14vw solid var(--player-border);
-	width: calc(100% - 0.57vw);
+	width: calc(100% - 0.32vw);
 	background-color: rgb(057, 053, 065 );
 }
 .white_card_picked{
@@ -253,7 +253,6 @@ h1{
 	height: 100%;
 }
 #my_cards{
-
 	display: flex;
 	flex-wrap: wrap;	
 	padding: 0 0.9vw 0 0.9vw;
@@ -294,8 +293,8 @@ input[type="checkbox"]{
 	min-height: 2.81vw;
 	overflow: hidden;
 	font-size: 0.9375vw;
-	width: calc(100% - 0.4vw);
-	padding: 0.23vw;
+	width: calc(100% - 0.23vw);
+	padding: 0.23vw 0 0.23vw 0.23vw;
 	position: relative;
 }
 .player_left{
