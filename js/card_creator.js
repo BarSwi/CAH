@@ -41,22 +41,25 @@ $('#add_card_black').click(function(){
 		}
 		$(this).css('pointer-events', 'none');
 		if(flag){
-			black_input.addClass('cards_animation');	
-			setTimeout(function(){
-				add_card_black.css('pointer-events', '');
-				black_input.removeClass('cards_animation');
-				$('#black_cards_added').prepend("<label class = 'black_card added_card' tabindex ='0'>"+ black_value +"<input class = 'added_card_check' type = 'checkbox'></label>");
-				black_input.val('');
-				black_cards_h1.text(parseInt(black_cards_h1.text())+1);
-			}, 300);
 			$.ajax({
 				type: 'GET',
 				url: "../phpscripts/add_card_db.php",
+				async: false,
 				data: {color:"black", value:black_value, deck_code:deck_code},
-				success(res){
+				success: function(res){
 					if(res=="0"){
 						alert("Critical error, please try again");
 						window.location.reload();
+					}
+					else{
+						black_input.addClass('cards_animation');	
+						setTimeout(function(){
+							add_card_black.css('pointer-events', '');
+							black_input.removeClass('cards_animation');
+							$('#black_cards_added').prepend("<label id = '"+res+"' class = 'black_card added_card' tabindex ='0'>"+ black_value +"<input class = 'added_card_check' type = 'checkbox'></label>");
+							black_input.val('');
+							black_cards_h1.text(parseInt(black_cards_h1.text())+1);
+						}, 300);
 					}
 				}
 			});
@@ -100,22 +103,25 @@ $('#add_card_white').click(function(){
 		add_card_white.css('pointer-events', '');
 	}
 	else if(flag){
-			white_input.addClass('cards_animation');	
-			setTimeout(function(){
-				add_card_white.css('pointer-events', '');
-				white_input.removeClass('cards_animation');
-				$('#white_cards_added').prepend("<label class = 'white_card added_card' tabindex ='0'>"+ white_value +"<input class = 'added_card_check' type = 'checkbox'></label>");
-				white_input.val('');
-				white_cards_h1.text(parseInt(white_cards_h1.text())+1);
-			}, 300);
 			$.ajax({
 				type: 'GET',
 				url: "../phpscripts/add_card_db.php",
+				async: false,
 				data: {color:"white", value:white_value, deck_code:deck_code},
 				success(res){
 					if(res=="0"){
 						alert("Critical error, please try again");
 						window.location.reload();
+					}
+					else{
+						white_input.addClass('cards_animation');	
+						setTimeout(function(){
+							add_card_white.css('pointer-events', '');
+							white_input.removeClass('cards_animation');
+							$('#white_cards_added').prepend("<label id = '"+res+"' class = 'white_card added_card' tabindex ='0'>"+ white_value +"<input class = 'added_card_check' type = 'checkbox'></label>");
+							white_input.val('');
+							white_cards_h1.text(parseInt(white_cards_h1.text())+1);
+						}, 300);
 					}
 				}
 			});
@@ -190,11 +196,8 @@ $(document).on('click', '#remove_cards_yes', function(){
 		if($(this).is(':checked')){
 			var color = $(this).parent().attr('class').substring(0,5);
 			var card_color = $("#"+color+"_cards_h1");
-			cards.push(
-			{
-			value:	$(this).parent().text(),	
-			color: color
-			})
+			var id = $(this).parent().attr('id');
+			cards.push(id);
 			$(this).parent().remove();
 			card_color.text(parseInt(card_color.text())-1);
 		}
@@ -204,5 +207,11 @@ $(document).on('click', '#remove_cards_yes', function(){
 		type: "post",
 		url: '../phpscripts/remove_card_db.php',
 		data: {cards:json, deck_code:deck_code},
+		success: function(res){
+			if(res == '0'){
+				alert('Critical Error');
+				window.location.href = "index.php"; 
+			}
+		}
 	});
 });

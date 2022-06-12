@@ -87,14 +87,14 @@
 			<div id ="black_cards_added" class = "cards">
 			<?php foreach($cards as $value){
 				if($value['color']=='black'){
-					echo "<label class = 'black_card added_card' tabindex ='0'>".$value['value']."<input class = 'added_card_check' type = 'checkbox'></label>";
+					echo "<label id = '".$value['ID']."' class = 'black_card added_card' tabindex ='0'>".$value['value']."<input class = 'added_card_check' type = 'checkbox'></label>";
 				}
 			}?>
 			</div>
 			<div id ="white_cards_added" class = "cards">
 			<?php foreach($cards as $value){
 				if($value['color']=='white'){
-					echo "<label class = 'white_card added_card' tabindex ='0'>".$value['value']."<input class = 'added_card_check' type = 'checkbox'></label>";
+					echo "<label id = '".$value['ID']."' class = 'white_card added_card' tabindex ='0'>".$value['value']."<input class = 'added_card_check' type = 'checkbox'></label>";
 				}
 			}?>
 			</div>

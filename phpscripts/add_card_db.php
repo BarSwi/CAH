@@ -2,6 +2,10 @@
 ini_set('display_errors','0');
 session_start();
 require_once ('connect_users.php');
+if(!isset($_SESSION['login']) || $_SESSION['login']==false){
+    echo "0";
+    exit();
+}
 $nick = $_SESSION['user'];
 $color = $_GET['color'];
 $text = $_GET['value'];
@@ -36,9 +40,10 @@ try{
 	$pdo = new PDO($dsn, $db_user, $db_password);
 	$pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	$pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$sql = "SELECT * FROM decks WHERE BINARY deck_code = '$deck_code' AND BINARY author = '$nick'";
+	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+	$sql = "SELECT * FROM decks WHERE BINARY deck_code = :deck_code AND BINARY author = '$nick'";
 	$stmt = $pdo->prepare($sql);
-	$stmt->execute();
+	$stmt->execute(['deck_code'=>$deck_code]);
 	$row = $stmt->fetch();
 	if($stmt->rowCount()==0){
 		header('Location: index.php');	
@@ -46,16 +51,26 @@ try{
 	}
 	$pdo->beginTransaction();
 	if($color=="white"){
-		$sql = "INSERT INTO cards (deck_code, value, color) VALUES ('$deck_code', :text, '$color')";
+		$sql = "INSERT INTO cards (deck_code, value, color) VALUES (:deck_code, :text, 'white')";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(['deck_code'=>$deck_code, 'text' => $text]);
+		$sql = "UPDATE decks SET white_cards = white_cards + 1 WHERE BINARY deck_code = :deck_code";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(['deck_code'=>$deck_code]);
 	}
 	else{
-		$sql = "INSERT INTO cards (deck_code, value, color, blank_space) VALUES ('$deck_code', :text, '$color', $count_space)";
+		$sql = "INSERT INTO cards (deck_code, value, color, blank_space) VALUES (:deck_code, :text, 'black', $count_space)";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(['deck_code'=>$deck_code, 'text' => $text]);
+		$sql = "UPDATE decks SET black_cards = black_cards + 1 WHERE BINARY deck_code = :deck_code";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(['deck_code'=>$deck_code]);
 	}
+	$sql = "SELECT ID FROM cards WHERE BINARY deck_code = :deck_code ORDER BY `cards`.`ID` DESC LIMIT 1";
 	$stmt = $pdo->prepare($sql);
-	$stmt->execute(['text' => $text]);
-	$sql = "UPDATE decks SET $color"."_cards = $color"."_cards + 1 WHERE BINARY deck_code = '$deck_code'";
-	$stmt = $pdo->prepare($sql);
-	$stmt->execute();
+	$stmt->execute(['deck_code'=>$deck_code]);
+	$ID = $stmt->fetch();
+	echo $ID['ID'];
 	$pdo->commit();
 	
 }

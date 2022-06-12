@@ -43,6 +43,10 @@ try{
         exit();
     }
     $pdo->beginTransaction();
+    $sql = "SELECT lobby_id FROM lobby";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $lobbies = $stmt->fetchAll();
     $counter =0;
 	while($flag){
 		$counter = $counter + 1;
@@ -53,13 +57,14 @@ try{
 			$randomString .= $characters[$index];
 		}
         $hash = password_hash($randomString, PASSWORD_DEFAULT);
-		$sql = "SELECT * FROM lobby WHERE lobby_id = '$hash'";
-		$stmt = $pdo->prepare($sql);
-		$stmt->execute();
-		if($stmt->rowCount() == 1) $flag = true;
-		
-		else $flag = false;
-		if($counter == 50000000000){
+        if(empty($lobbies)){
+            $flag = false;
+        }
+        foreach($lobbies as $lobby){
+            if($hash === $lobby) $flag = true;
+            else $flag = false;
+        }
+		if($counter == 500000000){
 			break; 
 		}
 	}
@@ -84,32 +89,15 @@ try{
         $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$hash', 0, false, '$last_change')";
         $stmt = $pdo->prepare($sql);
             $stmt->execute();
-        $sql = "UPDATE lobby SET last_change_players = '$last_change' WHERE lobby_id = '$hash'";
+        $sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$hash'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
-        $sql = "UPDATE lobby SET players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$hash'";
+        $in = join(',', array_fill(0, count($decks), '?'));
+        $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color, blank_space) SELECT '$hash', value, color, blank_space FROM cards WHERE BINARY deck_code IN ($in) ORDER BY RAND()";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        foreach($decks as $deck){
-            $sql = "SELECT * FROM cards WHERE BINARY deck_code = :deck_code ORDER BY RAND()";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute(['deck_code' => $deck]);
-            $row = $stmt->fetchAll();
-            foreach($row as $card){
-                $color = $card['color'];
-                $value = $card['value'];
-                $blank_space = $card['blank_space'];
-                if($color=="white"){
-                    $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color) VALUES('$hash', '$value', '$color')";
-                }
-                else    $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color, blank_space) VALUES('$hash', '$value', '$color', $blank_space)";
-
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute();
-            }
-        }
+        $stmt->execute($decks);
         echo $hash;
-	}
+	}   
     $pdo->commit();
 }
 catch(PDOException $e){

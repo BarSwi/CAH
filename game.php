@@ -61,20 +61,12 @@
 				$stmt->execute();
 			}
 			else{
-				$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
+				$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1, last_change_players = '$last_change' WHERE lobby_id IN (SELECT lobby_id FROM players_in_lobby WHERE nick = '$user')";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
-				$lobbies = $stmt->fetchAll();
 				$sql = "DELETE FROM players_in_lobby WHERE nick = '$user'";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
-				// Change into 1 query instead of loop
-				foreach($lobbies as $lobby_del){
-					$lobby_del_var = $lobby_del['lobby_id'];
-					$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1, last_change_players = '$last_change' WHERE lobby_id = '$lobby_del_var'";
-					$stmt = $pdo->prepare($sql);
-					$stmt->execute();
-				}
 				$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();	

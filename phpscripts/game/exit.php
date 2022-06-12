@@ -31,7 +31,7 @@ try{
     $last_change_lobby = $row['last_change'];
     $abs = abs($last_change_players - $last_change_lobby);
     if($abs>2000){
-        $sql = "DELETE FROM players_in_lobby WHERE nick = '$nick'";
+        $sql = "DELETE FROM players_in_lobby WHERE nick = '$nick' AND lobby_id = '$lobby_id'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_id'";
