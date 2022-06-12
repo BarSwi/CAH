@@ -65,7 +65,7 @@ function polling(time, round){
                 if(res[0] == "<"){
                     polling();
                 }
-                if(typeof res[0] == 'number'){
+                if(res.length == 13){
                     polling(res);
                 }
                 else{
