@@ -19,21 +19,25 @@
 	$sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
-    $row = $stmt->fetch();
-	$last_change_lobby = $row['last_change'];
+	if($stmt->rowCount() == 0){
+		header('Location: index.php');
+		exit();
+	}
+	$lobby_before = $stmt->fetch();
+	$last_change_lobby = $lobby_before['last_change'];
 	$last_change_players = $last_change;
 	$abs = abs($last_change_players - $last_change_lobby);
 	$user = $_SESSION['user'];
 	try{
 		$pdo->beginTransaction();
-		$sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
-		$stmt = $pdo->prepare($sql);
-		$stmt->execute();
-		$lobby_before = $stmt->fetch();
-		if($stmt->rowCount() == 0){
-			header('Location: index.php');
-			exit();
-		}
+		// $sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
+		// $stmt = $pdo->prepare($sql);
+		// $stmt->execute();
+		// $lobby_before = $stmt->fetch();
+		// if($stmt->rowCount() == 0){
+		// 	header('Location: index.php');
+		// 	exit();
+		// }
 		if($lobby_before['reset']==1 && $lobby_before['game_started']==0){
 			sleep(1);
 		}
@@ -55,7 +59,7 @@
 			if($stmt->rowCount()==0){
 				$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
 				$stmt = $pdo->prepare($sql);
-					$stmt->execute();
+				$stmt->execute();
 				$sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$lobby_id'";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
@@ -80,9 +84,6 @@
 			}
 		}
 		if($lobby_before['game_started']==1){
-			$sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'white'";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute(['id'=>$lobby_id]);
 			$sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'black' AND choosen = 1";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute(['id'=>$lobby_id]);
@@ -94,13 +95,9 @@
 				$sql = "UPDATE cards_in_lobby SET owner = '$user' WHERE lobby_id = :id AND color = 'white' AND owner IS NULL ORDER BY RAND() LIMIT 10";
 				$stmt=$pdo->prepare($sql);
 				$stmt->execute(['id'=>$lobby_id]);
-			}
-			$sql = "SELECT * FROM cards_in_lobby WHERE owner = '$user'";
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
-			if($stmt->rowCount()==0){
-				Header('Location: '.$_SERVER['PHP_SELF']);
-				Exit();
+				$sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'white' AND owner = '$user'";
+				$stmt = $pdo->prepare($sql);
+				$stmt->execute(['id'=>$lobby_id]);
 			}
 			$my_cards = $stmt->fetchAll();
 		}
