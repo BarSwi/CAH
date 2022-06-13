@@ -3,7 +3,7 @@
 	//ini_set('display_errors','0');
 	include "languages/config.php";	
     if(!isset($_SESSION['login']) || $_SESSION['login']==false){
-		header('Location: index.php');
+		header('Location: Home');
 		exit();
 	} 
 	require_once('phpscripts/connect_users.php');
@@ -20,7 +20,7 @@
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
 	if($stmt->rowCount() == 0){
-		header('Location: index.php');
+		header('Location: Home');
 		exit();
 	}
 	$lobby_before = $stmt->fetch();
@@ -79,7 +79,7 @@
 				$stmt->execute();
 			}
 			if($lobby_before['players_in_lobby'] + 1 > $lobby_before['max_players']){
-				header('Location: index.php');
+				header('Location: Home');
 				exit();
 			}
 		}
@@ -118,7 +118,7 @@
 		$stmt->execute();
 		$lobby = $stmt->fetch();
 		if($stmt->rowCount() == 0){
-			header('Location: index.php');
+			header('Location: Home');
 			exit();
 		}
 	}
@@ -139,7 +139,7 @@
 	<title>GoCards</title>
 	<meta name = "description" content =<?= $lang['side_description'] ?> />
 	<meta http-equiv="X-UA-Compatible" content = "IE=edge,chrome=1"/> 
-	<link href="css/game.css" type="text/css" rel="stylesheet" />
+	<link href="css/gameStyle.css" type="text/css" rel="stylesheet" />
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href = "fontello/css/fontello.css" type ="text/css" rel = "stylesheet">
@@ -289,7 +289,8 @@
 			echo '</div>
 			<div id = "menu">
 				<div id = "btn" '.$style_btn.'>'.$lang['Select'].'</div>
-			</div>';
+			</div>
+			<div id = "reroll" '.$style.'>'.$lang['Reroll_cards'].'</div>';
 			if($chooser == 1){
 				echo '<div id = "select_info">'.$lang['Selecting_information'].'</div>';
 			}
@@ -297,5 +298,5 @@
 		</div></div>';
 	}
 	?>
-	<script src = "js/game.js"></script>
+	<script src = "js/gameJs.js"></script>
 </body>

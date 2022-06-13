@@ -270,3 +270,7 @@ input[type="button"]{
 #remove_deck_no{
 	background-color: #990000;
 }
+.icon-left-circled2:before, .icon-right-circled2:before{
+	transition: .15s ease;
+	font-size: 5em;
+}

@@ -210,7 +210,7 @@ $(document).on('click', '#remove_cards_yes', function(){
 		success: function(res){
 			if(res == '0'){
 				alert('Critical Error');
-				window.location.href = "index.php"; 
+				window.location.replace="/Home";
 			}
 		}
 	});

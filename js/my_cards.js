@@ -68,7 +68,7 @@ $(document).on('click', '#remove_deck_yes', function(){
 	});
 });
 $('#edit_btn').click(function(){
-	location.href= "card_creator.php?id=" + $('.middle #deck_id').text();
+	window.location.replace('/Card-Creator='+$('.middle #deck_id').text());
 });
 
 $('#create_btn').click(function(){
@@ -117,7 +117,7 @@ $(document).on('click', '#create_new_deck_send', function(){
 			url: 'phpscripts/create_deck_id.php',
 			data: {title:title},
 			success: function(res){
-				if(res!="0")	location.href= "card_creator.php?id=" + res;
+				if(res!="0")	window.location.replace("/Card-Creator="+res);
 				else if(res=="0"){
 					if(litera == 'U') 	alert("Maksymalna ilość możliwych do stworzenia talii na konto została osiągnięta.");
 					if(litera == 'C') 	alert("The maximum number of decks that can be created per account has been reached.");					

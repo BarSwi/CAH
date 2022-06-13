@@ -37,10 +37,10 @@ $('#form').click(function(event){
                 if(res=="2"){
                     if(hl=="pl") alert("To konto jest już w innym lobby.")
                     if(hl=="en") alert("This account is already in another lobby.")
-                    location.href="index.php";
+                    window.location.replace="/Home";
                 }
                 else if(res!="0"){
-                    location.href = "game.php?id="+res;
+                    window.location.replace('/gameplay.php?id='+res);
                 }
                 
             }

@@ -1,6 +1,6 @@
 <?php
 	include "languages/config.php";	
-    if(!isset($_SESSION['login']) || $_SESSION['login']==false) header('Location: index.php');
+    if(!isset($_SESSION['login']) || $_SESSION['login']==false) header('Location: Home');
 	require_once('phpscripts/connect_users.php');
 	$nick = $_SESSION['user'];
 	$dsn = "mysql:host=".$host.";dbname=".$db_name;

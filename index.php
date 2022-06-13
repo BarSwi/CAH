@@ -149,7 +149,7 @@
 		<div id = "middletop">
 			<?php
 			if(!isset($_SESSION['login']) || $_SESSION['login']==false)	echo '<a title = "'.$lang['lobbycreate_title'].'"  id = "inactive" >'.$lang['lobbycreate'].'</a>'; 
-			else echo  '<a  href="create_lobby.php"  id = "active" >'.$lang['lobbycreate'].'</a>' ;
+			else echo  '<a  href="Create-Lobby"  id = "active" >'.$lang['lobbycreate'].'</a>' ;
 			?>
 		</div>
 		<div id = "righttop">
@@ -162,11 +162,11 @@
 				</form>
 			</div>
 			<div id = "register">'.$lang['acc_noexist_text'].'<br>
-				<a href = "register.php">'.$lang["acc_register"].'</a>
+				<a href = "Register">'.$lang["acc_register"].'</a>
 			</div>';
 			else echo
 				'<div id = "nickname">'.$_SESSION['user'].'</div><br>
-				<a href = "my_cards.php" tabindex ="-1"><div id = "my_cards" tabindex="0">'.$lang['my_cards_button'].'</div></a>
+				<a href = "My-Cards" tabindex ="-1"><div id = "my_cards" tabindex="0">'.$lang['my_cards_button'].'</div></a>
 				<div id = "create_new_deck" tabindex="0">'.$lang['create_new_deck_button'].'</div>
 				<div id = "logout_button" tabindex="0">'.$lang['Logout_button'].'</div>
 				'

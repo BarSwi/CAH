@@ -2,8 +2,8 @@
 	include "languages/config.php";	
 	try{
 		require_once("phpscripts/connect_users.php");
-		if(!isset($_SESSION['login']) || $_SESSION['login']==false) header('Location: index.php');
-		if(empty($_GET['id'])) header('Location: index.php');
+		if(!isset($_SESSION['login']) || $_SESSION['login']==false) header('Location: Home');
+		if(empty($_GET['id'])) header('Location: Home');
 		$dsn = 'mysql:host='.$host.';dbname='.$db_name;
 		$pdo = new PDO($dsn, $db_user, $db_password);
 		$pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -16,7 +16,7 @@
 		$stmt->execute();
 		$row = $stmt->fetch();
 		if($stmt->rowCount()==0){
-			header('Location: index.php');	
+			header('Location: Home');	
 			exit();
 		}
 		$stmt->execute();
@@ -107,6 +107,6 @@
 	<div id = "deck_info">
 		<?=" ID: ".$deck_code."<br>".$lang['deck_title'].$title ?>
 	</div>
-	<script src = "js/card_creator.js"></script>
+	<script src = "js/card_creatorJs.js"></script>
 </body>
 </html>

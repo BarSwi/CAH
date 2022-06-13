@@ -59,6 +59,6 @@
 .icon-help-circled:before { content: '\e802'; font-size: 1.1em;} /* '' */
 .icon-cancel:before { content: '\e803'; } /* '' */
 .icon-crown:before { content: '\e844'; color: gold; } /* '' */
-.icon-right-circled2:before { content: '\f18e'; position: absolute; left: 100%; top: 34%; font-size: 3em;color:  #7c7c7c; } /* '' */
-.icon-left-circled2:before { content: '\f190'; position: absolute; right: 100%; top: 34%;  font-size: 3em; color:  #7c7c7c; } /* '' */
+.icon-right-circled2:before { content: '\f18e'; position: absolute; left: 100%; top: 34%; color:  #7c7c7c; } /* '' */
+.icon-left-circled2:before { content: '\f190'; position: absolute; right: 100%; top: 34%; color:  #7c7c7c; } /* '' */
 .icon-user-times:before { content: '\f235'; } /* '' */

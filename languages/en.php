@@ -92,5 +92,6 @@
 	"Selecting_information"=>"You are selecting a winning card during this round.",
 	"lobbies_no_login"=>"You need to sign in before you can see active lobbies!",
 	"no_lobbies_found"=>"There are currently no active lobbies 😔",
+	"Reroll_cards" => "Reroll your cards 🎲 (Once per game)",
 	);
 ?>

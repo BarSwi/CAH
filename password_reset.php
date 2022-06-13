@@ -1,9 +1,9 @@
 
 <?php
 	include "languages/config.php";
-	if(isset($_SESSION['login']) && $_SESSION['login']!=false) header('Location: index.php');
+	if(isset($_SESSION['login']) && $_SESSION['login']!=false) header('Location: Home');
 	if(!isset($_GET['selector']) || !isset($_GET['validator']) || empty($_GET['selector']) || empty($_GET['validator'])){
-		header('Location: index.php');
+		header('Location: Home');
 	}
 	else{
 		$selector = $_GET['selector'];
@@ -21,13 +21,13 @@
 				$row = $stmt->fetch(PDO::FETCH_ASSOC);
 				if($stmt->rowCount()==0){
 					$_SESSION['password_recovery']=0;
-					header ('Location: index.php');
+					header ('Location: Home');
 					exit();
 				}
 				$tokenBin = hex2bin($validator);
 				if(!$tokenCheck = password_verify($tokenBin, $row['password_reset_token'])){
 							$_SESSION['password_recovery']=0;
-							header ('Location: index.php');
+							header ('Location: Home');
 							exit();
 				}
 				$email = $row['reset_email'];
@@ -39,7 +39,7 @@
 			}
 		}
 		else{
-			header ('Location: index.php');
+			header ('Location: Home');
 			$_SESSION['password_recovery']=0;
 			exit();
 		}

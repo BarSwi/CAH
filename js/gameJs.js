@@ -155,6 +155,7 @@ $(document).on('click', '.crown_btn', function(){
     }
 });
 $(document).on('click', '#start', function(){
+    $(this).css('pointer-events', 'none');
     $.ajax({
         type: 'post',
         url: '../phpscripts/game/start_game.php',
@@ -259,6 +260,28 @@ $(document).on('change', '.select_check', function(){
         }
     }
 });
+$('#reroll').click(function(){
+    $(this).css('pointer-events','none');
+    $.ajax({
+        url: '../phpscripts/game/reroll_cards.php',
+        async: false,
+        success: function(res){
+            let result = JSON.parse(res);
+            if(res=='0'){
+                alert('Error');
+                $('#reroll').remove(); 
+            }
+            else{
+                my_cards = $('#my_cards');
+                $('#reroll').remove();
+                my_cards.children().remove();
+                for(let i =0;i<result.length;i++){
+                    my_cards.append('<label id = "'+result[i][0]+'" class = "white_card">'+result[i][1]+'<input type = "checkbox" id = "check'+result[i][0]+'" class = "white_check"></label>');
+                }
+            }
+        }
+    });
+});
 $('#btn').click(function(){
     if(selected_flag==false){
             if(window.nick != window.chooser){
@@ -344,24 +367,7 @@ $('#btn').click(function(){
                         }
                         if(res=="2"){
                             alert('Unexpected Error');
-                            window.location.href = "index.php"; 
-                        }
-                        else{
-                        //     Nie do końca potrzebne, ale na razie zostawiam
-
-                        //     setTimeout(function(){
-                        //         $.ajax({
-                        //             type: 'post',
-                        //             url: '../phpscripts/game/reset.php',
-                        //             data: {id:id},
-                        //             success: function(res){
-                        //                 if(res=="0"){
-                        //                     alert('error');
-                        //                     return 0;
-                        //                 }
-                        //             }
-                        //         });
-                        //     },650);
+                            window.location.replace="/Home";
                         }
                     }
                 });
@@ -443,6 +449,7 @@ function polling_res(param){
                 selected_flag = false;
                 $('.white_card_picked').removeAttr('style');
                 $('#my_cards').css('display','none');
+                $('#reroll').css('display', 'none');
                 $('#btn').removeAttr('style');
                 if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
                 if(hl=="en") var text = "You are selecting a winning card during this round.";
@@ -476,6 +483,7 @@ function polling_res(param){
     }
     if(param[param.length-1]=="round_end"){
         $('#my_cards').css('display','none');
+        $('#reroll').css('display', 'none');
         time = param[param.length-2];
         if(window.chooser != window.nick){
             var style = 'style = "pointer-events: none;"';
@@ -549,9 +557,10 @@ function polling_res(param){
                 }
             }
             if(window.nick != window.chooser){
-                let information = $('#select_info');
+                var information = $('#select_info');
                 $('.player').removeClass('blink');
                 $('#btn').removeAttr('style');
+                $('#reroll').removeAttr('style');
                 $('#white_cards_cont').children().not('#white_cards_shown').remove();
                 $('#my_cards').removeAttr('style');
                 $('.white_card').removeAttr('style');
@@ -563,11 +572,14 @@ function polling_res(param){
                 $('#my_cards').css('display','none');
                 $('.player').removeClass('blink');
                 $('#btn').removeAttr('style');
+                $('#reroll').css('display', 'none');
                 $('#white_cards_cont').children().not('#white_cards_shown').remove();
                 $('.white_card').removeAttr('style');
                 if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
                 if(hl=="en") var text = "You are selecting a winning card during this round.";
-                $('#UI').append('<div id = "select_info">'+text+'</div>');
+                if(!information){
+                    $('#UI').append('<div id = "select_info">'+text+'</div>');
+                }
     
             }
             let round = 1;

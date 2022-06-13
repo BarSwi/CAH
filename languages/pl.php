@@ -92,5 +92,6 @@
 	"Selecting_information"=>"W tej rundzie wybierasz wygrywającą kartę.",
 	"lobbies_no_login"=>"Musisz być zalogowany w celu uzyskania dostepu do aktywnych poczekalni!",
 	"no_lobbies_found"=> "Obecnie nie ma aktywnych żadnych poczekalni 😔",
+	"Reroll_cards"=>"Przelosuj swoje karty 🎲 (Raz na grę)",
 	);
 	
