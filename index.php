@@ -98,6 +98,9 @@
 	
 		}
 	}
+	else{
+		$_SESSION['login']=false;
+	}
   
 	
 ?>
@@ -156,8 +159,8 @@
 			<?php if(!isset($_SESSION['login']) || $_SESSION['login']==false) echo
 			'<div id = "login">
 				<form>
-				<input type = "text" id = "input_login" placeholder = "Login" required oninvalid = "this.setCustomValidity(\''.$lang['login_invalid_mess'].'\')" oninput = "this.setCustomValidity(\'\')" maxlength = "15" title = "" /></br>
-				<input type ="password" id = "input_password" title = "" placeholder = "'.$lang['login_password'].'" required oninvalid = \'this.setCustomValidity("'.$lang['password_invalid_mess'].'")\' oninput = "this.setCustomValidity(\'\')"></br>
+				<input type = "text" id = "input_login" placeholder = "Login" required oninvalid = "this.setCustomValidity(\''.$lang['login_invalid_mess'].'\')" oninput = "this.setCustomValidity(\'\')" maxlength = "15" title = "" />
+				<input type ="password" id = "input_password" title = "" placeholder = "'.$lang['login_password'].'" required oninvalid = \'this.setCustomValidity("'.$lang['password_invalid_mess'].'")\' oninput = "this.setCustomValidity(\'\')">
 				<button id = "login_button">'.$lang["login_button"].'</button>	
 				</form>
 			</div>
@@ -165,7 +168,7 @@
 				<a href = "Register">'.$lang["acc_register"].'</a>
 			</div>';
 			else echo
-				'<div id = "nickname">'.$_SESSION['user'].'</div><br>
+				'<div id = "nickname">'.$_SESSION['user'].'</div>
 				<a href = "My-Cards" tabindex ="-1"><div id = "my_cards" tabindex="0">'.$lang['my_cards_button'].'</div></a>
 				<div id = "create_new_deck" tabindex="0">'.$lang['create_new_deck_button'].'</div>
 				<div id = "logout_button" tabindex="0">'.$lang['Logout_button'].'</div>
@@ -286,7 +289,7 @@
 		<div id = "right_container">
 		
 			<?php if(isset($_SESSION['login_error'])){ 
-			echo '<span id = "error_login">'.$lang['Invalid_login_data'].'</span><br><br><span id = "forgot_password">'.$lang["forgot_password"].'</span>'; 
+			echo '<span id = "error_login">'.$lang['Invalid_login_data'].'</span><br><span id = "forgot_password">'.$lang["forgot_password"].'</span>'; 
 			unset($_SESSION['login_error']);
 			}
 			?>

@@ -1,3 +1,6 @@
+*:root{
+	font-size: 30px;
+}
 html
 {
 	font-family: 'Merriweather', serif;
@@ -153,11 +156,11 @@ a:link,a:visited{
 	background-color: var(--game-creator) ;
 	border-radius: 10px;
 	border: 2px solid var(--game-creator-border);
-	font-size: 30px;
-	margin-top: 10px;
+	font-size: 1rem;
+	margin-top: 0.33rem;
 	font-weight: 900;
 	transition: all .15s ease-in-out;
-	padding: 15px;
+	padding: 0.5rem;
 }
 #middletop a#active:focus, #middletop a#active:hover
 {
@@ -193,7 +196,7 @@ a:link,a:visited{
 #lang
 {
 	float: left;
-	margin-top: 25px;
+	margin-top: 15px;
 	margin-left: 10px;
 }
 #lang input[type="submit"]{
@@ -202,7 +205,7 @@ a:link,a:visited{
 .lang_change{
 	cursor: pointer;	
 	display: block;
-	margin: 0 0 10px 20px;
+	margin: 0 0 0 20px;
 }
 .lang_change:hover{
 	transform: scale(1.05,1.05);
@@ -218,10 +221,11 @@ a:link,a:visited{
 {
 	width: 100px;
 	float: left;
-	margin-top: 40px;
+	margin-top: 45px;
 }
 .t_icon
 {
+	font-size: 0.5rem;
 	margin: -1px 1px 0px 1px;
 	float: left;
 }
@@ -277,12 +281,13 @@ input#topcheck:checked + .check:before
 {
 	text-align: center;
 	margin-bottom: 10px;
+	display: block;
 	padding: 2px;
 	border-radius: 5px;
 	border: 1px solid var(--input-border);
 	-webkit-box-shadow: 0px 1px 6px 0px var(--input-border);
 	-moz-box-shadow: 0px 1px 6px 0px var(--input-border);
-	font-size: 15px;
+	font-size: 0.5rem;
 	opacity: 70%;
 	box-shadow: 0px 1px 6px 0px var(--input-border);
 	width: 140px;
@@ -297,9 +302,10 @@ input#topcheck:checked + .check:before
 {
 	width: 146px;
 	position: relative;
+	display: block;
 	left: -1px;
 	color: var(--text-color);
-	font-size: 15px;
+	font-size: 0.5rem;
 	padding: 2px; 
 	background-color: var(--login-button-background);
 	transition: all .2s ease;
@@ -322,8 +328,9 @@ input#topcheck:checked + .check:before
 #register
 {
 	float: left;
+	font-size: 0.6rem;
 	color: var(--text-color);
-	margin-top: 20px;
+	margin-top: 0.7rem;
 	min-width: 150px;
 	text-align: center;
 }
@@ -336,13 +343,14 @@ input#topcheck:checked + .check:before
 {
 	display: block;
 	margin-top: 14px;
+	font-size: 0.5rem;
 	color: var(--register-link-color);
 	transition: 0.15s ease;
 }
 #register a:focus, #register a:hover
 {
 	outline: none;
-	font-size: 1.1em;
+	font-size: 0.6rem;
 }
 #container{
 	width: 100%;
@@ -365,7 +373,7 @@ input#topcheck:checked + .check:before
 	color: green;
 	left: 25%;
 	text-align: center;
-	font-size: 30px;
+	font-size: 1rem;
 	-webkit-box-shadow: 0px 0px 8px -3px rgba(78, 16, 71, 1);
 	-moz-box-shadow: 0px 0px 8px -3px rgba(78, 16, 71, 1);
 	box-shadow: 0px 0px 10px 0px rgba(78, 16, 71, 1);
@@ -388,7 +396,7 @@ input#topcheck:checked + .check:before
 	transition: .2s ease;
 	margin-right: auto;
 	text-align: center;
-	font-size: 30px;
+	font-size: 1rem;
 	font-weight: 900;
 	width: 431.7px;
 	height: 661.2px;
@@ -401,7 +409,7 @@ input[type="button"]{
 	display: none;
 }
 #forgot_password_email_input_send{
-	font-size: 1em;
+	font-size: 0.85rem;
 	display: block; 
 	border-radius: 4px;
 	padding: 3px;
@@ -415,7 +423,7 @@ input[type="button"]{
 	bottom: 0.6em;
 }
 #create_new_deck_send{
-	font-size: 1em;
+	font-size: 1rem;
 	display: block; 
 	padding: 10px;
 	background-color: var(--create-new-deck-btn);
@@ -425,7 +433,7 @@ input[type="button"]{
 	transition: .1s ease-in-out;
 	position: absolute;
 	bottom: 6.5em;
-	left: 29%;
+	left: 28%;
 	color: black;
  }
  
@@ -460,7 +468,7 @@ input[type="button"]{
 	text-align: center;
 	padding: 5px;
 	border-radius: 5px;
-	font-size: 1em;
+	font-size: 1rem;
 	border: 1px solid var(--forgot-password-email-input-border);
 }
 #create_new_deck_title_input{
@@ -473,7 +481,7 @@ input[type="button"]{
 	padding: 5px;
 	width: 300px;
 	border-radius: 5px;
-	font-size: 0.8em;
+	font-size: 0.8rem;
 	border: 1px solid var(--forgot-password-email-input-border);
 }
 #create_new_deck_input_title_span{
@@ -496,16 +504,19 @@ input[type="button"]{
 #error_login{
 	color: red;
 	font-weight: 900;
+	font-size: 0.6rem;
 }
 
 #nickname{
 	text-align: center;
 	font-weight: 900;
-	font-size: 20px;
-	margin-bottom: -7px;
+	display: block;
+	font-size: 0.7rem;
+	margin: 0.3rem 0 0.3rem 0;
 }
 #logout_button{
 	float: left;
+	font-size: 0.6rem;
 	border-radius: 5px;
 	padding: 5px;
 	border: 1px solid var(--my-cards-button-border);
@@ -516,6 +527,7 @@ input[type="button"]{
 #my_cards, #create_new_deck{
 	margin-right: 10px;
 	font-weight: 900;
+	font-size: 0.6rem;
 	position: relative;
 	border-radius: 5px;
 	transition: all .1s ease;
@@ -547,6 +559,7 @@ input[type="button"]{
 	display: block;
 	transform-origin: bottom;
 	float: left;
+	font-size: 0.7rem;
 	background-color: var(--rules-background);
 	transition: all .1s ease-in-out;
 	font-weight: 900;
@@ -575,7 +588,7 @@ input.rules:checked + label {
 	overflow-wrap: break-word;
 	max-height: calc(100vh - 181px);
 	display: none;
-	font-size: 20px;
+	font-size: 0.7rem;
 	overflow: auto !important;
 	padding: 5px 5px 24px 0;
 	background-color: var(--rules-background);
@@ -597,11 +610,12 @@ ol li, ul li{
 }
 #forgot_password{
 	transition: .1s ease;
+	font-size: 0.6rem;
 	font-weight: 900;
 }
 #forgot_password:hover{
 	cursor: pointer;
-	font-size: 1.03em;
+	font-size: 0.7em;
 }
 #forgot_password_result{
 	margin: -10px 0px 0 0px;
@@ -613,6 +627,7 @@ ol li, ul li{
 	background-color: var(--navbar);
 	border: 2px solid var(--navbar-border);
 	padding: 5px;
+	font-size: 0.7rem;
 	border-bottom-style:dotted;
 	position: relative;
 	font-weight: 900;
@@ -672,6 +687,7 @@ input[type="search"]:focus, input[type="search"]:hover{
 	width: 27%;
 	padding: 10px;
 	height: 230px;
+	font-size: 0.5rem;
 	position: relative;
 	margin: 14px;
 	border: 2px solid var(--lobby-border);
@@ -679,11 +695,11 @@ input[type="search"]:focus, input[type="search"]:hover{
 }
 .lobby_owner{
 	text-align: center;
-	font-size: 1.2em;
+	font-size: 0.64rem;
 	margin-bottom: 5px;
 }
 .lobby_title{
-	font-size: 1.2em;
+	font-size: 0.64rem;
 	text-align: center;
 }
 .icon-crown{
@@ -700,6 +716,7 @@ input[type="search"]:focus, input[type="search"]:hover{
 	color: rgb(150, 9, 9);
 }
 .icon-lock{
+	font-size: 0.64rem;
 	position: absolute;
 	right: 5px;
 	top: 2px;
@@ -742,7 +759,7 @@ input[type="search"]:focus, input[type="search"]:hover{
 	padding: 20px;
 	display: block;
 	font-weight: 900;
-	font-size: 45px;
+	font-size: 1.2rem;
 	text-align: center;
 	margin: 50px auto 50px auto;
 }
@@ -755,5 +772,6 @@ input[type="search"]:focus, input[type="search"]:hover{
 #lobbies h1{
 	text-align: center;
 	display: block;
-	margin: 50px 10px 50px 10px;
+	font-size: 1rem;
+	margin: 1.4rem auto 1.4rem auto;
 }

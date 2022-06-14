@@ -60,8 +60,8 @@
 				if($stmt->rowCount()>1){ echo
 				'<i class = "icon-right-circled2"></i>
 				<i class = "icon-left-circled2"></i></div>';
-				echo '<div id = "bottom"><div id = "edit_btn" class = "btn">'.$lang['edit_deck'].'</div><div id = "delete_btn" class = "btn">'.$lang['delete_deck'].'</div></div>';
 				}
+				echo '</div><div id = "bottom"><div id = "edit_btn" class = "btn">'.$lang['edit_deck'].'</div><div id = "delete_btn" class = "btn">'.$lang['delete_deck'].'</div>';
 			}
 		if($stmt->rowCount()<3) echo '<div id = "create_btn" class = "btn"">'.$lang['create_new_deck_button'].'</div>';
 		?>

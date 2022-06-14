@@ -41,6 +41,7 @@ $('#form').click(function(event){
                 }
                 else if(res!="0"){
                     window.location.replace('/gameplay.php?id='+res);
+                    // window.location.replace('/Game='+res);
                 }
                 
             }

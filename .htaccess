@@ -9,3 +9,6 @@ RewriteRule ^\bRegister\b register.php [NC]
 RewriteRule ^\bMy-Cards\b my_cards.php [NC]
 RewriteRule ^Card-Creator=([0-9a-zA-z]+) card_creator.php?id=$1 [NC]
 
+
+
+# RewriteRule ^Game=()$ gameplay.php?id=$1 [R=301]
