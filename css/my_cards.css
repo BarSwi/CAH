@@ -59,7 +59,7 @@ input[type="submit"]{
 }
 .icon-left-circled2:hover, .icon-right-circled2:hover{
 	cursor: pointer;
-	font-size: 1.1em;
+	font-size: 5.5em;
 }
 #deck1{
 	position: absolute;
@@ -270,7 +270,15 @@ input[type="button"]{
 #remove_deck_no{
 	background-color: #990000;
 }
-.icon-left-circled2:before, .icon-right-circled2:before{
+.icon-left-circled2, .icon-right-circled2{
 	transition: .15s ease;
 	font-size: 5em;
+	position: absolute;
+	top: 34%;
+}
+.icon-right-circled2{
+	left: 100%;
+}
+.icon-left-circled2{
+	right:100%;
 }

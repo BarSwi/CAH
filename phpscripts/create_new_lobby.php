@@ -70,19 +70,19 @@ try{
 	}
 	if(!$flag){
 		$user = $_SESSION['user'];
-		$sql = "SELECT * FROM players_in_lobby WHERE BINARY nick = '$user'";
-		$stmt = $pdo->prepare($sql);
-		$stmt->execute();
-        $row = $stmt->fetch();
-        $lobby_id = $row['lobby_id'];
-		if($stmt->rowCount() > 0){
-            $sql = "DELETE FROM players_in_lobby WHERE BINARY nick = '$user'";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_id'";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();  
-		}
+		// $sql = "SELECT * FROM players_in_lobby WHERE BINARY nick = '$user'";
+		// $stmt = $pdo->prepare($sql);
+		// $stmt->execute();
+        // $row = $stmt->fetch();
+        // $lobby_id = $row['lobby_id'];
+		// if($stmt->rowCount() > 0){
+        //     $sql = "DELETE FROM players_in_lobby WHERE BINARY nick = '$user'";
+        //     $stmt = $pdo->prepare($sql);
+        //     $stmt->execute();
+        //     $sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby-1 WHERE lobby_id = '$lobby_id'";
+        //     $stmt = $pdo->prepare($sql);
+        //     $stmt->execute();  
+		// }
         $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_points_limit, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$hash', '$password', $max_points, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();

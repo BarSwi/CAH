@@ -112,6 +112,7 @@ $('#forgot_password').click(function(){
 	});
 });
 $('#create_new_deck').click(function(){
+	$(this).blur();
 	$(this).css('pointer-events', 'none');
 	$('#top').css('opacity','40%');
 	$('#container').css('opacity','40%');

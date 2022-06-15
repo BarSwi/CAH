@@ -46,7 +46,7 @@ try{
         $sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick' AND lobby_id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
-        $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id' LIMIT 1";
+        $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id' ORDER BY RAND() LIMIT 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $row = $stmt->fetch();

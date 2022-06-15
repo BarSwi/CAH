@@ -1,3 +1,20 @@
+
+
+<!DOCTYPE HTML>
+<html lang="pl">
+<head>
+	<meta charset = "utf-8"/>
+	<title>GoCards</title>
+	<meta name = "description" content =<?= $lang['side_description'] ?> />
+	<meta http-equiv="X-UA-Compatible" content = "IE=edge,chrome=1"/> 
+	<link href="css/gameStyle.css" type="text/css" rel="stylesheet" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href = "fontello/css/fontello.css" type ="text/css" rel = "stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;900&display=swap" rel="stylesheet">
+	<script src="js/jquery-3.6.0.min.js"></script>
+	<script src = "js/FormSubmitLang.js"></script> 
+</head>
 <?php
 	usleep(100000);
 	//ini_set('display_errors','0');
@@ -30,14 +47,6 @@
 	$user = $_SESSION['user'];
 	try{
 		$pdo->beginTransaction();
-		// $sql = "SELECT * FROM lobby WHERE lobby_id = '$lobby_id'";
-		// $stmt = $pdo->prepare($sql);
-		// $stmt->execute();
-		// $lobby_before = $stmt->fetch();
-		// if($stmt->rowCount() == 0){
-		// 	header('Location: index.php');
-		// 	exit();
-		// }
 		if($lobby_before['reset']==1 && $lobby_before['game_started']==0){
 			sleep(1);
 		}
@@ -56,6 +65,10 @@
 			$sql = "SELECT * FROM players_in_lobby WHERE nick = '$user'";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
+			$row = $stmt->fetch();
+			$chooser = $row['chooser'];
+			$player_id = $row['ID'];
+			$remove_id = $row['lobby_id'];
 			if($stmt->rowCount()==0){
 				$sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$lobby_id', 0, false, '$last_change')";
 				$stmt = $pdo->prepare($sql);
@@ -65,6 +78,28 @@
 				$stmt->execute();
 			}
 			else{
+				$sql = "SELECT * FROM lobby WHERE owner = '$user'";
+				$stmt = $pdo->prepare($sql);
+				$stmt->execute();	
+				if($stmt->rowCount()!=0){
+					$owner = 1;
+				}
+				if($chooser == 1){
+					$sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$remove_id' AND ID > $player_id LIMIT 1";
+					$stmt = $pdo->prepare($sql);
+					$stmt->execute();
+					if($stmt->rowCount()==0){
+						$sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$remove_id' LIMIT 1";
+						$stmt = $pdo->prepare($sql);
+						$stmt->execute();
+					}
+				}
+				if($owner == 1){
+					$sql = "UPDATE lobby SET owner = (SELECT nick FROM players_in_lobby WHERE lobby_id = '$remove_id' LIMIT 1) WHERE lobby_id = '$remove_id'";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute();
+					echo $stmt->rowCount();
+				}
 				$sql = "UPDATE lobby SET players_in_lobby = players_in_lobby-1, last_change_players = '$last_change' WHERE lobby_id IN (SELECT lobby_id FROM players_in_lobby WHERE nick = '$user')";
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute();
@@ -131,22 +166,6 @@
 	}
 	
 ?>
-
-<!DOCTYPE HTML>
-<html lang="pl">
-<head>
-	<meta charset = "utf-8"/>
-	<title>GoCards</title>
-	<meta name = "description" content =<?= $lang['side_description'] ?> />
-	<meta http-equiv="X-UA-Compatible" content = "IE=edge,chrome=1"/> 
-	<link href="css/gameStyle.css" type="text/css" rel="stylesheet" />
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href = "fontello/css/fontello.css" type ="text/css" rel = "stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;900&display=swap" rel="stylesheet">
-	<script src="js/jquery-3.6.0.min.js"></script>
-	<script src = "js/FormSubmitLang.js"></script> 
-</head>
 <body>
 	<?php
 	if($lobby['game_started']==0){

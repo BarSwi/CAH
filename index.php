@@ -71,11 +71,11 @@
 								$stmt->execute();
 							}
 						}
-						if($round_started == 0 && $game_started ==1 && $reset == 1){
-							$sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
-							$stmt= $pdo->prepare($sql);
-							$stmt->execute(['id'=>$lobby_id]);
-						}
+						// if($round_started == 0 && $game_started ==1 && $reset == 1){
+						// 	$sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
+						// 	$stmt= $pdo->prepare($sql);
+						// 	$stmt->execute(['id'=>$lobby_id]);
+						// }
 				}
 			}
 			$sql = "DELETE cards_in_lobby, players_in_lobby FROM cards_in_lobby LEFT JOIN players_in_lobby ON cards_in_lobby.lobby_id = players_in_lobby.lobby_id WHERE cards_in_lobby.lobby_id IN (SELECT lobby_id FROM lobby WHERE (last_change < $delete AND (last_change_round < $delete OR last_change_round IS NULL)) OR players_in_lobby < 1)";
@@ -220,9 +220,9 @@
 			<div id = "navbar">
 				<?php
 				if($_SESSION['login']==true){
-					echo '<button id = "refresh">'.$lang['Refresh'].'</button>'
-					.$lang['active_lobbies'].'
-					<input type = "search" id = "search" placeholder = '.$lang['Search'].'></input>';
+					echo '<div id = "navbar_text">'.$lang['active_lobbies'].'</div>
+					<div id = "control_panel"><button id = "refresh">'.$lang['Refresh'].'</button>
+					<input type = "text" id = "search" placeholder = '.$lang['Search'].'></input></div><div style = "clear: both;"></div>';
 				}
 				else{
 					echo $lang['active_lobbies'];
@@ -259,9 +259,9 @@
 								'<div class = "lobby_owner">'.
 									$owner
 								.'<i class = "icon-crown" ></i></div>
-								<div class = "lobby_title">„'.
+								<div class = "lobby_title">'.
 									$title	
-								.'”</div>
+								.'</div>
 								<div '.$class.'><br>'.
 									$status
 								.'</div><br>
