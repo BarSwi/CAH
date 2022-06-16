@@ -197,7 +197,7 @@ $(document).on('click','.join', function(){
 						},3000);
 					}
 					else{
-						location.href = "gameplay.php?id="+res;
+						location.href = "Game="+res;
 						return 0;
 					}
 				}
@@ -215,7 +215,7 @@ $(document).on('click','.join', function(){
 					window.location.reload();
 				}
 				else{
-                    location.href = "gameplay.php?id="+res;
+                    location.href = "Game="+res;
 					return 0;
 				}
 			}

@@ -40,7 +40,7 @@ $('#form').click(function(event){
                     window.location.replace="/Home";
                 }
                 else if(res!="0"){
-                    window.location.replace('/gameplay.php?id='+res);
+                    window.location.replace('/Game='+res);
                     // window.location.replace('/Game='+res);
                 }
                 

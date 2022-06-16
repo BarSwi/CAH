@@ -3,52 +3,83 @@ function isMobile() {
     return false;
 } 
 //exmerimental mobile treatment
-document.addEventListener("visibilitychange", function() {
-
-    if(isMobile()==true){
-        window.unload = true;
-        polling = function(){};
-        navigator.sendBeacon('../phpscripts/game/exit.php');
-
-    }
-});
+// document.addEventListener("visibilitychange", function() {
+//     if($('#password_check').length==0){
+//         if(isMobile()==true){
+//             window.unload = true;
+//             polling = function(){};
+//             navigator.sendBeacon('../phpscripts/game/exit.php');
+    
+//         }
+//     }
+// });
 id = window.location.href.substring(window.location.href.indexOf('=')+1);
 selected_flag = false;
 
 //Sometimes bugged because of exit.php
-
 $(window).on('beforeunload', function(){  
-    window.unload = true;
-    polling = function(){};
-    navigator.sendBeacon('../phpscripts/game/exit.php');
-
-
+    if($('#password_check').length==0){
+        window.unload = true;
+        polling = function(){};
+        navigator.sendBeacon('../phpscripts/game/exit.php');
+    }
 });
 kickflag = true;
 $(document).ready(function(){
-    window.scrollTo(0, 0);
-    window.selected_cards = [];
-    window.winner = [];
-    $.ajax({
-        type: 'post',
-        url: 'phpscripts/game/check_id.php',
-        data: {id:id},
-        async: false,
-        success: function(res){
-            var result = JSON.parse(res);
-            window.personal_id = result[0];
-            window.nick = result[1];
-            window.owner = result[2];
-            lang = result[3];
-            window.black = result[4];
-            window.chooser = result[5];
-            window.round = result[6];
-            if(lang=="pl") window.hl = "pl";
-            if(lang=="en") window.hl = "en";
-            
-        }
-    });
-        polling(0, window.round);
+    if($('#password_check').length==0){
+        window.scrollTo(0, 0);
+        window.selected_cards = [];
+        window.winner = [];
+        $.ajax({
+            type: 'post',
+            url: 'phpscripts/game/check_id.php',
+            data: {id:id},
+            async: false,
+            success: function(res){
+                var result = JSON.parse(res);
+                window.personal_id = result[0];
+                window.nick = result[1];
+                window.owner = result[2];
+                lang = result[3];
+                window.black = result[4];
+                window.chooser = result[5];
+                window.round = result[6];
+                if(lang=="pl") window.hl = "pl";
+                if(lang=="en") window.hl = "en";
+                
+            }
+        });
+            polling(0, window.round);
+    }
+});
+$('#password_submit').click(function(){
+    $(this).blur();
+    var password = $('#password_input');
+    if(password.val().length != 0 ){
+        $(this).css('pointer-events', 'none');
+        $.ajax({
+            type: 'post',
+            url: '../phpscripts/game/check_password.php',
+            data: {password:password.val(), id:id},
+            success: function(res){
+                setTimeout(function(){
+                    ($('#password_submit').removeAttr('style'));
+                },2000);
+                if(res=="1"){
+                    window.location.reload();
+                }
+                if(res=="0"){
+                    password.css('border', '2px solid red');
+                }
+                if(res=="2"){
+                    window.location.replace('/Home');
+                }
+            }
+        });
+    }
+    else{
+        password.css('border', '2px solid red');
+    }
 });
 function polling(time, round){
         $.ajax({

@@ -50,7 +50,7 @@ input[type="submit"]{
 	width: 30%;
 	background: url("../img/card") no-repeat center;
 	background-size: 100% 100%;
-	transition:0.5s ease;
+	transition: transform 0.5s ease;
 	border-radius: 20px;
 }
 .button{
@@ -114,10 +114,11 @@ input[type="submit"]{
 	margin: 20px auto 10px auto;
 	position: relative;
 	display: flex;
-	width: 500px;
+	width: 420px;
 	justify-content: space-between;
 }
 #create_btn{
+	width: max-content;
 	z-index: 10;
 	font-weight: 900;
 	font-size: 1.3em;
@@ -125,8 +126,8 @@ input[type="submit"]{
 	padding: 15px 25px 15px 25px;
 	position: fixed;
 	top: 2%;
-	left: 87%;
-	transition: .1s ease;
+	left: 85%;
+	transition: .1s ease, media-queries;
 	background-color: #4D4DFF;
 }
 #edit_btn:hover, #delete_btn:hover, #create_btn:hover{
@@ -281,4 +282,23 @@ input[type="button"]{
 }
 .icon-left-circled2{
 	right:100%;
+}
+@media only screen and (max-width: 1450px) {
+	*:root{
+		font-size: 12px;
+	}
+	#container{
+		width: 650px;
+		height: 370px;
+	}
+	.deck{
+		height: 250px;
+	}
+	#bottom{
+		width: 320px;
+	}
+	.icon-left-circled2, .icon-right-circled2{
+		top: 30%;
+		font-size: 4.5em;
+	}
 }

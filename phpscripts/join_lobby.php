@@ -37,6 +37,7 @@ try{
         }
         else{
             echo $lobby['lobby_id'];
+            $_SESSION['lobby_password_ignore'] = $lobby['lobby_id'];
         }
     }
     else{

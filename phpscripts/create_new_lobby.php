@@ -56,12 +56,11 @@ try{
 			$index = rand(0, strlen($characters) - 1);
 			$randomString .= $characters[$index];
 		}
-        $hash = password_hash($randomString, PASSWORD_DEFAULT);
         if(empty($lobbies)){
             $flag = false;
         }
         foreach($lobbies as $lobby){
-            if($hash === $lobby) $flag = true;
+            if($randomString === $lobby) $flag = true;
             else $flag = false;
         }
 		if($counter == 500000000){
@@ -83,20 +82,21 @@ try{
         //     $stmt = $pdo->prepare($sql);
         //     $stmt->execute();  
 		// }
-        $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_points_limit, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$hash', '$password', $max_points, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
+        $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_points_limit, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$randomString', '$password', $max_points, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
-        $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$hash', 0, false, '$last_change')";
+        $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$randomString', 0, false, '$last_change')";
         $stmt = $pdo->prepare($sql);
             $stmt->execute();
-        $sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$hash'";
+        $sql = "UPDATE lobby SET last_change_players = '$last_change', players_in_lobby = players_in_lobby+1 WHERE lobby_id = '$randomString'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $in = join(',', array_fill(0, count($decks), '?'));
-        $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color, blank_space) SELECT '$hash', value, color, blank_space FROM cards WHERE BINARY deck_code IN ($in) ORDER BY RAND()";
+        $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color, blank_space) SELECT '$randomString', value, color, blank_space FROM cards WHERE BINARY deck_code IN ($in) ORDER BY RAND()";
         $stmt = $pdo->prepare($sql);
         $stmt->execute($decks);
-        echo $hash;
+        echo $randomString;
+        $_SESSION['lobby_password_ignore'] = $randomString;
 	}   
     $pdo->commit();
 }
