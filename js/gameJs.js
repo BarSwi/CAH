@@ -266,7 +266,7 @@ $(document).on('change', '.select_check', function(){
                 }
                 else{
                     let remove_card = window.winner;
-                    $('.'+remove_card).removeAttr('style');
+                    $('.'+remove_card).css({'background-color': '', 'opacity': '', 'color': ''});
                     $('.'+remove_card).prop('checked', false);
                     window.winner = [];
                     card_handler.css({'background-color': '#164135', 'opacity': '1', 'color': 'white'});
@@ -275,7 +275,7 @@ $(document).on('change', '.select_check', function(){
             }
             else{
                 window.winner = window.winner.filter(e => e !== card_id);
-                card_handler.removeAttr('style');
+                card_handler.css({'background-color': '', 'opacity': '', 'color': ''});
             }
             if(window.winner.length == 1){
                 $('#btn').css({'pointer-events': 'auto', 'opacity': '1'});
@@ -292,6 +292,9 @@ $(document).on('change', '.select_check', function(){
     }
 });
 $('#reroll').click(function(){
+    var btn = $('#btn');
+    $('.shown').remove();
+    btn.css('pointer-events', 'none');
     $(this).css('pointer-events','none');
     $.ajax({
         url: '../phpscripts/game/reroll_cards.php',
@@ -303,8 +306,10 @@ $('#reroll').click(function(){
                 $('#reroll').remove(); 
             }
             else{
+                window.selected_cards = [];
                 my_cards = $('#my_cards');
                 $('#reroll').remove();
+                btn.css('pointer-events', '');
                 my_cards.children().remove();
                 for(let i =0;i<result.length;i++){
                     my_cards.append('<label id = "'+result[i][0]+'" class = "white_card">'+result[i][1]+'<input type = "checkbox" id = "check'+result[i][0]+'" class = "white_check"></label>');
@@ -314,6 +319,11 @@ $('#reroll').click(function(){
     });
 });
 $('#btn').click(function(){
+    var reroll = $('#reroll');
+    reroll.css('pointer-events','none');
+    setTimeout(function(){
+        reroll.css('pointer-events','');
+    },1500);
     if(selected_flag==false){
             if(window.nick != window.chooser){
                 if(window.selected_cards.length == 0 ){
@@ -445,7 +455,7 @@ function polling_res(param){
             }
             polling(time);
         }
-        else{
+        else{   
             // var players exists only when game_started = 1
             var players = $('#players');
             $('.player_after').remove();
@@ -503,11 +513,16 @@ function polling_res(param){
     }
     if(param[param.length-1]=="round"){
         time = param[0];
-        let i = param[1];
+        var players_selected = param[1];
         var round = param[2];
         let white_cards_cont = $('#white_cards_cont');
         white_cards_cont.children().not('#white_cards_shown').remove();
-        for(let k=0; k<i;k++){
+        for(let k=0; k<players_selected.length;k++){
+            let player = $('#'+players_selected[k]);
+            let attr = player.attr('style');
+            if(typeof attr == 'undefined' || attr == false){
+                player.css('background-color', 'rgb(35, 255, 71,.1)');
+            }
             white_cards_cont.append('<div class = "white_card_picked"></div>');
         }
         polling(time, round);
@@ -515,19 +530,42 @@ function polling_res(param){
     if(param[param.length-1]=="round_end"){
         $('#my_cards').css('display','none');
         $('#reroll').css('display', 'none');
+        $('.player').removeAttr('style');
         time = param[param.length-2];
-        if(window.chooser != window.nick){
-            var style = 'style = "pointer-events: none;"';
-        }
-        else var style = '';
         let white_cards_cont = $('#white_cards_cont');
         white_cards_cont.children().not('#white_cards_shown').remove();   
         let i = param.length-2;
+        const colors = ['#FF8C00', '#DC143C', '#C0C0C0', '#9400D3', '#4682B4', '#00FF00', '#DEB887', '#660000', '#FF1493']
         for(let j = 0; j<i; j++){
            let k = param[j].length-1;
-           for(let m = 0; m<k;m++){
-                white_cards_cont.append('<label  class = "selected white_card_picked '+param[j][0]+'"'+style+'>'+param[j][m+1]+'<input type = "checkbox" class = "select_check '+param[j][0]+'"></label>');
+           if(window.black>1 && window.black%2==0 && j%2==0){
+                if(j!=0){
+                    var color = colors[j/2];
+                }
+                else{
+                    var color = colors[j];
+                }
            }
+           else if(window.black>1 && window.black%3==0 && j%3==0){
+                if(j!=0){
+                    var color = colors[j/3];
+                }
+                else{
+                    var color = colors[j];
+                }
+           }
+           else if(window.black==1){
+                var color = colors[j];
+           }
+           if(window.chooser != window.nick){
+               var style_addon = "pointer-events: none;";
+            }
+            else var style_addon = '';
+            let inline_shadow = `0px 6px 6px -4px ${color}`
+            var style = `style = "-webkit-box-shadow: ${inline_shadow}; -moz-box-shadow: ${inline_shadow}; box-shadow: ${inline_shadow}; ${style_addon}"`;
+            for(let m = 0; m<k;m++){
+                white_cards_cont.append('<label  class = "selected white_card_picked '+param[j][0]+'"'+style+'>'+param[j][m+1]+'<input type = "checkbox" class = "select_check '+param[j][0]+'"></label>');
+            }
         }
         polling(time, 0);
     }
@@ -535,13 +573,13 @@ function polling_res(param){
         time = param[0];
         let nick = param[1];
         let card = param[2];
-        let game_status = param[3];
+        window.game_status = param[3];
         nick_handler = $('#'+nick);
         nick_handler.addClass('blink');
         let new_value = parseInt(nick_handler.children('.player_left').children('.points').children('.value').text()) +1;
         nick_handler.children('.player_left').children('.points').children('.value').text(new_value);
         $('.'+card).css({'background-color': '#164135', 'color':'white'});
-        if(game_status == 1){
+        if(window.game_status == 1){
             if(window.hl = "pl"){
                 var text = "Zwycięzca";
             }
@@ -564,9 +602,11 @@ function polling_res(param){
             time = param[param.length-3];
             if(window.hl = "pl"){
                 var points = "Punkty: ";
+                var reroll_text = "Przelosuj swoje karty 🎲 (Raz na grę)";
             }
             if(window.hl = "en"){
                 var points = "Points: ";
+                var reroll_text = "Reroll your cards 🎲 (Once per game)";
             }
             if(window.owner != owner){
                 if(owner==window.nick){
@@ -576,8 +616,8 @@ function polling_res(param){
             for(var i = 0; i< param.length-5; i++){
                 if(param[i][2]==1){
                     window.chooser = param[i][0];
-                    if(window.hl = "pl") var select = "Wybiera";
-                    if(window.hl="en")   var select = "Selecting";
+                    if(window.hl == "pl") var select = "Wybiera";
+                    if(window.hl=="en")   var select = "Selecting";
                 }
                 else var select = "";
                 if(param[i][0]==owner){
@@ -598,6 +638,11 @@ function polling_res(param){
                 if(information.length){
                     information.remove();
                 }
+                if(window.game_status==1){
+                    if($('#reroll').length==0){
+                        $('#UI').append('<div id = "reroll">'+reroll_text+'</div>');       
+                    }
+                }
             }
             else{
                 $('#my_cards').css('display','none');
@@ -610,6 +655,11 @@ function polling_res(param){
                 if(hl=="en") var text = "You are selecting a winning card during this round.";
                 if(!information){
                     $('#UI').append('<div id = "select_info">'+text+'</div>');
+                }
+                if(window.game_status==1){
+                    if($('#reroll').length==0){
+                        $('#UI').append('<div id = "reroll" style = "display: none;">'+reroll_text+'</div>');       
+                    }
                 }
     
             }

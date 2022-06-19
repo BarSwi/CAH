@@ -31,11 +31,11 @@ try{
     $stmt=$pdo->prepare($sql);
     $stmt->execute();
     $card = $stmt->fetch();
-    if($card['choosen']==NULL){
+    $owner = $card['owner'];
+    if($owner == $nick){
         echo '1';
         exit();
     }
-    $owner = $card['owner'];
     $sql  = "UPDATE players_in_lobby SET points = points + 1 WHERE nick = '$owner'";
     $stmt= $pdo->prepare($sql);
     $stmt->execute();
@@ -51,15 +51,56 @@ try{
     $stmt->execute(['id'=>$lobby_id]);
     $row = $stmt->fetch();
     $max_points = $row['lobby_points_limit'];
+    $sql = "SELECT * FROM cards_in_lobby WHERE color = 'black' AND lobby_id = :id AND choosen = 1";
+    $stmt= $pdo->prepare($sql);
+    $stmt->execute(['id'=>$lobby_id]);
+    $row = $stmt->fetch();
+    $black_card = $row['ID'];
     sleep(3);
     $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id AND points = $max_points";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
     if($stmt->rowCount()==1){
         sleep(2);
-        $sql = "UPDATE players_in_lobby SET points = 0 WHERE lobby_id = :id";
+        $sql = "UPDATE players_in_lobby SET points = 0, reroll = 1 WHERE lobby_id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$lobby_id]);
+        // $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color, blank_space) SELECT lobby_id, value, color, blank_space FROM cards_in_lobby WHERE color = 'black' AND lobby_id = :id ORDER BY RAND()";
+        // $stmt= $pdo->prepare($sql);
+        // $stmt->execute(['id'=>$lobby_id]);
+        // $black_cards_count = $stmt->rowCount();
+        // $sql = "DELETE FROM cards_in_lobby WHERE color = 'black' AND lobby_id = :id LIMIT $black_cards_count";
+        // $stmt= $pdo->prepare($sql);
+        // $stmt->execute(['id'=>$lobby_id]);
+        // $sql  = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id ORDER BY RAND() LIMIT 1";
+        // $stmt= $pdo->prepare($sql);
+        // $stmt->execute(['id'=>$lobby_id]);
+        // $sql  = "UPDATE cards_in_lobby SET choosen = 0 WHERE color = 'black' AND lobby_id = :id";
+        // $stmt= $pdo->prepare($sql);
+        // $stmt->execute(['id'=>$lobby_id]);
+        // $sql  = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id AND ID > $black_card LIMIT 1";
+        // $stmt= $pdo->prepare($sql);
+        // $stmt->execute(['id'=>$lobby_id]);
+        // if($stmt->rowCount()==0){
+        //     $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color, blank_space) SELECT lobby_id, value, color, blank_space FROM cards_in_lobby WHERE color = 'black' AND lobby_id = :id ORDER BY RAND()";
+        //     $stmt= $pdo->prepare($sql);
+        //     $stmt->execute(['id'=>$lobby_id]);
+        //     $black_cards_count = $stmt->rowCount();
+        //     $sql = "DELETE FROM cards_in_lobby WHERE color = 'black' AND lobby_id = :id LIMIT $black_cards_count";
+        //     $stmt= $pdo->prepare($sql);
+        //     $stmt->execute(['id'=>$lobby_id]);
+        //     $sql  = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id LIMIT 1";
+        //     $stmt= $pdo->prepare($sql);
+        //     $stmt->execute(['id'=>$lobby_id]);
+        // }
+    }
+    $sql  = "UPDATE cards_in_lobby SET choosen = 0 WHERE color = 'black' AND lobby_id = :id";
+    $stmt= $pdo->prepare($sql);
+    $stmt->execute(['id'=>$lobby_id]);
+    $sql  = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id AND ID > $black_card LIMIT 1";
+    $stmt= $pdo->prepare($sql);
+    $stmt->execute(['id'=>$lobby_id]);
+    if($stmt->rowCount()==0){
         $sql = "INSERT INTO cards_in_lobby (lobby_id, value, color, blank_space) SELECT lobby_id, value, color, blank_space FROM cards_in_lobby WHERE color = 'black' AND lobby_id = :id ORDER BY RAND()";
         $stmt= $pdo->prepare($sql);
         $stmt->execute(['id'=>$lobby_id]);
@@ -67,27 +108,9 @@ try{
         $sql = "DELETE FROM cards_in_lobby WHERE color = 'black' AND lobby_id = :id LIMIT $black_cards_count";
         $stmt= $pdo->prepare($sql);
         $stmt->execute(['id'=>$lobby_id]);
-        $sql  = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id ORDER BY RAND() LIMIT 1";
+        $sql  = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id LIMIT 1";
         $stmt= $pdo->prepare($sql);
         $stmt->execute(['id'=>$lobby_id]);
-    }
-    else{
-        $sql = "SELECT * FROM cards_in_lobby WHERE color = 'black' AND lobby_id = :id AND choosen = 1";
-        $stmt= $pdo->prepare($sql);
-        $stmt->execute(['id'=>$lobby_id]);
-        $row = $stmt->fetch();
-        $black_card = $row['ID'];
-        $sql  = "UPDATE cards_in_lobby SET choosen = 0 WHERE color = 'black' AND lobby_id = :id";
-        $stmt= $pdo->prepare($sql);
-        $stmt->execute(['id'=>$lobby_id]);
-        $sql  = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id AND ID > $black_card LIMIT 1";
-        $stmt= $pdo->prepare($sql);
-        $stmt->execute(['id'=>$lobby_id]);
-        if($stmt->rowCount()==0){
-            $sql  = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id LIMIT 1";
-            $stmt= $pdo->prepare($sql);
-            $stmt->execute(['id'=>$lobby_id]);
-        }
     }
     $time = floor(microtime(true)*1000);
     $sql  = "UPDATE lobby SET reset = 1 WHERE lobby_id = :id";

@@ -62,6 +62,14 @@ try{
         echo '0';
         exit();
     }
+    $in = join(',', array_fill(0, count($array), '?'));
+    $sql = "SELECT * FROM cards_in_lobby WHERE owner = '$nick' AND color = 'white' AND ID IN ($in)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($array);
+    if($stmt->rowCount()!=count($array)){
+        echo '0';
+        exit();
+    }
     $counter = 1;
     // Change into 1 query instead of loop
     foreach($array as $card){

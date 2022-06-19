@@ -44,7 +44,7 @@ try{
     }
     else{
         $pdo->beginTransaction();
-        $sql = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id ORDER BY RAND() LIMIT 1";
+        $sql = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id LIMIT 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
         $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id ORDER BY RAND() LIMIT 1";

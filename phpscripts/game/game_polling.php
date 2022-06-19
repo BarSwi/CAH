@@ -98,16 +98,22 @@ try{
                 {
                     $time_res = $time_change['last_change_round'];
                     if($round_started==1){
+                        $nick_array = [];
                         $players = $time_change['players_in_lobby'];
                         $sql = "SELECT * FROM cards_in_lobby WHERE color = 'white' AND choosen = 1 AND lobby_id = :id";
                         $stmt = $pdo->prepare($sql);
                         $stmt->execute(['id'=>$id]);
+                        $rows = $stmt->fetchAll();
+                        foreach($rows as $nick){
+                            array_push($nick_array, $nick['owner']);
+                        }
                         if($stmt->rowCount()!=$players-1 || $players<3){
-                            array_push($array_exit, $time_res, $stmt->rowCount(), 1, 'round');
+                            array_push($array_exit, $time_res, $nick_array, 1, 'round');
                             echo json_encode($array_exit);
                             exit();
                         }
                         else{
+                            // Problem
                             $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id ORDER BY `cardsShuffled`.`owner` DESC, `cardsShuffled`.`choosen` ASC";
                             $stmt = $pdo->prepare($sql);
                             $stmt->execute(['id'=>$id]);
