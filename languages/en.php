@@ -94,5 +94,6 @@
 	"no_lobbies_found"=>"There are currently no active lobbies 😔",
 	"Reroll_cards" => "Reroll your cards 🎲 (Once per game)",
 	"insert_password_lobby" =>"Insert password to the lobby",
+	"Limit_card_selection_time" => "Time limit for selecting a card (seconds): ",
 	);
 ?>

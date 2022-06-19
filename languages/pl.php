@@ -94,5 +94,6 @@
 	"no_lobbies_found"=> "Obecnie nie ma aktywnych żadnych poczekalni 😔",
 	"Reroll_cards"=>"Przelosuj swoje karty 🎲 (Raz na grę)",
 	"insert_password_lobby" => "Podaj hasło do poczekalni",
+	"Limit_card_selection_time" => "Limit czasu na wybranie karty (sekundy): ",
 	);
 	

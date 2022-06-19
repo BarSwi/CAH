@@ -114,12 +114,12 @@ try{
                         }
                         else{
                             // Problem
-                            $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id ORDER BY `cardsShuffled`.`owner` DESC, `cardsShuffled`.`choosen` ASC";
+                            $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id";
                             $stmt = $pdo->prepare($sql);
                             $stmt->execute(['id'=>$id]);
                             if($stmt->rowCount()==0){
                                 usleep(100000);
-                                $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id ORDER BY `cardsShuffled`.`owner` DESC, `cardsShuffled`.`choosen` ASC";
+                                $sql = "SELECT * FROM cardsShuffled WHERE lobby_id = :id";
                                 $stmt = $pdo->prepare($sql);
                                 $stmt->execute(['id'=>$id]);
                             }

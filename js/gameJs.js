@@ -488,7 +488,7 @@ function polling_res(param){
             if(window.chooser == window.nick){
                 $('.shown').remove();
                 selected_flag = false;
-                $('.white_card_picked').removeAttr('style');
+                $('.white_card_picked').css({'background-color': '', 'opacity': '', 'color': ''});
                 $('#my_cards').css('display','none');
                 $('#reroll').css('display', 'none');
                 $('#btn').removeAttr('style');

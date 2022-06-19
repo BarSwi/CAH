@@ -27,7 +27,8 @@ try{
     $reset = $row['reset'];
     $game_started = $row['game_started'];
     $owner = $row['owner'];
-    $last_change_players = floor(microtime(true) * 1000);;
+    $players_in_lobby = $row['players_in_lobby'];
+    $last_change_players = floor(microtime(true) * 1000);
     $last_change_lobby = $row['last_change'];
     $abs = abs($last_change_players - $last_change_lobby);
     if($abs>2000){
@@ -60,6 +61,7 @@ try{
                 }
             }
         }
+        $pdo->commit();
         if($game_started==1){
             if($chooser == 1){
                 $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$lobby_id' AND ID > $player_id LIMIT 1";
@@ -74,6 +76,21 @@ try{
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();
             }
+            $sql = "SELECT * FROM cards_in_lobby WHERE choosen = 1 AND color = 'white' AND lobby_id = '$lobby_id'";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            if($stmt->rowCount()==$players_in_lobby-2 && $round_started == 1 && $stmt->rowCount()>0){
+                $sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) SELECT value, owner, choosen, lobby_id FROM cards_in_lobby WHERE lobby_id=:id AND choosen IS NOT NULL AND color = 'white' ORDER BY owner DESC, choosen ASC, RAND()";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute(['id'=>$lobby_id]);
+                $sql = "UPDATE  lobby SET round_started = 0, reset = 0 WHERE lobby_id = :id";
+                $stmt= $pdo->prepare($sql);
+                $stmt->execute(['id'=>$lobby_id]);
+                $new_time = floor(microtime(true) * 1000);
+                $sql = "UPDATE lobby SET last_change_round = '$new_time' WHERE lobby_id = '$lobby_id'";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute();
+            }
             if($round_started == 0 && $reset == 1){
                 $sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
                 $stmt= $pdo->prepare($sql);
@@ -81,9 +98,9 @@ try{
             }
         }
         $_SESSION['game']= false;
+        usleep(650000);
     }
 
-    $pdo->commit();
 }
 catch(PDOException $e){
     $pdo->rollBack();

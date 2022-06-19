@@ -287,12 +287,12 @@ $('#refresh').click(function(){
 	refresh.text(10);
 	var i = 9;               
 
-	function loop() {
+	function refreshCooldown() {
 	  setTimeout(function() {
 		refresh.text(i);
 		i--;
 		if (i >= 0) {      
-			loop();
+			refreshCooldown();
 		}  
 		else{
 			if(hl=="pl") refresh.text('Odśwież');
@@ -302,7 +302,7 @@ $('#refresh').click(function(){
 	  }, 1000)
 	}
 
-	loop();   
+	refreshCooldown();   
 });
 $('#search').keyup(function(){
 	$('#no_search_result').remove();
@@ -324,7 +324,7 @@ $('#search').keyup(function(){
 		if(counter==lobbies){
 			if(hl=="pl") var text = "Nie ma poczekalni spełniającej Twoje wymagania wyszukiwania 😔";
 			if(hl=="en") var text = "There is no lobby that matches Your search requirements 😔";
-			$('#lobbies').append('<span id = "no_search_result">'+text+'</span>');
+			$('#lobbies').append(`<span id = "no_search_result">${text}</span>`);
 		}
 	})
 });

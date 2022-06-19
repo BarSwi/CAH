@@ -93,7 +93,7 @@ body{
 	display: flex;	
 	justify-content: space-evenly;
 }
-#lobby_title_input, #lobby_password_input, #round_time_input, #round_limit_input, #max_players_input, #add_decks_input{
+#lobby_title_input, #lobby_password_input, #round_time_input, #round_limit_input, #max_players_input, #add_decks_input, #afk_time_input{
 	border: none;
 	border-radius: 3px;
 	height: 1.6em;
@@ -107,7 +107,7 @@ body{
 input{
 	opacity: 75%;
 }
-#round_time_input, #round_limit_input, #max_players_input{
+#round_time_input, #round_limit_input, #max_players_input, #afk_time_input{
 	width: 50px;
 	text-align: center;
 }
@@ -118,7 +118,7 @@ input:focus, input:hover{
 #sub_inf{
 	margin-top: 35px;
 	display: flex;
-	font-size: 20px;
+	font-size:	1.1rem;
 	justify-content: space-evenly;
 }
 input:invalid{

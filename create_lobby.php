@@ -69,6 +69,11 @@
 						<input id = "round_limit_input" value = "3" type = "number" max = "999" min="3" />
 					</label>
 				</div>
+				<div id = "afk_time"><?=$lang['Limit_card_selection_time']?>
+					<label id = "afk_time_label">
+						<input id = "afk_time_input" type = "number" value = "30" min = "5" max = "1800">
+					</label>
+				</div>
 			</div>
 			<div id = "add_decks">
 				<h2><?=$lang['add_decks_to_game'] ?> </h2>

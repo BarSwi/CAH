@@ -100,7 +100,7 @@ try{
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
     if($stmt->rowCount()==$players-1){
-        $sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) SELECT value, owner, choosen, lobby_id FROM cards_in_lobby WHERE lobby_id=:id AND choosen IS NOT NULL AND color = 'white' ORDER BY RAND()";
+        $sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) SELECT value, owner, choosen, lobby_id FROM cards_in_lobby WHERE lobby_id=:id AND choosen IS NOT NULL AND color = 'white' ORDER BY owner DESC, choosen ASC, RAND()";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
         $sql = "UPDATE  lobby SET round_started = 0, reset = 0 WHERE lobby_id = :id";
