@@ -24,6 +24,7 @@ try{
         exit();
     }
     $row = $stmt->fetch();
+    $players_in_lobby = $row['players_in_lobby'];
     $round_started = $row['round_started'];
     $reset = $row['reset'];
     $game_started = $row['game_started'];
@@ -66,6 +67,23 @@ try{
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $pdo->commit();
+    if($players_in_lobby>2 && $round_started == 1){
+        $sql = "SELECT * FROM cards_in_lobby WHERE choosen = 1 AND color = 'white' AND lobby_id = '$id'";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        if($stmt->rowCount()==$players_in_lobby-2){
+            $sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) SELECT value, owner, choosen, lobby_id FROM cards_in_lobby WHERE lobby_id=:id AND choosen IS NOT NULL AND color = 'white' ORDER BY owner DESC, choosen ASC, RAND()";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id'=>$id]);
+            $sql = "UPDATE  lobby SET round_started = 0, reset = 0 WHERE lobby_id = :id";
+            $stmt= $pdo->prepare($sql);
+            $stmt->execute(['id'=>$id]);
+            $new_time = floor(microtime(true) * 1000);
+            $sql = "UPDATE lobby SET last_change_round = '$new_time' WHERE lobby_id = '$id'";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+        }
+    }
 }
 catch(PDOException $e){
     $pdo->rollBack();

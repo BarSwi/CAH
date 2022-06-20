@@ -72,26 +72,28 @@
 								$stmt->execute();
 							}
 						}
-						$sql = "SELECT * FROM cards_in_lobby WHERE choosen = 1 AND color = 'white' AND lobby_id = '$lobby_id'";
-						$stmt = $pdo->prepare($sql);
-						$stmt->execute();
-						if($stmt->rowCount()==$players_in_lobby-2 && $round_started == 1 && $stmt->rowCount()>0){
-							$sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) SELECT value, owner, choosen, lobby_id FROM cards_in_lobby WHERE BINARY lobby_id=:id AND choosen IS NOT NULL AND color = 'white' ORDER BY owner DESC, choosen ASC, RAND()";
-							$stmt = $pdo->prepare($sql);
-							$stmt->execute(['id'=>$lobby_id]);
-							$sql = "UPDATE  lobby SET round_started = 0, reset = 0 WHERE BINARY lobby_id = :id";
-							$stmt= $pdo->prepare($sql);
-							$stmt->execute(['id'=>$lobby_id]);
-							$new_time = floor(microtime(true) * 1000);
-							$sql = "UPDATE lobby SET last_change_round = '$new_time' WHERE BINARY lobby_id = '$lobby_id'";
+						if($players_in_lobby>2 && $round_started == 1){
+							$sql = "SELECT * FROM cards_in_lobby WHERE choosen = 1 AND color = 'white' AND lobby_id = '$lobby_id'";
 							$stmt = $pdo->prepare($sql);
 							$stmt->execute();
+							if($stmt->rowCount()==$players_in_lobby-2){
+								$sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) SELECT value, owner, choosen, lobby_id FROM cards_in_lobby WHERE lobby_id=:id AND choosen IS NOT NULL AND color = 'white' ORDER BY owner DESC, choosen ASC, RAND()";
+								$stmt = $pdo->prepare($sql);
+								$stmt->execute(['id'=>$lobby_id]);
+								$sql = "UPDATE  lobby SET round_started = 0, reset = 0 WHERE lobby_id = :id";
+								$stmt= $pdo->prepare($sql);
+								$stmt->execute(['id'=>$lobby_id]);
+								$new_time = floor(microtime(true) * 1000);
+								$sql = "UPDATE lobby SET last_change_round = '$new_time' WHERE lobby_id = '$lobby_id'";
+								$stmt = $pdo->prepare($sql);
+								$stmt->execute();
+							}
 						}
-						// if($round_started == 0 && $game_started ==1 && $reset == 1){
-						// 	$sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
-						// 	$stmt= $pdo->prepare($sql);
-						// 	$stmt->execute(['id'=>$lobby_id]);
-						// }
+						if($round_started == 0 && $game_started ==1 && $reset == 1){
+							$sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
+							$stmt= $pdo->prepare($sql);
+							$stmt->execute(['id'=>$lobby_id]);
+						}
 				}
 			}
 			$sql = "DELETE cards_in_lobby, players_in_lobby FROM cards_in_lobby LEFT JOIN players_in_lobby ON cards_in_lobby.lobby_id = players_in_lobby.lobby_id WHERE cards_in_lobby.lobby_id IN (SELECT lobby_id FROM lobby WHERE (last_change < $delete AND (last_change_round < $delete OR last_change_round IS NULL)) OR players_in_lobby < 1)";
