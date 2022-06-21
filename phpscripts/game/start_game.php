@@ -13,7 +13,7 @@ $pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 $pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 try{
-    $sql = "SELECT * FROM players_in_lobby WHERE nick = '$nick'";
+    $sql = "SELECT * FROM players_in_lobby WHERE BINARY nick = '$nick'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $row = $stmt->fetch();
@@ -22,7 +22,7 @@ try{
         exit();
     }
     $id = $row['lobby_id'];
-    $sql = "SELECT * FROM lobby WHERE lobby_id = '$id'";
+    $sql = "SELECT * FROM lobby WHERE BINARY lobby_id = '$id'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $row = $stmt->fetch();
@@ -44,13 +44,13 @@ try{
     }
     else{
         $pdo->beginTransaction();
-        $sql = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND lobby_id = :id LIMIT 1";
+        $sql = "UPDATE cards_in_lobby SET choosen = 1 WHERE color = 'black' AND BINARY lobby_id = :id LIMIT 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
-        $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id ORDER BY RAND() LIMIT 1";
+        $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE BINARY lobby_id = :id ORDER BY RAND() LIMIT 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
-        $sql = "UPDATE lobby SET last_change = '$last_change', game_started = true, round_started = true WHERE lobby_id = :id";
+        $sql = "UPDATE lobby SET last_change = '$last_change', game_started = true, round_started = true WHERE BINARY lobby_id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
         $pdo->commit();

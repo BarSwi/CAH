@@ -26,12 +26,13 @@ $('#form').click(function(event){
     let added_decks_json = JSON.stringify(added_decks);
     let lobby_password = $('#lobby_password_input').val();
     let lobby_title = $('#lobby_title_input').val();
+    let afk_time = $('#afk_time_input').val();
     let black_cards_res = players_val * points_val - players_val + 1;
     let white_cards_res = players_val * 12 + 10;
     if(flag && parseInt(min_amount_black_cards.text()) >= black_cards_res && parseInt(min_amount_white_cards.text()) >= white_cards_res){
         $.ajax({
             type: 'post',
-            data: {points:points_val, players:players_val, array:added_decks_json, password:lobby_password, title:lobby_title},
+            data: {points:points_val, players:players_val, array:added_decks_json, password:lobby_password, title:lobby_title, afk_time:afk_time},
             url: '../phpscripts/create_new_lobby.php',
             success: function(res){
                 if(res=="2"){
@@ -157,8 +158,9 @@ $('#max_players_input').change(function(){
         black_cards_span.css('color','green');
     }  
 });
-$('#round_limit_input').change(function(){
+points.change(function(){
     if(points.val() < 3) points.val(3);
+    if(points.val()>999) points.val(999);
     var black_cards_res = players.val() * points.val() - players.val() + 1;
     var white_cards_res = players.val() * 12 + 10;
     min_amount_black_cards.html(black_cards_res);
@@ -258,4 +260,7 @@ $('#add_decks_btn').click(function(){
         }
     }
 });
-
+$('#afk_time_input').change(function(){
+    if($(this).val()>1800) $(this).val(1800);
+    if($(this).val()<5) $(this).val(5);
+});

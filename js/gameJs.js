@@ -107,7 +107,8 @@ function polling(time, round){
                 
             },
             error: function(){
-                polling();
+                alert('Connection error please try again');
+                window.location.reload();
             }
         }); 
 }

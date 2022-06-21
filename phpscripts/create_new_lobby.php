@@ -12,7 +12,8 @@ $flag = true;
 $max_players = $_POST['players'];
 $max_points = $_POST['points'];
 $decks = json_decode($_POST['array']);
-if(empty($title) || !is_numeric($max_players) || !is_numeric($max_points) || $max_players < 3 || $max_players > 9 || $max_points < 3){
+$afk_time = $_POST['afk_time'];
+if(empty($title) || !is_numeric($max_players) || !is_numeric($max_points) || !is_numeric($afk_time) || $max_players < 3 || $max_players > 9 || $max_points < 3 || $afk_time > 1800 || $afk_time < 5){
     echo "0";
     exit();
 }
@@ -69,7 +70,7 @@ try{
 	}
 	if(!$flag){
 		$user = $_SESSION['user'];
-        $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_points_limit, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$randomString', '$password', $max_points, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
+        $sql = "INSERT INTO lobby (lobby_id, lobby_password, lobby_points_limit, lobby_afk_time, lobby_title, max_players, owner, game_started, last_change, last_change_players) VALUES('$randomString', '$password', $max_points, $afk_time, '$title', $max_players, '$user', false, '$last_change', '$last_change')";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $sql = "INSERT INTO players_in_lobby (nick, lobby_id, points, chooser, last_change) VALUES ('$user', '$randomString', 0, false, '$last_change')";
