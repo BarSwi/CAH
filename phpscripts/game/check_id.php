@@ -9,12 +9,13 @@ try{
     $pdo->SetAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     $pdo->SetAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
+    $sql = "SELECT * FROM lobby WHERE BINARY lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=> $id]);
     $lobby = $stmt->fetch();
     $owner = $lobby['owner'];
     $round_status = $lobby['round_started'];
+    $afk_time = $lobby['lobby_afk_time'];
     $sql = "SELECT * FROM users WHERE login = '$nick'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -22,18 +23,18 @@ try{
     $array_exit = [];
     array_push($array_exit, $row['id'], $row['login'], $owner, $_SESSION['lang']);
     if($lobby['game_started']==1){
-        $sql = "SELECT * FROM cards_in_lobby WHERE lobby_id = :id AND color = 'black' AND choosen = 1";
+        $sql = "SELECT * FROM cards_in_lobby WHERE BINARY lobby_id = :id AND color = 'black' AND choosen = 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
         if($stmt->rowCount()!=0){
             $row = $stmt->fetch();
             array_push($array_exit, $row['blank_space']);
         }
-        $sql = "SELECT * FROM players_in_lobby WHERE lobby_id = :id AND chooser = 1";
+        $sql = "SELECT * FROM players_in_lobby WHERE BINARY lobby_id = :id AND chooser = 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
         $row = $stmt->fetch();
-        array_push($array_exit, $row['nick'], $round_status);
+        array_push($array_exit, $row['nick'], $round_status, $afk_time);
     }
     echo json_encode($array_exit);
 }

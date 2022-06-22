@@ -47,6 +47,7 @@
 	$lobby_before = $stmt->fetch();
 	$lobby_password = $lobby_before['lobby_password'];
 	$last_change_lobby = $lobby_before['last_change'];
+	$afk_time = $lobby_before['lobby_afk_time'];
 	$last_change_players = $last_change;
 	$abs = abs($last_change_players - $last_change_lobby);
 	$user = $_SESSION['user'];
@@ -235,6 +236,7 @@
 			<label class = "lang_change"> <img src = "img/enflag"> <input type = "submit" name = "hl" value ="en" class = "hl" ></label>
 			
 			</div>
+			<div id = "timer">'.$afk_time.'</div>
 			<div id = "main">
 				<div id = "left">
 				<div id = "black_card_cont">

@@ -70,11 +70,11 @@ $('.add_my_deck_btn').click(function() {
     $(this).css({'pointer-events': 'none', 'opacity': '60%'});   
     added_decks_list.children('#child').css('display', 'none');
     $('#added_decks_table').append('<tr><td class = "deck_id">'+deck_id+'</td><td class = "deck_title">'+title+'</td><td class = "white_cards">'+white_cards+'</td><td class = "black_cards">'+black_cards+'</td><td><div id ="delete_added_deck_btn">x</div></td></tr>');
-    current_black_cards_int = parseInt(current_black_cards.text());
-    current_black_cards_res = parseInt(black_cards) + current_black_cards_int;
+    var current_black_cards_int = parseInt(current_black_cards.text());
+    var current_black_cards_res = parseInt(black_cards) + current_black_cards_int;
     current_black_cards.html(current_black_cards_res);
-    current_white_cards_int = parseInt(current_white_cards.text());
-    current_white_cards_res = parseInt(white_cards) + current_white_cards_int;
+    var current_white_cards_int = parseInt(current_white_cards.text());
+    var current_white_cards_res = parseInt(white_cards) + current_white_cards_int;
     current_white_cards.html(current_white_cards_res);
     if(parseInt(min_amount_white_cards.text()) <= current_white_cards_res) {
         white_cards_span.css('color','green');
@@ -109,10 +109,10 @@ $(document).on('click', '#delete_added_deck_btn', function(){
         deck_button.css({'pointer-events':'', 'opacity': '100%'});
     }
     $(this).parents().eq(1).remove();
-    current_black_cards_int = parseInt(current_black_cards.text());
-    current_white_cards_int = parseInt(current_white_cards.text());
-    current_black_cards_res =current_black_cards_int - parseInt(black_cards);
-    current_white_cards_res = current_white_cards_int - parseInt(white_cards);
+    var current_black_cards_int = parseInt(current_black_cards.text());
+    var current_white_cards_int = parseInt(current_white_cards.text());
+    var current_black_cards_res =current_black_cards_int - parseInt(black_cards);
+    var current_white_cards_res = current_white_cards_int - parseInt(white_cards);
     current_white_cards.html(current_white_cards_res);
     current_black_cards.html(current_black_cards_res);
     if(parseInt(min_amount_white_cards.text()) > current_white_cards_res) {
@@ -236,11 +236,11 @@ $('#add_decks_btn').click(function(){
         added_decks.push(deck_id);
         added_decks_list.children('#child').css('display', 'none');
         $('#added_decks_table').append('<tr><td class = "deck_id">'+deck_id+'</td><td class = "deck_title">'+title+'</td><td class = "white_cards">'+white_cards+'</td><td class = "black_cards">'+black_cards+'</td><td><div id ="delete_added_deck_btn">x</div></td></tr>');
-        current_black_cards_int = parseInt(current_black_cards.text());
-        current_black_cards_res = parseInt(black_cards) + current_black_cards_int;
+        var current_black_cards_int = parseInt(current_black_cards.text());
+        var current_black_cards_res = parseInt(black_cards) + current_black_cards_int;
         current_black_cards.html(current_black_cards_res);
-        current_white_cards_int = parseInt(current_white_cards.text());
-        current_white_cards_res = parseInt(white_cards) + current_white_cards_int;
+        var current_white_cards_int = parseInt(current_white_cards.text());
+        var current_white_cards_res = parseInt(white_cards) + current_white_cards_int;
         current_white_cards.html(current_white_cards_res);
         if(parseInt(min_amount_white_cards.text()) <= current_white_cards_res) {
             white_cards_span.css('color','green');

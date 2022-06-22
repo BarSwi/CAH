@@ -290,8 +290,7 @@ $('#refresh').click(function(){
 	function refreshCooldown() {
 	  setTimeout(function() {
 		refresh.text(i);
-		i--;
-		if (i >= 0) {      
+		if (i > 0) {      
 			refreshCooldown();
 		}  
 		else{
@@ -299,6 +298,7 @@ $('#refresh').click(function(){
 			if(hl=="en") refresh.text('Refresh');
 			refresh.prop('disabled',false);
 		}
+		i--;
 	  }, 1000)
 	}
 

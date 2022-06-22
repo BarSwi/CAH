@@ -44,6 +44,8 @@ $(document).ready(function(){
                 window.black = result[4];
                 window.chooser = result[5];
                 window.round = result[6];
+                window.afk_time = result[7];
+                window.afk = 1;
                 if(lang=="pl") window.hl = "pl";
                 if(lang=="en") window.hl = "en";
                 
@@ -341,42 +343,7 @@ $('#btn').click(function(){
                         $('#'+window.selected_cards[i]).remove();
                     }
                     window.selected_cards = [];
-                    $.ajax({
-                        type: 'post',
-                        url: '../phpscripts/game/selected_cards.php',
-                        async: false,
-                        data: {array:array, id:id},
-                        success: function(res){
-                            if(res=="2"){
-                                alert('Unexpected Error');
-                                window.chooser = window.nick;
-                                $('.white_card').css('pointer-events','none');
-                                $('#my_cards').css('display', 'none');
-                            }
-                            if(res=="1"){
-                                alert('Unexpected Error');
-                                $('.white_card').css('pointer-events','none');
-                            }
-                            if(res=="0"){
-                                alert('Unexpected Error');
-                                window.location.reload();
-                            }
-                            else{
-                                let my_cards = $('#my_cards');
-                                $('.shown').remove();
-                                $('#white_cards_cont').append('<div class = "white_card_picked"></div>');
-                                selected_flag = true;
-                                $('#btn').css('display', 'none');
-                                let array = JSON.parse(res);
-                                my_cards.empty();
-                                for(let i = 0; i<array.length; i++){
-                                    my_cards.append("<label id = "+array[i][0]+" class = 'white_card'>"+array[i][1]+"<input type = 'checkbox' id = 'check"+array[i][0]+"' class = 'white_check''></label>");
-                                    
-                                }
-                                $('.white_card').css('pointer-events','none');
-                            }
-                        }
-                    })
+                    AjaxSelectedCards(array, window.afk, 1);
                 }
         }
         else{
@@ -459,7 +426,14 @@ function polling_res(param){
         else{   
             // var players exists only when game_started = 1
             var players = $('#players');
-            $('.player_after').remove();
+            var player_after = $('.player_after');
+            const styles = [];
+            player_after.each(function(){
+                if($(this).css('background-color') == "rgba(35, 255, 71, 0.1)"){
+                    styles.push($(this).attr('id'));
+                }
+            });
+            player_after.remove();
             time = param[param.length-4];
             if(window.hl = "pl"){
                 var points = "Punkty: ";
@@ -477,19 +451,26 @@ function polling_res(param){
                     window.chooser = param[i][0];
                     if(window.hl == "pl") var select = "Wybiera";
                     if(window.hl=="en")   var select = "Selecting";
-                }
-                else var select = "";
-                if(param[i][0]==owner){
-                    players.append('<div class = "player_after player" id = "'+param[i][0]+'"><div class = "player_left"><span class = "nick owner">'+param[i][0]+'<i class = "icon-crown"></i></span><div class = "points">'+points+'<span class = "value">'+param[i][1]+'</span></div></div><div class = "player_right">'+select+'</div><div style = "clear:both;"></div></div>');
+                    var inline_style = "";
                 }
                 else{
-                    players.append('<div class = "player_after player" id = "'+param[i][0]+'"><div class = "player_left"><span class = "nick">'+param[i][0]+'</span><div class = "points">'+points+'<span class = "value">'+param[i][1]+'</span>    </div></div><div class = "player_right">'+select+'</div><div style = "clear:both;"></div></div>');
+                    var select = "";
+                    if(styles.includes(param[i][0])){
+                        var inline_style = 'style = "background-color: rgba(35, 255, 71, 0.1)"';
+                    }
+                    else var inline_style = '';
+                } 
+                if(param[i][0]==owner){
+                    players.append(`<div class = "player_after player" id = "${param[i][0]}" ${inline_style} ><div class = "player_left"><span class = "nick owner">${param[i][0]}<i class = "icon-crown"></i></span><div class = "points">${points}<span class = "value">${param[i][1]}</span></div></div><div class = "player_right">${select}</div><div style = "clear:both;"></div></div>`);
+                }
+                else{
+                    players.append(`<div class = "player_after player" id = "${param[i][0]}" ${inline_style}><div class = "player_left"><span class = "nick">${param[i][0]}</span><div class = "points">${points}<span class = "value">${param[i][1]}</span></div></div><div class = "player_right">${select}</div><div style = "clear:both;"></div></div>`);
                 }
             }
             if(window.chooser == window.nick){
                 $('.shown').remove();
                 selected_flag = false;
-                $('.white_card_picked').css({'background-color': '', 'opacity': '', 'color': ''});
+                $('.white_card_picked').css({'background-color': '', 'opacity': '', 'color': '', 'pointer-events': ''});
                 $('#my_cards').css('display','none');
                 $('#reroll').css('display', 'none');
                 $('#btn').removeAttr('style');
@@ -498,7 +479,6 @@ function polling_res(param){
                 if(!$('#select_info').length){
                     $('#UI').append('<div id = "select_info">'+text+'</div>');
                 }
-
             }
             polling(time, round);
         }
@@ -509,7 +489,7 @@ function polling_res(param){
         setTimeout(function(){
             window.location.reload();
         },200)
-        // Timeout changed from 500 to 200 *optimalization* 06.06 01:38 
+        
 
     }
     if(param[param.length-1]=="round"){
@@ -622,10 +602,10 @@ function polling_res(param){
                 }
                 else var select = "";
                 if(param[i][0]==owner){
-                    players.append('<div class = "player_after player" id = "'+param[i][0]+'"><div class = "player_left"><span class = "nick owner">'+param[i][0]+'<i class = "icon-crown"></i></span><div class = "points">'+points+'<span class = "value">'+param[i][1]+'</span></div></div><div class = "player_right">'+select+'</div><div style = "clear:both;"></div></div>');
+                    players.append(`<div class = "player_after player" id = "${param[i][0]}"><div class = "player_left"><span class = "nick owner">${param[i][0]}<i class = "icon-crown"></i></span><div class = "points">${points}<span class = "value">${param[i][1]}</span></div></div><div class = "player_right">${select}</div><div style = "clear:both;"></div></div>`);
                 }
                 else{
-                    players.append('<div class = "player_after player" id = "'+param[i][0]+'"><div class = "player_left"><span class = "nick">'+param[i][0]+'</span><div class = "points">'+points+'<span class = "value">'+param[i][1]+'</span>    </div></div><div class = "player_right">'+select+'</div><div style = "clear:both;"></div></div>');
+                    players.append(`<div class = "player_after player" id = "${param[i][0]}"><div class = "player_left"><span class = "nick">${param[i][0]}</span><div class = "points">${points}<span class = "value">${param[i][1]}</span></div></div><div class = "player_right">${select}</div><div style = "clear:both;"></div></div>`);
                 }
             }
             if(window.nick != window.chooser){
@@ -672,4 +652,56 @@ function polling_res(param){
         window.selected_cards = [];
     }
 
+}
+
+// function timerCount(i) {
+//     setTimeout(function() {
+//       timer.text(i);
+//       if (i > 0) {      
+//           timerCount(i);
+//       }  
+//       else{
+
+//       }
+//       i--;
+//     }, 1000)
+// }
+
+function AjaxSelectedCards(array, current_afk_status, new_afk_status){
+    $.ajax({
+        type: 'post',
+        url: '../phpscripts/game/selected_cards.php',
+        async: false,
+        data: {array:array, id:id, current_afk_status, new_afk_status},
+        success: function(res){
+            if(res=="2"){
+                alert('Unexpected Error');
+                window.chooser = window.nick;
+                $('.white_card').css('pointer-events','none');
+                $('#my_cards').css('display', 'none');
+            }
+            if(res=="1"){
+                alert('Unexpected Error');
+                $('.white_card').css('pointer-events','none');
+            }
+            if(res=="0"){
+                alert('Unexpected Error');
+                window.location.reload();
+            }
+            else{
+                let my_cards = $('#my_cards');
+                $('.shown').remove();
+                $('#white_cards_cont').append('<div class = "white_card_picked"></div>');
+                selected_flag = true;
+                $('#btn').css('display', 'none');
+                let array = JSON.parse(res);
+                my_cards.empty();
+                for(let i = 0; i<array.length; i++){
+                    my_cards.append("<label id = "+array[i][0]+" class = 'white_card'>"+array[i][1]+"<input type = 'checkbox' id = 'check"+array[i][0]+"' class = 'white_check''></label>");
+                    
+                }
+                $('.white_card').css('pointer-events','none');
+            }
+        }
+    });
 }

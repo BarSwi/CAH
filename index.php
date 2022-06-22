@@ -21,15 +21,15 @@
 				if($_SESSION['login']==true){
 						$row = $stmt->fetch();
 						$chooser = $row['chooser'];
-						$reset = $row['reset'];
-						$game_started = $row['game_started'];
-						$round_started = $row['round_started'];
 						$player_id = $row['ID'];
 						$lobby_id = $row['lobby_id'];
 						$sql = "SELECT * FROM lobby WHERE lobby_id = :id";
 						$stmt=$pdo->prepare($sql);
 						$stmt->execute(['id'=>$lobby_id]);
 						$row = $stmt->fetch();
+						$reset = $row['reset'];
+						$game_started = $row['game_started'];
+						$round_started = $row['round_started'];
 						$players_in_lobby = $row['players_in_lobby'];
 						if($row['owner']==$nick){
 							$sql = "SELECT * FROM players_in_lobby WHERE lobby_id = '$lobby_id' LIMIT 1";
@@ -87,6 +87,7 @@
 								$sql = "UPDATE lobby SET last_change_round = '$new_time' WHERE lobby_id = '$lobby_id'";
 								$stmt = $pdo->prepare($sql);
 								$stmt->execute();
+								echo $stmt->rowCount();
 							}
 						}
 						if($round_started == 0 && $game_started ==1 && $reset == 1){
