@@ -92,11 +92,11 @@
 						$owner = 1;
 					}
 					if($chooser == 1){
-						$sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$remove_id' AND ID > $player_id LIMIT 1";
+						$sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$remove_id' AND ID > $player_id AND afk = 0 LIMIT 1";
 						$stmt = $pdo->prepare($sql);
 						$stmt->execute();
 						if($stmt->rowCount()==0){
-							$sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$remove_id' LIMIT 1";
+							$sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$remove_id' AND afk = 0 LIMIT 1";
 							$stmt = $pdo->prepare($sql);
 							$stmt->execute();
 						}
@@ -235,9 +235,18 @@
 		
 			<label class = "lang_change"> <img src = "img/enflag"> <input type = "submit" name = "hl" value ="en" class = "hl" ></label>
 			
-			</div>
-			<div id = "timer">'.$afk_time.'</div>
-			<div id = "main">
+			</div>';
+			if($lobby['reset'] == 1){
+				if($chooser==0){
+					$style = '';
+				}
+				else{
+					$style = 'style = "display: none;"';
+				}
+				echo '<div id = "timer" '.$style.'>'.$afk_time.'</div>';
+			}
+
+			echo '<div id = "main">
 				<div id = "left">
 				<div id = "black_card_cont">
 					<div id = "black_card">'.$black_card["value"].'</div>

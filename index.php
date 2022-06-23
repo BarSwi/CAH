@@ -46,9 +46,9 @@
 						$sql = "UPDATE cards_in_lobby SET owner = NULL, choosen = NULL WHERE lobby_id = :id AND owner = '$nick'";
 						$stmt=$pdo->prepare($sql);
 						$stmt->execute(['id'=>$lobby_id]);
-						$sql  = "DELETE FROM cardsShuffled WHERE lobby_id = :id AND owner = '$nick'";
+						$sql  = "DELETE FROM cardsShuffled WHERE owner = '$nick'";
 						$stmt= $pdo->prepare($sql);
-						$stmt->execute(['id'=>$lobby_id]);
+						$stmt->execute();
 						$sql = "DELETE FROM players_in_lobby WHERE nick = '$nick'";
 						$stmt = $pdo->prepare($sql);
 						$stmt->execute();
@@ -63,11 +63,11 @@
 						$stmt->execute();
 						$_SESSION['game']= false;
 						if($chooser == 1){
-							$sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$lobby_id' AND ID > $player_id LIMIT 1";
+							$sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$lobby_id' AND ID > $player_id AND afk = 0 LIMIT 1";
 							$stmt = $pdo->prepare($sql);
 							$stmt->execute();
 							if($stmt->rowCount()==0){
-								$sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$lobby_id' LIMIT 1";
+								$sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = '$lobby_id' AND afk = 0 LIMIT 1";
 								$stmt = $pdo->prepare($sql);
 								$stmt->execute();
 							}

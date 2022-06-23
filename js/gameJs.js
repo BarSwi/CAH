@@ -45,13 +45,18 @@ $(document).ready(function(){
                 window.chooser = result[5];
                 window.round = result[6];
                 window.afk_time = result[7];
-                window.afk = 1;
+                window.afk = 0;
                 if(lang=="pl") window.hl = "pl";
                 if(lang=="en") window.hl = "en";
                 
             }
         });
             polling(0, window.round);
+    }
+    var timer = $('#timer');
+    var end_time = Date.now() + window.afk_time * 1000;
+    if(timer.length){
+        timerCount(window.afk_time, timer, end_time);
     }
 });
 $('#password_submit').click(function(){
@@ -343,7 +348,8 @@ $('#btn').click(function(){
                         $('#'+window.selected_cards[i]).remove();
                     }
                     window.selected_cards = [];
-                    AjaxSelectedCards(array, window.afk, 1);
+                    AjaxSelectedCards(array, window.afk, 0);
+                    window.afk = 0;
                 }
         }
         else{
@@ -624,8 +630,13 @@ function polling_res(param){
                         $('#UI').append('<div id = "reroll">'+reroll_text+'</div>');       
                     }
                 }
+                var timer = $('#timer');
+                var end_time = Date.now() + window.afk_time * 1000;
+                timerCount(window.afk_time, timer, end_time);
+                timer.css('display' ,'');
             }
             else{
+                var information = $('#select_info');
                 $('#my_cards').css('display','none');
                 $('.player').removeClass('blink');
                 $('#btn').removeAttr('style');
@@ -634,7 +645,7 @@ function polling_res(param){
                 $('.white_card').removeAttr('style');
                 if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
                 if(hl=="en") var text = "You are selecting a winning card during this round.";
-                if(!information){
+                if(information.length == 0){
                     $('#UI').append('<div id = "select_info">'+text+'</div>');
                 }
                 if(window.game_status==1){
@@ -654,25 +665,49 @@ function polling_res(param){
 
 }
 
-// function timerCount(i) {
-//     setTimeout(function() {
-//       timer.text(i);
-//       if (i > 0) {      
-//           timerCount(i);
-//       }  
-//       else{
-
-//       }
-//       i--;
-//     }, 1000)
-// }
+function timerCount(i, timer, end_time){
+    var k = i;
+    if(selected_flag==false && window.chooser != window.nick){
+        function countDown(){
+            if(!document.hasFocus()){
+                let current_time = Date.now();
+                k = Math.ceil((end_time - current_time) / 1000);
+            }
+            k--;
+            timer.text(k);
+            if (k > 0) {      
+                timerCount(k, timer, end_time);
+            }  
+            else{
+                timer.css('display', 'none');
+                var reroll = $('#reroll');
+                reroll.css('pointer-events','none');
+                setTimeout(function(){
+                    reroll.css('pointer-events','');
+                },1500);
+                window.selected_cards = [];
+                $('#btn').css('display', 'none');
+                let cards = [];
+                for(let m = 0; m<window.black; m++){
+                    let card = $('.white_card').eq(m).attr('id');
+                    cards.push(card);
+                }
+                var array = JSON.stringify(cards);
+                AjaxSelectedCards(array, window.afk, 1);
+                window.afk = 1;
+                
+            }
+        }
+        setTimeout(countDown, 1000);
+    }
+}
 
 function AjaxSelectedCards(array, current_afk_status, new_afk_status){
     $.ajax({
         type: 'post',
         url: '../phpscripts/game/selected_cards.php',
         async: false,
-        data: {array:array, id:id, current_afk_status, new_afk_status},
+        data: {array:array, id:id, current_afk:current_afk_status, new_afk:new_afk_status},
         success: function(res){
             if(res=="2"){
                 alert('Unexpected Error');
@@ -689,6 +724,9 @@ function AjaxSelectedCards(array, current_afk_status, new_afk_status){
                 window.location.reload();
             }
             else{
+                let timer = $('#timer');
+                timer.text(window.afk_time);
+                timer.css('display', 'none');
                 let my_cards = $('#my_cards');
                 $('.shown').remove();
                 $('#white_cards_cont').append('<div class = "white_card_picked"></div>');

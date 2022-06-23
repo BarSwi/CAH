@@ -9,6 +9,8 @@ $id = $_POST['id'];
 $number = count($array);
 $array_exit= [];
 $nick = $_SESSION['user'];
+$afk_status = $_POST['current_afk'];
+$new_afk = $_POST['new_afk'];
 try{
     require_once('../connect_users.php');
     $dsn = "mysql:host=".$host.";dbname=".$db_name;
@@ -70,6 +72,18 @@ try{
         echo '0';
         exit();
     }
+    if($afk_status != $new_afk){
+        if($new_afk == 1){
+            $sql = "UPDATE players_in_lobby SET afk = 1 WHERE nick = '$nick' AND lobby_id = :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id'=>$id]);
+        }
+        else{
+            $sql = "UPDATE players_in_lobby SET afk = 0 WHERE nick = '$nick' AND lobby_id = :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id'=>$id]);
+        }
+    }
     $counter = 1;
     // Change into 1 query instead of loop
     foreach($array as $card){
@@ -90,7 +104,6 @@ try{
     $sql = "UPDATE cards_in_lobby SET owner = '$nick' WHERE owner is NULL AND lobby_id = :id AND color = 'white' ORDER BY RAND() LIMIT $number";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
-
     $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);

@@ -30,6 +30,10 @@ try{
     $sql = "SELECT * FROM cardsShuffled WHERE ID = '$card_id'";
     $stmt=$pdo->prepare($sql);
     $stmt->execute();
+    if($stmt->rowCount()==0){
+        echo '1';
+        exit();
+    }
     $card = $stmt->fetch();
     $owner = $card['owner'];
     if($owner == $nick){
@@ -119,11 +123,11 @@ try{
     $sql = "UPDATE players_in_lobby SET chooser = 0 WHERE lobby_id = :id AND ID = $player_id LIMIT 1";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
-    $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id AND ID > $player_id LIMIT 1";
+    $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id AND ID > $player_id AND afk = 0 LIMIT 1";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$lobby_id]);
     if($stmt->rowCount()==0){
-        $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id LIMIT 1";
+        $sql = "UPDATE players_in_lobby SET chooser = 1 WHERE lobby_id = :id AND afk = 0 LIMIT 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$lobby_id]);
     }
