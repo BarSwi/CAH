@@ -33,7 +33,7 @@ input[type="submit"]{
 }
 #container{
 	padding: 15px;
-	margin: 27vh auto 0 auto;
+	margin: 24vh auto 0 auto;
 	border-radius: 5px;
 	text-align: center;
 	width: 1000px;
@@ -275,7 +275,7 @@ input[type="button"]{
 	transition: .15s ease;
 	font-size: 5em;
 	position: absolute;
-	top: 34%;
+	top: 29%;
 }
 .icon-right-circled2{
 	left: 100%;

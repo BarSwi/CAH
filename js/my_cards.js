@@ -141,31 +141,31 @@ function turnleft(){
 		var deck2 = $('#deck2');
 		var deck3 = $('#deck3');
 		if(deck3.length){
-			if(deck1.attr('class').substring(5) =='left'){
+			if(deck1.attr('class').split(' ')[1] =='left'){
 				deck1.css({'transform': 'translateX(105%) scale(1) ', 'z-index': -1});
 			}
-			else if(deck1.attr('class').substring(5) =='middle'){
+			else if(deck1.attr('class').split(' ')[1] =='middle'){
 				deck1.css({'transform': 'translateX(-100%) scale(1)', 'z-index': -1});
 			}
-			else if(deck1.attr('class').substring(5) =='right'){
+			else if(deck1.attr('class').split(' ')[1] =='right'){
 				deck1.css({'z-index': 1, 'transform': 'scale(1.75)'});
 			}
-			if(deck2.attr('class').substring(5) =='left'){
-				deck2.css({'transform': 'scale(1) translateX(210%)', 'z-index': -1});
+			if(deck2.attr('class').split(' ')[1] =='left'){
+				deck2.css({'transform': 'scale(1) translateX(210%)', 'z-index': -2});
 			}
-			else if(deck2.attr('class').substring(5) =='middle'){
+			else if(deck2.attr('class').split(' ')[1] =='middle'){
 				deck2.css({'transform': 'scale(1', 'z-index': -1});
 			}
-			else if(deck2.attr('class').substring(5) =='right'){
+			else if(deck2.attr('class').split(' ')[1] =='right'){
 				deck2.css({'z-index': 1, 'transform': 'translateX(105%) scale(1.75) '});
 			}
-			if(deck3.attr('class').substring(5) =='left'){
-				deck3.css({'transform': 'scale(1) ', 'z-index': -1});
+			if(deck3.attr('class').split(' ')[1] =='left'){
+				deck3.css({'transform': 'scale(1) ', 'z-index': -2});
 			}
-			else if(deck3.attr('class').substring(5) =='middle'){
+			else if(deck3.attr('class').split(' ')[1] =='middle'){
 				deck3.css({'transform': 'scale(1) translateX(-210%)', 'z-index': -1});
 			}
-			else if(deck3.attr('class').substring(5) =='right'){
+			else if(deck3.attr('class').split(' ')[1] =='right'){
 				deck3.css({'z-index': 1, 'transform': 'translateX(-105%) scale(1.75) '});
 			}
 			left.attr('class', 'deck right');
@@ -175,22 +175,22 @@ function turnleft(){
 		else if(deck2.length){
 			$('.icon-left-circled2').css('display','none');
 			$('.icon-right-circled2').css('display', '');
-			if(deck1.attr('class').substring(5) =='left'){
+			if(deck1.attr('class').split(' ')[1] =='left'){
 				deck1.css({'transform': 'translateX(105%) scale(1) ', 'z-index': -1});
 			}
-			else if(deck1.attr('class').substring(5) =='middle'){
+			else if(deck1.attr('class').split(' ')[1] =='middle'){
 				deck1.css({'transform': 'translateX(-100%) scale(1)', 'z-index': -1});
 			}
-			else if(deck1.attr('class').substring(5) =='right'){
+			else if(deck1.attr('class').split(' ')[1] =='right'){
 				deck1.css({'z-index': 1, 'transform': 'scale(1.75)'});
 			}
-			if(deck2.attr('class').substring(5) =='left'){
+			if(deck2.attr('class').split(' ')[1] =='left'){
 				deck2.css({'transform': 'scale(1) translateX(210%)', 'z-index': -1});
 			}
-			else if(deck2.attr('class').substring(5) =='middle'){
+			else if(deck2.attr('class').split(' ')[1] =='middle'){
 				deck2.css({'transform': 'scale(1', 'z-index': -1});
 			}
-			else if(deck2.attr('class').substring(5) =='right'){
+			else if(deck2.attr('class').split(' ')[1] =='right'){
 				deck2.css({'z-index': 1, 'transform': 'translateX(105%) scale(1.75) '});
 			}
 			middle.attr('class', 'deck left');
@@ -215,32 +215,32 @@ function turnright(){
 		var deck2 = $('#deck2');
 		var deck3 = $('#deck3');
 		if(deck3.length){
-			if(deck1.attr('class').substring(5) =='left'){
+			if(deck1.attr('class').split(' ')[1] =='left'){
 				deck1.css({'transform': 'scale(1.75) ', 'z-index': 1});
 			}
-			else if(deck1.attr('class').substring(5) =='middle'){
+			else if(deck1.attr('class').split(' ')[1] =='middle'){
 				deck1.css({'transform': 'scale(1) translateX(105%)', 'z-index': -1});
 			}
-			else if(deck1.attr('class').substring(5) =='right'){
+			else if(deck1.attr('class').split(' ')[1] =='right'){
 				deck1.css({'z-index': -1, 'transform': 'scale(1) translateX(-100%) '});
 			}
-			if(deck2.attr('class').substring(5) =='left'){
+			if(deck2.attr('class').split(' ')[1] =='left'){
 				deck2.css({'transform': 'translateX(105%) scale(1.75)', 'z-index': 1});
 			}
-			else if(deck2.attr('class').substring(5) =='middle'){
+			else if(deck2.attr('class').split(' ')[1] =='middle'){
 				deck2.css({'transform': 'scale(1) translateX(210%)', 'z-index': -1});
 			}
-			else if(deck2.attr('class').substring(5) =='right'){
+			else if(deck2.attr('class').split(' ')[1] =='right'){
 				deck2.css({'z-index': -1, 'transform': ' scale(1) '});
 			}
-			if(deck3.attr('class').substring(5) =='left'){
+			if(deck3.attr('class').split(' ')[1] =='left'){
 				deck3.css({'transform': 'translateX(-105%) scale(1.75) ', 'z-index': 1});
 			}
-			else if(deck3.attr('class').substring(5) =='middle'){
+			else if(deck3.attr('class').split(' ')[1] =='middle'){
 				deck3.css({'transform': 'scale(1)', 'z-index': -1});
 			}
-			else if(deck3.attr('class').substring(5) =='right'){
-				deck3.css({'z-index': -1, 'transform': 'translateX(-210%) scale(1) '});
+			else if(deck3.attr('class').split(' ')[1] =='right'){
+				deck3.css({'z-index': -2, 'transform': 'translateX(-210%) scale(1) '});
 			}
 			left.attr('class', 'deck middle');
 			middle.attr('class', 'deck right');
@@ -249,22 +249,22 @@ function turnright(){
 		else if(deck2.length){
 			$('.icon-right-circled2').css('display','none');
 			$('.icon-left-circled2').css('display', '');
-			if(deck1.attr('class').substring(5) =='left'){
+			if(deck1.attr('class').split(' ')[1] =='left'){
 				deck1.css({'transform': 'scale(1.75) ', 'z-index': 1});
 			}
-			else if(deck1.attr('class').substring(5) =='middle'){
+			else if(deck1.attr('class').split(' ')[1] =='middle'){
 				deck1.css({'transform': 'scale(1) translateX(105%)', 'z-index': -1});
 			}
-			else if(deck1.attr('class').substring(5) =='right'){
+			else if(deck1.attr('class').split(' ')[1] =='right'){
 				deck1.css({'z-index': -1, 'transform': 'scale(1) translateX(-105%) '});
 			}
-			if(deck2.attr('class').substring(5) =='left'){
+			if(deck2.attr('class').split(' ')[1] =='left'){
 				deck2.css({'transform': 'translateX(105%) scale(1.75)', 'z-index': 1});
 			}
-			else if(deck2.attr('class').substring(5) =='middle'){
+			else if(deck2.attr('class').split(' ')[1] =='middle'){
 				deck2.css({'transform': 'scale(1) translateX(210%)', 'z-index': -1});
 			}
-			else if(deck2.attr('class').substring(5) =='right'){
+			else if(deck2.attr('class').split(' ')[1] =='right'){
 				deck2.css({'z-index': -1, 'transform': ' scale(1) '});
 			}
 			left.attr('class', 'deck middle');

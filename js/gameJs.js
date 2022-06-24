@@ -475,6 +475,7 @@ function polling_res(param){
             }
             if(window.chooser == window.nick){
                 $('.shown').remove();
+                $('#timer').css('display', 'none');
                 selected_flag = false;
                 $('.white_card_picked').css({'background-color': '', 'opacity': '', 'color': '', 'pointer-events': ''});
                 $('#my_cards').css('display','none');
