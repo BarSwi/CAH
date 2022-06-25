@@ -243,7 +243,12 @@
 				else{
 					$style = 'style = "display: none;"';
 				}
-				echo '<div id = "timer" '.$style.'>'.$afk_time.'</div>';
+				echo '<div id = "timer_wrap" '.$style.'>
+				<svg>
+				  <circle r="18" cx="20" cy="20"></circle>
+				  <text text-anchor = "middle" x = "20" y = "20" alignment-baseline="middle">'.$afk_time.'</div>
+				</svg>
+				</div>';
 			}
 
 			echo '<div id = "main">

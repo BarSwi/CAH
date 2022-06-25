@@ -76,7 +76,7 @@ try{
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();
             }
-            if($players_in_lobby>2 && $round_started == 1){
+            if($players_in_lobby>3 && $round_started == 1){
                 $sql = "SELECT * FROM cards_in_lobby WHERE choosen = 1 AND color = 'white' AND lobby_id = '$lobby_id'";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();

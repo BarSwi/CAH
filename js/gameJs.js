@@ -53,7 +53,7 @@ $(document).ready(function(){
         });
             polling(0, window.round);
     }
-    var timer = $('#timer');
+    var timer = $('svg text');
     var end_time = Date.now() + window.afk_time * 1000;
     if(timer.length){
         timerCount(window.afk_time, timer, end_time);
@@ -475,7 +475,7 @@ function polling_res(param){
             }
             if(window.chooser == window.nick){
                 $('.shown').remove();
-                $('#timer').css('display', 'none');
+                $('#timer_wrap').css('display', 'none');
                 selected_flag = false;
                 $('.white_card_picked').css({'background-color': '', 'opacity': '', 'color': '', 'pointer-events': ''});
                 $('#my_cards').css('display','none');
@@ -631,10 +631,10 @@ function polling_res(param){
                         $('#UI').append('<div id = "reroll">'+reroll_text+'</div>');       
                     }
                 }
-                var timer = $('#timer');
+                var timer = $('svg text');
                 var end_time = Date.now() + window.afk_time * 1000;
                 timerCount(window.afk_time, timer, end_time);
-                timer.css('display' ,'');
+                timer.parent().css('display' ,'');
             }
             else{
                 var information = $('#select_info');
@@ -680,7 +680,7 @@ function timerCount(i, timer, end_time){
                 timerCount(k, timer, end_time);
             }  
             else{
-                timer.css('display', 'none');
+                timer.parent().css('display', 'none');
                 var reroll = $('#reroll');
                 reroll.css('pointer-events','none');
                 setTimeout(function(){
@@ -725,9 +725,9 @@ function AjaxSelectedCards(array, current_afk_status, new_afk_status){
                 window.location.reload();
             }
             else{
-                let timer = $('#timer');
+                let timer = $('svg text');
                 timer.text(window.afk_time);
-                timer.css('display', 'none');
+                timer.parent().css('display', 'none');
                 let my_cards = $('#my_cards');
                 $('.shown').remove();
                 $('#white_cards_cont').append('<div class = "white_card_picked"></div>');
