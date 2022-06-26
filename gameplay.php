@@ -236,20 +236,18 @@
 			<label class = "lang_change"> <img src = "img/enflag"> <input type = "submit" name = "hl" value ="en" class = "hl" ></label>
 			
 			</div>';
-			if($lobby['reset'] == 1 || $lobby['round_started']==1){
-				if($chooser==0){
-					$style = '';
-				}
-				else{
-					$style = 'style = "display: none;"';
-				}
-				echo '<div id = "timer_wrap" '.$style.'>
-				<svg>
-				  <circle r="18" cx="20" cy="20"></circle>
-				  <text text-anchor = "middle" x = "20" y = "20" alignment-baseline="middle">'.$afk_time.'</div>
-				</svg>
-				</div>';
+			if($chooser==0 && $lobby['round_started'] != 0){
+				$style = '';
 			}
+			else{
+				$style = 'style = "display: none;"';
+			}
+			echo '<div id = "timer_wrap" '.$style.'>
+			<svg>
+				<circle class = "svg_circle_animation" r="18" cx="20" cy="20"></circle>
+				<text class = "svg_text_animation" text-anchor = "middle" x = "20" y = "20" alignment-baseline="middle">'.$afk_time.'</div>
+			</svg>
+			</div>';
 
 			echo '<div id = "main">
 				<div id = "left">

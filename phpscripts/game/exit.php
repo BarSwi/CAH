@@ -76,10 +76,10 @@ try{
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();
             }
+            $sql = "SELECT * FROM cards_in_lobby WHERE choosen = 1 AND color = 'white' AND lobby_id = '$lobby_id'";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
             if($players_in_lobby>3 && $round_started == 1){
-                $sql = "SELECT * FROM cards_in_lobby WHERE choosen = 1 AND color = 'white' AND lobby_id = '$lobby_id'";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute();
                 if($stmt->rowCount()==$players_in_lobby-2){
                     $sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) SELECT value, owner, choosen, lobby_id FROM cards_in_lobby WHERE lobby_id=:id AND choosen IS NOT NULL AND color = 'white' ORDER BY owner DESC, choosen ASC, RAND()";
                     $stmt = $pdo->prepare($sql);

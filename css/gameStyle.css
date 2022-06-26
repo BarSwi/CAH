@@ -1,5 +1,6 @@
 *:root{
 	background-color: rgb(038, 036, 044);
+	--timer: 30s;
 }
 html
 {
@@ -102,13 +103,7 @@ body{
 	right: 2vw;
 	top: 1vw;
 	text-align: center;
-}
-#timer{
-	color: white;
-	display: inline-block;
-	line-height: 40px;
-}
-  
+} 
 svg {
 	position: absolute;
 	top: 0;
@@ -123,13 +118,40 @@ svg circle {
 	stroke-dashoffset: 0px;
 	stroke-linecap: round;
 	stroke-width: 2px;
-	stroke: white;
+	stroke: green;
 	fill: none;
-	animation: countdown 10s linear infinite forwards;
 }
 svg text{
+	stroke: green;
+	fill: green;
 	transform-origin: center;
 	transform:rotate(90deg) rotateY(-180deg);
+}
+.svg_text_animation{
+	animation: countdown_text var(--timer) linear forwards;
+}
+.svg_circle_animation{
+	animation: countdown_circle var(--timer) linear forwards;
+}
+@keyframes countdown_text{
+	from{
+		stroke: green;
+		fill: green;
+	}
+	to{
+		stroke: red;
+		fill: red;
+	}
+}
+@keyframes countdown_circle{
+	from{
+		stroke: green;
+		stroke-dashoffset: 0px;
+	}
+	to{
+		stroke: red;
+		stroke-dashoffset: 113px;
+	}
 }
 #lang_before{
 	position: fixed;

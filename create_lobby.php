@@ -71,7 +71,7 @@
 				</div>
 				<div id = "afk_time"><?=$lang['Limit_card_selection_time']?>
 					<label id = "afk_time_label">
-						<input id = "afk_time_input" type = "number" value = "30" min = "5" max = "1800">
+						<input id = "afk_time_input" type = "number" value = "30" min = "5" max = "999">
 					</label>
 				</div>
 			</div>

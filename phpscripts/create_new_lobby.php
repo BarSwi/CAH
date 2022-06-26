@@ -13,7 +13,7 @@ $max_players = $_POST['players'];
 $max_points = $_POST['points'];
 $decks = json_decode($_POST['array']);
 $afk_time = $_POST['afk_time'];
-if(empty($title) || !is_numeric($max_players) || !is_numeric($max_points) || !is_numeric($afk_time) || $max_players < 3 || $max_players > 9 || $max_points < 3 || $afk_time > 1800 || $afk_time < 5){
+if(empty($title) || !is_numeric($max_players) || !is_numeric($max_points) || !is_numeric($afk_time) || $max_players < 3 || $max_players > 9 || $max_points < 3 || $afk_time > 999 || $afk_time < 5){
     echo "0";
     exit();
 }

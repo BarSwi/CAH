@@ -261,6 +261,6 @@ $('#add_decks_btn').click(function(){
     }
 });
 $('#afk_time_input').change(function(){
-    if($(this).val()>1800) $(this).val(1800);
+    if($(this).val()>999) $(this).val(999);
     if($(this).val()<5) $(this).val(5);
 });

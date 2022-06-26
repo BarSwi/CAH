@@ -51,6 +51,8 @@ $(document).ready(function(){
                 
             }
         });
+            var root = document.querySelector(':root');
+            root.style.setProperty('--timer', window.afk_time+'s');
             polling(0, window.round);
     }
     var timer = $('svg text');
@@ -633,8 +635,9 @@ function polling_res(param){
                 }
                 var timer = $('svg text');
                 var end_time = Date.now() + window.afk_time * 1000;
+                timer.text(window.afk_time);
                 timerCount(window.afk_time, timer, end_time);
-                timer.parent().css('display' ,'');
+                $('#timer_wrap').css('display' ,'');
             }
             else{
                 var information = $('#select_info');
@@ -680,23 +683,24 @@ function timerCount(i, timer, end_time){
                 timerCount(k, timer, end_time);
             }  
             else{
-                timer.parent().css('display', 'none');
-                var reroll = $('#reroll');
-                reroll.css('pointer-events','none');
-                setTimeout(function(){
-                    reroll.css('pointer-events','');
-                },1500);
-                window.selected_cards = [];
-                $('#btn').css('display', 'none');
-                let cards = [];
-                for(let m = 0; m<window.black; m++){
-                    let card = $('.white_card').eq(m).attr('id');
-                    cards.push(card);
-                }
-                var array = JSON.stringify(cards);
-                AjaxSelectedCards(array, window.afk, 1);
-                window.afk = 1;
-                
+                if(selected_flag==false){
+                    $('#timer_wrap').css('display' ,'');
+                    var reroll = $('#reroll');
+                    reroll.css('pointer-events','none');
+                    setTimeout(function(){
+                        reroll.css('pointer-events','');
+                    },1500);
+                    window.selected_cards = [];
+                    $('#btn').css('display', 'none');
+                    let cards = [];
+                    for(let m = 0; m<window.black; m++){
+                        let card = $('.white_card').eq(m).attr('id');
+                        cards.push(card);
+                    }
+                    var array = JSON.stringify(cards);
+                    AjaxSelectedCards(array, window.afk, 1);
+                    window.afk = 1;
+                }         
             }
         }
         setTimeout(countDown, 1000);
@@ -727,7 +731,7 @@ function AjaxSelectedCards(array, current_afk_status, new_afk_status){
             else{
                 let timer = $('svg text');
                 timer.text(window.afk_time);
-                timer.parent().css('display', 'none');
+                $('#timer_wrap').css('display' ,'none');
                 let my_cards = $('#my_cards');
                 $('.shown').remove();
                 $('#white_cards_cont').append('<div class = "white_card_picked"></div>');
