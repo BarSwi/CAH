@@ -6,6 +6,7 @@ html
 	font-family: 'Merriweather', serif;
 }
 body{
+	-webkit-tap-highlight-color: transparent;
 	margin: 0;
 	overflow: hidden;
 }

@@ -3,14 +3,7 @@ html
 	font-family: 'Merriweather', serif;
 }
 body{
-    background-color: rgb(038, 036, 044);
-	margin: 0;
-}
-html
-{
-	font-family: 'Merriweather', serif;
-}
-body{
+	-webkit-tap-highlight-color: transparent;
 	margin: 0;
 	background-color: rgb(038, 036, 044);
 	color:  #DCDCDC;
