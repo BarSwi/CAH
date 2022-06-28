@@ -236,7 +236,7 @@
 			<label class = "lang_change"> <img src = "img/enflag"> <input type = "submit" name = "hl" value ="en" class = "hl" ></label>
 			
 			</div>';
-			if($chooser==0 && $lobby['round_started'] != 0){
+			if($chooser==0 && $lobby['round_started'] != 0 || $lobby['reset']==1){
 				$style = '';
 			}
 			else{

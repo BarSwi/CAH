@@ -57,7 +57,7 @@ $(document).ready(function(){
     }
     var timer = $('svg text');
     var end_time = Date.now() + window.afk_time * 1000;
-    if(timer.length){
+    if(timer.length && $('#timer_wrap').is(':visible')){
         timerCount(window.afk_time, timer, end_time);
     }
 });

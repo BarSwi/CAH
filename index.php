@@ -278,9 +278,9 @@
 								'<div class = "lobby_owner">'.
 									$owner
 								.'<i class = "icon-crown" ></i></div>
-								<div class = "lobby_title">'.
+								<div class = "lobby_title">„'.
 									$title	
-								.'</div>
+								.'”</div>
 								<div '.$class.'><br>'.
 									$status
 								.'</div><br>

@@ -79,6 +79,12 @@ try{
             $sql = "SELECT * FROM cards_in_lobby WHERE choosen = 1 AND color = 'white' AND lobby_id = '$lobby_id'";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
+            if($stmt->rowCount()==0 && $round_started  == 0){
+                $new_time = floor(microtime(true) * 1000);
+                $sql = "UPDATE lobby SET reset = 1, last_change_round = '$new_time' WHERE lobby_id = '$lobby_id'";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute();
+            }
             if($players_in_lobby>3 && $round_started == 1){
                 if($stmt->rowCount()==$players_in_lobby-2){
                     $sql = "INSERT INTO cardsShuffled (value, owner, choosen, lobby_id) SELECT value, owner, choosen, lobby_id FROM cards_in_lobby WHERE lobby_id=:id AND choosen IS NOT NULL AND color = 'white' ORDER BY owner DESC, choosen ASC, RAND()";
@@ -93,11 +99,11 @@ try{
                     $stmt->execute();
                 }
             }
-            if($round_started == 0 && $reset == 1){
-                $sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
-                $stmt= $pdo->prepare($sql);
-                $stmt->execute(['id'=>$lobby_id]);
-            }
+            // if($round_started == 0 && $reset == 1){
+            //     $sql  = "UPDATE lobby SET round_started = 1 WHERE lobby_id = :id";
+            //     $stmt= $pdo->prepare($sql);
+            //     $stmt->execute(['id'=>$lobby_id]);
+            // }
         }
         $_SESSION['game']= false;
         usleep(650000);

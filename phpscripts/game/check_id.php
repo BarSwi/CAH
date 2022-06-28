@@ -14,7 +14,7 @@ try{
     $stmt->execute(['id'=> $id]);
     $lobby = $stmt->fetch();
     $owner = $lobby['owner'];
-    $round_status = $lobby['round_started'];
+    $reset = $lobby['reset'];
     $afk_time = $lobby['lobby_afk_time'];
     $sql = "SELECT * FROM users WHERE login = '$nick'";
     $stmt = $pdo->prepare($sql);
@@ -34,7 +34,7 @@ try{
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id'=>$id]);
         $row = $stmt->fetch();
-        array_push($array_exit, $row['nick'], $round_status, $afk_time);
+        array_push($array_exit, $row['nick'], $reset, $afk_time, $reset);
     }
     echo json_encode($array_exit);
 }

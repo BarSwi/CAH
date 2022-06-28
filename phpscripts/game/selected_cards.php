@@ -25,7 +25,6 @@ try{
         echo '2';
         exit();
     }
-    if($stmt)
     $sql = "SELECT * FROM lobby WHERE lobby_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['id'=>$id]);
