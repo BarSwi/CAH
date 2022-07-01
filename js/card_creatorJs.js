@@ -56,7 +56,7 @@ $('#add_card_black').click(function(){
 						setTimeout(function(){
 							add_card_black.css('pointer-events', '');
 							black_input.removeClass('cards_animation');
-							$('#black_cards_added').prepend("<label id = '"+res+"' class = 'black_card added_card' tabindex ='0'>"+ black_value +"<input class = 'added_card_check' type = 'checkbox'></label>");
+							$('#black_cards_added').prepend(`<label id = "${res}" class = 'black_card added_card' tabindex ='0'>${black_value}<input class = 'added_card_check' type = 'checkbox'></label>`);
 							black_input.val('');
 							black_cards_h1.text(parseInt(black_cards_h1.text())+1);
 						}, 300);
@@ -118,7 +118,7 @@ $('#add_card_white').click(function(){
 						setTimeout(function(){
 							add_card_white.css('pointer-events', '');
 							white_input.removeClass('cards_animation');
-							$('#white_cards_added').prepend("<label id = '"+res+"' class = 'white_card added_card' tabindex ='0'>"+ white_value +"<input class = 'added_card_check' type = 'checkbox'></label>");
+							$('#white_cards_added').prepend(`<label id = "${res}" class = 'white_card added_card' tabindex ='0'>${white_value}<input class = 'added_card_check' type = 'checkbox'></label>`);
 							white_input.val('');
 							white_cards_h1.text(parseInt(white_cards_h1.text())+1);
 						}, 300);
@@ -172,16 +172,16 @@ $('#remove_cards').click(function(){
 		if(hl == "T"){
 			if(counter==1) var karta = "card";
 			if(counter>1) var karta = "cards";
-			$('body').append('<div id = "remove_cards_confirm"><div>Are you sure you want to delete: '+counter+ ' ' +karta+'?</div><div id = "remove_cards_select"><div class = "remove_cards_option" id ="remove_cards_yes">Yes</div><div class = "remove_cards_option" id ="remove_cards_no">No</div></div></div>');
+			$('body').append(`<div id = "remove_cards_confirm"><div>Are you sure you want to delete: ${counter} ${karta}?</div><div id = "remove_cards_select"><div class = "remove_cards_option" id ="remove_cards_yes">Yes</div><div class = "remove_cards_option" id ="remove_cards_no">No</div></div></div>`);
 			adding_result.html("");
-			}	
+			}
 		if(hl == "P"){
 			if(counter==1) var karta = "kartę";
 			if(counter>1) var karta = "karty";
 			if(counter>4) var karta = "kart";
-			$('body').append('<div id = "remove_cards_confirm"><div>Czy na pewno chcesz usunąć: '+counter+ ' ' + karta +'?</div><div id = "remove_cards_select"><div class = "remove_cards_option" id ="remove_cards_yes">Tak</div><div class = "remove_cards_option" id ="remove_cards_no">Nie</div></div></div>');
+			$('body').append(`<div id = "remove_cards_confirm"><div>Czy na pewno chcesz usunąć: ${counter} ${karta}?</div><div id = "remove_cards_select"><div class = "remove_cards_option" id ="remove_cards_yes">Tak</div><div class = "remove_cards_option" id ="remove_cards_no">Nie</div></div></div>`);
 			adding_result.html("");
-		}	
+		}
 
 	}
 });
