@@ -69,7 +69,7 @@ $('.add_my_deck_btn').click(function() {
     added_decks.push(deck_id);
     $(this).css({'pointer-events': 'none', 'opacity': '60%'});   
     added_decks_list.children('#child').css('display', 'none');
-    $('#added_decks_table').append('<tr><td class = "deck_id">'+deck_id+'</td><td class = "deck_title">'+title+'</td><td class = "white_cards">'+white_cards+'</td><td class = "black_cards">'+black_cards+'</td><td><div id ="delete_added_deck_btn">x</div></td></tr>');
+    $('#added_decks_table').append(`<tr><td class = "deck_id">${deck_id}</td><td class = "deck_title">${title}</td><td class = "white_cards">${white_cards}</td><td class = "black_cards">${black_cards}</td><td><div id ="delete_added_deck_btn">x</div></td></tr>`);
     var current_black_cards_int = parseInt(current_black_cards.text());
     var current_black_cards_res = parseInt(black_cards) + current_black_cards_int;
     current_black_cards.html(current_black_cards_res);
@@ -235,7 +235,7 @@ $('#add_decks_btn').click(function(){
         }
         added_decks.push(deck_id);
         added_decks_list.children('#child').css('display', 'none');
-        $('#added_decks_table').append('<tr><td class = "deck_id">'+deck_id+'</td><td class = "deck_title">'+title+'</td><td class = "white_cards">'+white_cards+'</td><td class = "black_cards">'+black_cards+'</td><td><div id ="delete_added_deck_btn">x</div></td></tr>');
+        $('#added_decks_table').append(`<tr><td class = "deck_id">${deck_id}</td><td class = "deck_title">${title}</td><td class = "white_cards">${white_cards}</td><td class = "black_cards">${black_cards}</td><td><div id ="delete_added_deck_btn">x</div></td></tr>`);
         var current_black_cards_int = parseInt(current_black_cards.text());
         var current_black_cards_res = parseInt(black_cards) + current_black_cards_int;
         current_black_cards.html(current_black_cards_res);

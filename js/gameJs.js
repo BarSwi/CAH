@@ -218,10 +218,10 @@ $(document).on('change','.white_check', function(e){
                 $(this).parent().css({'background-color': '#164135', 'opacity': '1', 'color': 'white'});
                 window.selected_cards.push(id);
                 if($('.shown').length){
-                    $('.shown:last-of-type').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                    $('.shown:last-of-type').after(`<div  class = "white_card_picked shown ${id}">${text}</div>`);
                 }
                 else{
-                    white_cards_shown.prepend('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                    white_cards_shown.prepend(`<div  class = "white_card_picked shown ${id}">${text}</div>`);
                 }
     
                 
@@ -237,10 +237,10 @@ $(document).on('change','.white_check', function(e){
                     id = $(this).parent().attr('id');
                     window.selected_cards.push(id);
                     if($('.shown').length){
-                        $('.shown:last-of-type').after('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                        $('.shown:last-of-type').after(`<div  class = "white_card_picked shown ${id}">${text}</div>`);
                     }
                     else{
-                        white_cards_shown.prepend('<div  class = "white_card_picked shown '+id+'">'+text+'</div>');
+                        white_cards_shown.prepend(`<div  class = "white_card_picked shown ${id}">${text}</div>`);
                     }
                 }
             }
@@ -322,7 +322,7 @@ $('#reroll').click(function(){
                 btn.css('pointer-events', '');
                 my_cards.children().remove();
                 for(let i =0;i<result.length;i++){
-                    my_cards.append('<label id = "'+result[i][0]+'" class = "white_card">'+result[i][1]+'<input type = "checkbox" id = "check'+result[i][0]+'" class = "white_check"></label>');
+                    my_cards.append(`<label id = "${result[i][0]}" class = "white_card">${result[i][1]}<input type = "checkbox" id = "check${result[i][0]}" class = "white_check"></label>`);
                 }
             }
         }
@@ -411,10 +411,10 @@ function polling_res(param){
             time = param[param.length-4];
             for(var i = 0; i< param.length-4; i++){
                 if(param[i][0]==owner){
-                    $('#players').append('<div class = "player_before owner player"><span class = "nick">'+param[i][0]+'<i class = "icon-crown"></i></span></div>');
+                    $('#players').append(`<div class = "player_before owner player"><span class = "nick">${param[i][0]}<i class = "icon-crown"></i></span></div>`);
                 }
                 else{
-                    $('#players').append('<div class = "player_before player"><span class = "nick">'+param[i][0]+'</span></div>');
+                    $('#players').append(`<div class = "player_before player"><span class = "nick">${param[i][0]}</span></div>`);
                 }
             }
             if(window.owner != owner){
@@ -426,7 +426,7 @@ function polling_res(param){
                     else var className = "class = 'inactive'";
                     if(window.hl=="pl") var text = "W celu wystartowania rozgrywki potrzeba conajmniej 3 graczy. Każda poczekalnia zostaje usunięta po godzinie nieaktywności.";
                     if(window.hl=="en") var text = "In order to start the game you need at least 3 players. Each lobby is deleted after one hour of inactivity.";
-                    $('#middle').html('<div id = "start" '+className+'>START</div><div id = "information">'+text+'</div>');
+                    $('#middle').html(`<div id = "start" ${className}>START</div><div id = "information">${text}</div>`);
                 }
             }
             polling(time);
@@ -554,7 +554,7 @@ function polling_res(param){
             let inline_shadow = `0px 6px 6px -4px ${color}`
             var style = `style = "-webkit-box-shadow: ${inline_shadow}; -moz-box-shadow: ${inline_shadow}; box-shadow: ${inline_shadow}; ${style_addon}"`;
             for(let m = 0; m<k;m++){
-                white_cards_cont.append('<label  class = "selected white_card_picked '+param[j][0]+'"'+style+'>'+param[j][m+1]+'<input type = "checkbox" class = "select_check '+param[j][0]+'"></label>');
+                white_cards_cont.append(`<label  class = "selected white_card_picked ${param[j][0]}" ${style}>${param[j][m+1]}<input type = "checkbox" class = "select_check ${param[j][0]}"></label>`);
             }
         }
         polling(time, 0);
@@ -650,11 +650,11 @@ function polling_res(param){
                 if(hl=="pl") var text = "W tej rundzie wybierasz wygrywającą kartę.";
                 if(hl=="en") var text = "You are selecting a winning card during this round.";
                 if(information.length == 0){
-                    $('#UI').append('<div id = "select_info">'+text+'</div>');
+                    $('#UI').append(`<div id = "select_info">${text}</div>`);
                 }
                 if(window.game_status==1){
                     if($('#reroll').length==0){
-                        $('#UI').append('<div id = "reroll" style = "display: none;">'+reroll_text+'</div>');       
+                        $('#UI').append(`<div id = "reroll" style = "display: none;">${reroll_text}</div>`);       
                     }
                 }
     
@@ -740,7 +740,7 @@ function AjaxSelectedCards(array, current_afk_status, new_afk_status){
                 let array = JSON.parse(res);
                 my_cards.empty();
                 for(let i = 0; i<array.length; i++){
-                    my_cards.append("<label id = "+array[i][0]+" class = 'white_card'>"+array[i][1]+"<input type = 'checkbox' id = 'check"+array[i][0]+"' class = 'white_check''></label>");
+                    my_cards.append(`<label id = "${array[i][0]}" class = 'white_card'>${array[i][1]}<input type = 'checkbox' id = 'check${array[i][0]}' class = 'white_check''></label>`);
                     
                 }
                 $('.white_card').css('pointer-events','none');

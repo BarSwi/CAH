@@ -270,14 +270,14 @@ $('#refresh').click(function(){
 					}
 					if(password.length) var el1 = '<i class = "icon-lock"></i>';
 					else var el1 = '';
-					var el2 = '<div class = "lobby_owner">'+owner+'<i class = "icon-crown" ></i></div>';
-					var el3 = '<div class = "lobby_title">„'+title+'”</div>';
-					var el4 = '<div '+status_class+'><br>'+status+'</div><br>';
-					var el5 = '<div '+player_status+'>'+players+'/'+max_players+'<i class = "icon-adult"></i></div><br>';
-					if(password.length) var el6 = '<input class = "lobby_password" type = "password" placeholder ='+placeholder+'></input>';
+					var el2 = `<div class = "lobby_owner">${owner}<i class = "icon-crown" ></i></div>`;
+					var el3 = `<div class = "lobby_title">„${title}”</div>`;
+					var el4 = `<div ${status_class}><br>${status}</div><br>`;
+					var el5 = `<div ${player_status}>${players}/${max_players}<i class = "icon-adult"></i></div><br>`;
+					if(password.length) var el6 = `<input class = "lobby_password" type = "password" placeholder ='${placeholder}'></input>`;
 					else var el6 ='';
-					var el7 = '<br><div class = "join">'+join+'</div></div>';
-					lobbies.append('<div class = "lobby" id ='+id+'>'+el1+el2+el3+el4+el5+el6+el7);
+					var el7 = `<br><div class = "join">${join}</div></div>`;
+					lobbies.append(`<div class = "lobby" id =${id}>`+el1+el2+el3+el4+el5+el6+el7);
 				}
 			}
 		}
