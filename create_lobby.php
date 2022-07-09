@@ -85,7 +85,7 @@
 							$black_cards = $deck['black_cards'];
 							$deck_id = $deck['deck_code'];
 							echo 
-							"<li id = "deck">
+							"<li id = 'deck'>
 								<table>
 									<tr>
 										<th>ID:</th>

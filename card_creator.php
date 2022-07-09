@@ -87,7 +87,7 @@
 			<div id ="black_cards_added" class = "cards">
 			<?php foreach($cards as $value){
 				if($value['color']=='black'){
-					echo "<label id = '".$value['ID']."' class = 'black_card added_card' tabindex ='0'>".$value['value']."<input class = 'added_card_check' type = 'checkbox'></label>";
+					echo "<label id = '$value[ID]' class = 'black_card added_card' tabindex ='0'>$value[value]<input class = 'added_card_check' type = 'checkbox'></label>";
 				}
 			}?>
 			</div>
