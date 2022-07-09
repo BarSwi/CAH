@@ -100,7 +100,7 @@
 					</tr>
 				</table>
 			<div id = "bottom">
-				<input type = "submit" value = <?= '"'.$lang['change_password_button'].'"' ?>   id = "register_button" disabled>
+				<input type = "submit" value = <?= "$lang[change_password_button]" ?>   id = "register_button" disabled>
 			</div>
 			</div>
 			<div id = "hl" style = "display: none;"></div>

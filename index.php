@@ -170,28 +170,28 @@
 		</div>
 		<div id = "middletop">
 			<?php
-			if(!isset($_SESSION['login']) || $_SESSION['login']==false)	echo '<a title = "'.$lang['lobbycreate_title'].'"  id = "inactive" >'.$lang['lobbycreate'].'</a>'; 
-			else echo  '<a  href="Create-Lobby"  id = "active" >'.$lang['lobbycreate'].'</a>' ;
+			if(!isset($_SESSION['login']) || $_SESSION['login']==false)	echo "<a title = \"$lang[lobbycreate_title]\"  id = 'inactive' >$lang[lobbycreate]</a>"; 
+			else echo  "<a  href='Create-Lobby'  id = 'active'>$lang[lobbycreate]</a>" ;
 			?>
 		</div>
 		<div id = "righttop">
 			<?php if(!isset($_SESSION['login']) || $_SESSION['login']==false) echo
-			'<div id = "login">
+			"<div id = 'login'>
 				<form>
-				<input type = "text" id = "input_login" placeholder = "Login" required oninvalid = "this.setCustomValidity(\''.$lang['login_invalid_mess'].'\')" oninput = "this.setCustomValidity(\'\')" maxlength = "15" title = "" />
-				<input type ="password" id = "input_password" title = "" placeholder = "'.$lang['login_password'].'" required oninvalid = \'this.setCustomValidity("'.$lang['password_invalid_mess'].'")\' oninput = "this.setCustomValidity(\'\')">
-				<button id = "login_button">'.$lang["login_button"].'</button>	
+				<input type = 'text' id = 'input_login' placeholder = 'Login' required oninvalid = 'this.setCustomValidity(\"$lang[login_invalid_mess]\")' oninput = 'this.setCustomValidity(\"\")' maxlength = '15' title = '' />
+				<input type ='password' id = 'input_password' title = '' placeholder = $lang[login_password] required oninvalid = 'this.setCustomValidity(\"$lang[password_invalid_mess]\")' oninput = 'this.setCustomValidity(\"\")'>
+				<button id = 'login_button'>$lang[login_button]</button>	
 				</form>
 			</div>
-			<div id = "register">'.$lang['acc_noexist_text'].'<br>
-				<a href = "Register">'.$lang["acc_register"].'</a>
-			</div>';
+			<div id = 'register'>$lang[acc_noexist_text]<br>
+				<a href = 'Register'>$lang[acc_register]</a>
+			</div>";
 			else echo
-				'<div id = "nickname">'.$_SESSION['user'].'</div>
-				<a href = "My-Cards" tabindex ="-1"><div id = "my_cards" tabindex="0">'.$lang['my_cards_button'].'</div></a>
-				<div id = "create_new_deck" tabindex="0">'.$lang['create_new_deck_button'].'</div>
-				<div id = "logout_button" tabindex="0">'.$lang['Logout_button'].'</div>
-				'
+				"<div id = 'nickname'>$_SESSION[user]</div>
+				<a href = 'My-Cards' tabindex ='-1' rel = 'ugc'><div id = 'my_cards' tabindex='0'>$lang[my_cards_button]</div></a>
+				<div id = 'create_new_deck' tabindex='0'>$lang[create_new_deck_button]</div>
+				<div id = 'logout_button' tabindex='0'>$lang[Logout_button]</div>
+				"
 			?>
 
 		</div>
@@ -205,30 +205,30 @@
 				<input type = "checkbox" id = "side_rules_check" class = "rules"><label class = "rules" id = "side_rules" for ="side_rules_check"><?= $lang['side_rules'] ?></label>		
 				<div id = "game_rules_text">
 					<ul><?=
-						'<li><strong>'.$lang['game_rule1'].'</strong></li><br><br>
-						<li>'.$lang['game_rule2'].'</li><br><br>
-						<li>'.$lang['game_rule3'].'</li><br><br>
-						<li>'.$lang['game_rule4'].'</li><br><br>
-						<li>'.$lang['game_rule5'].'</li><br><br>
-						<li>'.$lang['game_rule6'].'</li><br><br>
-						<li>'.$lang['game_rule7'].'</li><br><br>
-						<li>'.$lang['game_rule8'].'</li><br><br>
-						<li>'.$lang['game_rule9'].'</li><br><br>
-						<li>'.$lang['game_rule10'].'</li><br><br>
-						<li>'.$lang['game_rule11'].'</li>'
+						"<li><strong>$lang[game_rule1]</strong></li><br><br>
+						<li>$lang[game_rule2]</li><br><br>
+						<li>$lang[game_rule3]</li><br><br>
+						<li>$lang[game_rule4]</li><br><br>
+						<li>$lang[game_rule5]</li><br><br>
+						<li>$lang[game_rule6]</li><br><br>
+						<li>$lang[game_rule7]</li><br><br>
+						<li>$lang[game_rule8]</li><br><br>
+						<li>$lang[game_rule9]</li><br><br>
+						<li>$lang[game_rule10]</li><br><br>
+						<li>$lang[game_rule11]</li>"
 						?>
 					</ul>
 				</div>
 				<div id = "side_rules_text">
 					<ol><?=
-						'<br><li>'.$lang["side_rule1"].'</li><br><br>
-						<li>'.$lang['side_rule2'].'</li><br><br>
-						<li>'.$lang['side_rule3'].'</li><br><br>
-						<li>'.$lang['side_rule4'].'</li><br><br>
-						<li>'.$lang['side_rule5'].'</li><br><br>
-						<li>'.$lang['side_rule6'].'</li><br><br>
-						<li>'.$lang['side_rule7'].'</li><br><br>
-						<li>'.$lang['side_rule8'].'</li>'
+						"<br><li>$lang[side_rule1]</li><br><br>
+						<li>$lang[side_rule2]</li><br><br>
+						<li>$lang[side_rule3]</li><br><br>
+						<li>$lang[side_rule4]</li><br><br>
+						<li>$lang[side_rule5]</li><br><br>
+						<li>$lang[side_rule6]</li><br><br>
+						<li>$lang[side_rule7]</li><br><br>
+						<li>$lang[side_rule8]</li>"
 						?>
 					</ol>
 				</div>
@@ -239,9 +239,9 @@
 			<div id = "navbar">
 				<?php
 				if($_SESSION['login']==true){
-					echo '<div id = "navbar_text">'.$lang['active_lobbies'].'</div>
-					<div id = "control_panel"><button id = "refresh">'.$lang['Refresh'].'</button>
-					<input type = "text" id = "search" placeholder = '.$lang['Search'].'></input></div><div style = "clear: both;"></div>';
+					echo "<div id = 'navbar_text'>$lang[active_lobbies]</div>
+					<div id = 'control_panel'><button id = 'refresh'>$lang[Refresh]</button>
+					<input type = 'text' id = 'search' placeholder = \"$lang[Search]\"></input></div><div style = 'clear: both;'></div>";
 				}
 				else{
 					echo $lang['active_lobbies'];
@@ -252,7 +252,7 @@
 				<?php
 					if($_SESSION['login']==true){
 						if(empty($lobbies)){
-							echo '<h1>'.$lang['no_lobbies_found'].'</h1>';
+							echo "<h1>$lang[no_lobbies_found]</h1>";
 						}
 						foreach($lobbies as $lobby){
 							$id = $lobby['ID'];
@@ -272,33 +272,33 @@
 								$class = 'class = "not_started status"';
 							} 
 							echo 
-							'<div class = "lobby" id ='.$id.'>';	
+							"<div class = 'lobby' id =\"$id\">";	
 								if(!empty($password)) echo '<i class = "icon-lock"></i>';
 								echo
-								'<div class = "lobby_owner">'.
+								"<div class = 'lobby_owner'>
 									$owner
-								.'<i class = "icon-crown" ></i></div>
-								<div class = "lobby_title">„'.
+								<i class = 'icon-crown' ></i></div>
+								<div class = 'lobby_title'>„
 									$title	
-								.'”</div>
-								<div '.$class.'><br>'.
+								”</div>
+								<div $class><br>
 									$status
-								.'</div><br>
-								<div '.$player_status.'>'.
+								</div><br>
+								<div $player_status>
 									$players
-								.'/'.$max_players.'<i class = "icon-adult"></i></div><br>';
+								/$max_players<i class = 'icon-adult'></i></div><br>";
 								if(!empty($password))
 								{ echo 
-								'<input class = "lobby_password" type = "password" placeholder = '.$lang['login_password'].'></input>';
+								"<input class = 'lobby_password' type = 'password' placeholder = \"$lang[login_password]\"></input>";
 								}
 							echo	
-							'<br><div class = "join">'.$lang['join'].'</div>
-							</div>';
+							"<br><div class = 'join'>$lang[join]</div>
+							</div>";
 	
 						}
 					}
 					else{
-						echo '<h1>'.$lang['lobbies_no_login'].'</h1>';
+						echo "<h1>$lang[lobbies_no_login]</h1>";
 					}
 				
 				?>
@@ -308,7 +308,7 @@
 		<div id = "right_container">
 		
 			<?php if(isset($_SESSION['login_error'])){ 
-			echo '<span id = "error_login">'.$lang['Invalid_login_data'].'</span><br><span id = "forgot_password">'.$lang["forgot_password"].'</span>'; 
+			echo "<span id = 'error_login'>$lang[Invalid_login_data]</span><br><span id = 'forgot_password'>$lang[forgot_password]</span>"; 
 			unset($_SESSION['login_error']);
 			}
 			?>
@@ -316,19 +316,19 @@
 	</div>
 	<?php if(isset($_SESSION['register']))
 	{		echo
-		'<div id = "register_success">
-			<h1>'.$lang['register_success'].'</h1>
-			<label id = "close_register"><input type ="button" id = "close_register_btn"><i class = "icon-cancel"></i></label>
-		</div>';
+		"<div id = 'register_success'>
+			<h1>$lang[register_success]</h1>
+			<label id = 'close_register'><input type ='button' id = 'close_register_btn'><i class = 'icon-cancel'></i></label>
+		</div>";
 		unset($_SESSION['register']);
 	}
 	if(isset($_SESSION['password_recovery'])){
 		if($_SESSION['password_recovery'] == 0){
 			echo
-			'<div id = "password_recovery">
-				<h1>'.$lang['recovery_failed_expired'].'</h1>
-				<label id = "close_register"><input type ="button" id = "close_recovery_btn"><i class = "icon-cancel"></i></label>
-			</div>';
+			"<div id = 'password_recovery'>
+				<h1>$lang[recovery_failed_expired]</h1>
+				<label id = 'close_register'><input type ='button' id = 'close_recovery_btn'><i class = 'icon-cancel'></i></label>
+			</div>";
 			unset($_SESSION['password_recovery']);
 		}
 		}

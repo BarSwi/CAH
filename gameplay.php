@@ -178,40 +178,40 @@
 	<?php
 	if(isset($_SESSION['lobby_password_ignore']) && $_SESSION['lobby_password_ignore'] == $lobby_id || empty($lobby_password)){
 		if($lobby['game_started']==0){
-			echo'
-			<div id = "lang_before">
+			echo"
+			<div id = 'lang_before'>
 					
-			<label class = "lang_change"><img src ="img/plflag"><input type = "submit" name = "hl" value ="pl" class = "hl" ></label>
+			<label class = 'lang_change'><img src ='img/plflag'><input type = 'submit' name = 'hl' value ='pl' class = 'hl' ></label>
 		
-			<label class = "lang_change"> <img src = "img/enflag"> <input type = "submit" name = "hl" value ="en" class = "hl" ></label>
+			<label class = 'lang_change'> <img src = 'img/enflag'> <input type = 'submit' name = 'hl' value ='en' class = 'hl' ></label>
 			
 			</div>
-			<div id ="top">
-				<h1>'.$lobby['lobby_title'].'</h1>
+			<div id ='top'>
+				<h1>$lobby[lobby_title]</h1>
 			</div>
-			<div id = "middle" class= "middle_not_started">';
+			<div id = 'middle' class= 'middle_not_started'>";
 			if($user != $lobby['owner']){
 				echo $lang['game_not_started'];
 			}
 			else{
 				if($lobby['players_in_lobby']>=3) $class = 'class = "active"';
 				else $class = 'class = "inactive"';
-				echo '<div id = "start"'.$class.'>START</div><div id = "information">'.$lang['lobby_message'].'</div>';
+				echo "<div id = 'start' $class >START</div><div id = 'information'>$lang[lobby_message]</div>";
 			}
 		
-			echo '</div>
-			<div id ="bottom">
-			<h2>'.$lang['players'].'	
-			<span id = "players_in_lobby">
-				'.$lobby['players_in_lobby'].'
+			echo "</div>
+			<div id ='bottom'>
+			<h2>$lang[players]	
+			<span id = 'players_in_lobby'>
+				$lobby[players_in_lobby]
 			</span>
 			/
-			<span id = "max_players">
-				'.$lobby['max_players'].'
+			<span id = 'max_players'>
+				$lobby[max_players]
 			</span>
-			<i class = "icon-adult"></i>
+			<i class = 'icon-adult'></i>
 			</h2>
-			<div id = "players" class = "players_not_started">';
+			<div id = 'players' class = 'players_not_started'>";
 				 foreach($players as $player){
 					if($lobby['owner']===$player['nick']) {
 						$class = 'class = "player_before owner player"';
@@ -223,7 +223,7 @@
 						$icon = '';
 					} 
 					echo
-					'<div '.$class.'><span class = "nick">'.$player['nick'].$icon.'</span></div>';
+					"<div $class><span class = 'nick'>$player[nick]$icon</span></div>";
 				}
 			'</div>';
 		}	
@@ -242,19 +242,19 @@
 			else{
 				$style = 'style = "display: none;"';
 			}
-			echo '<div id = "timer_wrap" '.$style.'>
+			echo "<div id = 'timer_wrap' $style>
 			<svg>
-				<circle class = "svg_circle_animation" r="18" cx="20" cy="20"></circle>
-				<text class = "svg_text_animation" text-anchor = "middle" x = "20" y = "20" alignment-baseline="middle">'.$afk_time.'</div>
+				<circle class = 'svg_circle_animation' r='18' cx='20' cy='20'></circle>
+				<text class = 'svg_text_animation' text-anchor = 'middle' x = '20' y = '20' alignment-baseline='middle'>$afk_time</div>
 			</svg>
-			</div>';
+			</div>";
 
-			echo '<div id = "main">
-				<div id = "left">
-				<div id = "black_card_cont">
-					<div id = "black_card">'.$black_card["value"].'</div>
+			echo "<div id = 'main'>
+				<div id = 'left'>
+				<div id = 'black_card_cont'>
+					<div id = 'black_card'>$black_card[value]</div>
 				</div>
-					<div id = "players" class = "players_started">';
+					<div id = 'players' class = 'players_started'>";
 					foreach($players as $player){
 						if($lobby['owner']===$player['nick']) {
 							$class = 'class = "nick owner"';
@@ -266,11 +266,11 @@
 							$icon = '';
 						} 
 						echo
-						'
-						<div class = "player_after player" id = "'.$player['nick'].'"><div class = "player_left"><span '.$class.'>'.$player['nick'].$icon.'</span>
-						<div class = "points">'.$lang['points'].'<span class = "value">'.$player['points'].'</span></div>
+						"
+						<div class = 'player_after player' id = '$player[nick]'><div class = 'player_left'><span $class>$player[nick]$icon</span>
+						<div class = 'points'>$lang[points]<span class = 'value'>$player[points]</span></div>
 						</div>
-						<div class = "player_right">';
+						<div class = 'player_right'>";
 						if($player['chooser']==1) echo $lang['Selecting'];
 						echo '</div>
 						<div style = "clear:both;"></div>
@@ -308,7 +308,7 @@
 						}
 						if($chooser == 1) $style = "";
 						else $style = 'style = "pointer-events: none;"';
-						echo '<label class = "white_card_picked '.$card_id.'"'.$style.'>'.$card['value'].'<input type = "checkbox" class = "select_check '.$card_id.'"></label>';
+						echo "<label class = 'white_card_picked $card_id' $style>$card[value]<input type = 'checkbox' class = 'select_check $card_id'></label>";
 					}
 				}
 				echo '</div>
@@ -322,24 +322,24 @@
 					$style_btn = 'style = "display: none;"';
 				}
 				else $style_card = "";
-				echo '<div id = "my_cards"'.$style.'>';
+				echo "<div id = 'my_cards' $style >";
 					foreach($my_cards as $card){
-						echo '<label id = '.$card['ID'].' class = "white_card" '.$style_card.'>'.$card['value'].'<input type = "checkbox" id = check'.$card['ID'].' class = "white_check"></label>';
+						echo "<label id = $card[ID] class = 'white_card' $style_card>$card[value]<input type = 'checkbox' id = 'check$card[ID]' class = 'white_check'></label>";
 					}
-				echo '</div>
-				<div id = "menu">
-					<div id = "btn" '.$style_btn.'>'.$lang['Select'].'</div>
+				echo "</div>
+				<div id = 'menu'>
+					<div id = 'btn' $style_btn >$lang[Select]</div>
 				</div>
-				<div id = "reroll" '.$style.'>'.$lang['Reroll_cards'].'</div>';
+				<div id = 'reroll' $style >$lang[Reroll_cards]</div>";
 				if($chooser == 1){
-					echo '<div id = "select_info">'.$lang['Selecting_information'].'</div>';
+					echo "<div id = 'select_info'>$lang[Selecting_information]</div>";
 				}
 			echo '</div>
 			</div></div>';
 		}
 	}
 	else{
-		echo '<div id = "password_check"><span id = "insert_password_span">'.$lang['insert_password_lobby'].'</span><input type = "text" id = "password_input"/><div id = "password_submit" tabindex = "0">'.$lang['join'].'</div></div>';
+		echo "<div id = 'password_check'><span id = 'insert_password_span'>$lang[insert_password_lobby]</span><input type = 'text' id = 'password_input'/><div id = 'password_submit' tabindex = '0'>$lang[join]</div></div>";
 	}
 	?>
 	<script src = "js/gameJs.js"></script>

@@ -85,23 +85,23 @@
 							$black_cards = $deck['black_cards'];
 							$deck_id = $deck['deck_code'];
 							echo 
-							'<li id = "deck">
+							"<li id = "deck">
 								<table>
 									<tr>
 										<th>ID:</th>
-										<th>'.$lang['deck_title'].'</th>
-										<th>'.$lang['white_cards'].'</th>
-										<th>'.$lang['black_cards'].'</th>
-										<td rowspan ="2" style = "border: none;"><div class = "add_my_deck_btn" id = "'.$deck_id.'">'.$lang['add_deck_btn'].'</div></td>
+										<th>$lang[deck_title]</th>
+										<th>$lang[white_cards]</th>
+										<th>$lang[black_cards]</th>
+										<td rowspan ='2' style = 'border: none;'><div class = 'add_my_deck_btn' id = '$deck_id'>$lang[add_deck_btn]</div></td>
 									</tr>
 									<tr>
-										<td class = "deck_id">'.$deck_id.'</td>
-										<td class = "deck_title">'.$title.'</td>
-										<td class = "white_cards">'.$white_cards.'</td>
-										<td class = "black_cards">'.$black_cards.'</td>
+										<td class = 'deck_id'>$deck_id</td>
+										<td class = 'deck_title'>$title</td>
+										<td class = 'white_cards'>$white_cards</td>
+										<td class = 'black_cards'>$black_cards</td>
 									</tr>
 								</table>
-							</li>';
+							</li>";
 						}
 					?>
 				</ol>
@@ -113,14 +113,14 @@
 					<div id = "added_decks_list">
 						<?php 
 							echo 
-							'<table id = "added_decks_table">
+							"<table id = 'added_decks_table'>
 								<tr>
 									<th>ID:</th>
-									<th>'.$lang['deck_title'].'</th>
-									<th>'.$lang['white_cards'].'</th>
-									<th>'.$lang['black_cards'].'</th>
+									<th>$lang[deck_title]</th>
+									<th>$lang[white_cards]</th>
+									<th>$lang[black_cards]</th>
 								</tr>
-							</table>'
+							</table>"
 						
 						?>
 						<h2 id = "child"> <?= $lang['added_decks_list'] ?> </h2>

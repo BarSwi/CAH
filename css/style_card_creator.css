@@ -246,7 +246,7 @@ input[type="checkbox"]{
 	text-align: left;
 	border: 2px solid var(--container-background);
 	margin: 5px 5px 0 0;
-	font-size: 0.3rem;
+	font-size: 0.31rem;
 	word-wrap: break-word;
 	height: 150px;	
 }

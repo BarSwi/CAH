@@ -73,21 +73,21 @@
 			<div id = "rules">
 				<ol>
 				<?=
-					'<li><span class = "rules">'.$lang['side_rule1'].'</span></li><br>
-					<li><span class = "rules">'.$lang['side_rule2'].'</span></li><br>
-					<li><span class = "rules">'.$lang['side_rule3'].'</span></li><br>
-					<li><span class = "rules">'.$lang['side_rule4'].'</span></li><br>
-					<li><span class = "rules">'.$lang['side_rule5'].'</span></li><br>
-					<li><span class = "rules">'.$lang['side_rule6'].'</span></li><br>
-					<li><span class = "rules">'.$lang['side_rule7'].'</span></li><br>
-					<li><span class = "rules">'.$lang['side_rule8'].'</span></li>'
+					"<li><span class = 'rules'>$lang[side_rule1]</span></li><br>
+					<li><span class = 'rules'>$lang[side_rule2]</span></li><br>
+					<li><span class = 'rules'>$lang[side_rule3]</span></li><br>
+					<li><span class = 'rules'>$lang[side_rule4]</span></li><br>
+					<li><span class = 'rules'>$lang[side_rule5]</span></li><br>
+					<li><span class = 'rules'>$lang[side_rule6]</span></li><br>
+					<li><span class = 'rules'>$lang[side_rule7]</span></li><br>
+					<li><span class = 'rules'>$lang[side_rule8]</span></li>"
 				?>
 				</ol>
 				<input type = 'checkbox' id = "rules_accept"><label for = "rules_accept" id = "rules_accept_label"><?= $lang['side_rules_accept'] ?>
 				</label>
 			</div>
 			<div id = "bottom">
-				<input type = "submit" value = <?= '"'.$lang['register_submit'].'"' ?>   id = "register_button" disabled>
+				<input type = "submit" value = <?= "$lang[register_submit]" ?>   id = "register_button" disabled>
 			</div>
 			<div id = "hl" style = "display: none;"></div>
 	</div>
